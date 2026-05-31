@@ -1,0 +1,8 @@
+# VARIABLES DE ENTORNO LOCALES
+.env
+*.env
+
+# ARCHIVOS BASURA DEL SISTEMA Y VS CODE
+.DS_Store
+Thumbs.db
+.vscode/
