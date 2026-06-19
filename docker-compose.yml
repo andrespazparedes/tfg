@@ -20,6 +20,75 @@ services:
     healthcheck:
       disable: true
 
+  # ─────────────────────────────────────
+  # DWH (PostgreSQL)
+  # ─────────────────────────────────────
+  postgres-dwh:
+    image: postgres:16-alpine
+    container_name: postgres-dwh
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_DWH_DB}
+      - POSTGRES_USER=${DB_DWH_USER}
+      - POSTGRES_PASSWORD=${DB_DWH_PASS}
+    ports:
+      - "${DWH_PORT}:5432"
+    volumes:
+      - dwh_data:/var/lib/postgresql/data
+      - ./dwh/init:/docker-entrypoint-initdb.d
+    networks:
+      - tfg-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_DWH_USER} -d ${DB_DWH_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 90s
+
+  # ─────────────────────────────────────
+  # HOP (Apache Hop)
+  # ─────────────────────────────────────
+  apachehop-web:
+    image: apache/hop-web:latest
+    container_name: apachehop-web
+    restart: unless-stopped
+    ports:
+      - "${HOP_PORT}:8080"
+    volumes:
+      - ./hop:/usr/local/tomcat/webapps/ROOT/config/projects/default # Mapeo directo al proyecto default de Hop
+    environment:
+      - HOP_SHARED_JDBC_FOLDER=/usr/local/tomcat/webapps/ROOT/config/projects/default/lib
+      - HOP_OPTIONS=-Xmx1024m -DDB_SOURCE_HOST=${DB_SOURCE_HOST} -DDB_SOURCE_PORT=${DB_SOURCE_PORT} -DDB_SOURCE_DB=${DB_SOURCE_DB} -DDB_SOURCE_USER=${DB_SOURCE_USER} -DDB_SOURCE_PASS=${DB_SOURCE_PASS} -DDB_DWH_HOST=${DB_DWH_HOST} -DDB_DWH_PORT=${DB_DWH_PORT} -DDB_DWH_DB=${DB_DWH_DB} -DDB_DWH_USER=${DB_DWH_USER} -DDB_DWH_PASS=${DB_DWH_PASS}
+    networks:
+      - tfg-network
+    depends_on:
+      - postgres-source
+      - postgres-dwh
+
+  # ─────────────────────────────────────
+  # API (FastAPI)
+  # ─────────────────────────────────────
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: fastapi-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    environment:
+      - DB_DWH_HOST=${DB_DWH_HOST}
+      - DB_DWH_PORT=${DB_DWH_PORT}
+      - DB_DWH_DB=${DB_DWH_DB}
+      - DB_DWH_USER=${DB_DWH_USER}
+      - DB_DWH_PASS=${DB_DWH_PASS}
+    networks:
+      - tfg-network
+    depends_on:
+      - postgres-dwh
+
 # ─────────────────────────────────────
 # VOLUMES
 # ─────────────────────────────────────
