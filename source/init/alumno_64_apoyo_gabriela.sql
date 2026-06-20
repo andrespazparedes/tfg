@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Fernando Otero Castro y Laura Varela Rey)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP064', 'Fernando Otero Castro', 'Laura Varela Rey', '600640011', '600640022', 'fernando.otero@email.com', 'laura.varela.re@email.com', 'Rúa Real 50, CP 15003, A Coruña', false);
+('RESP064', 'Fernando Otero Castro', 'Laura Varela Rey', '600640011', '600640022', 'fernando.otero@email.com', 'laura.varela.re@email.com', 'Rúa Real 50, N/A, CP 15003, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan estabilidad económica y nula brecha digital)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Fernando Veiga Castro y María Gómez Rey)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP058', 'Fernando Veiga Castro', 'María Gómez Rey', '600580011', '600580022', 'fernando.veiga.c@email.com', 'maria.gomez.rey2@email.com', 'Rúa Hospital 12, CP 15002, A Coruña', false);
+('RESP058', 'Fernando Veiga Castro', 'María Gómez Rey', '600580011', '600580022', 'fernando.veiga.c@email.com', 'maria.gomez.rey2@email.com', 'Rúa Hospital 12, N/A, CP 15002, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

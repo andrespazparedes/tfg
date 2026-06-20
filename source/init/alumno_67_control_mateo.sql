@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Sergio Romero Otero y Laura Varela Rey)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP067', 'Sergio Romero Otero', 'Laura Varela Rey', '600670011', '600670022', 'sergio.romero.v2@email.com', 'laura.varela.rey2@email.com', 'Rúa Real 90, CP 15003, A Coruña', false);
+('RESP067', 'Sergio Romero Otero', 'Laura Varela Rey', '600670011', '600670022', 'sergio.romero.v2@email.com', 'laura.varela.rey2@email.com', 'Rúa Real 90, N/A, CP 15003, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

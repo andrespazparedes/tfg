@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Daniel Iglesias Varela e Isabel Blanco Castro)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP031', 'Daniel Iglesias Varela', 'Isabel Blanco Castro', '600310011', NULL, 'daniel.iglesias.b@email.com', NULL, 'Rúa de la Torre 44, CP 15002, A Coruña', false);
+('RESP031', 'Daniel Iglesias Varela', 'Isabel Blanco Castro', '600310011', NULL, 'daniel.iglesias.b@email.com', NULL, 'Rúa de la Torre 44, N/A, CP 15002, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media y nula brecha digital)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

@@ -3,8 +3,8 @@
 -- Ubicación: source/init/ (se ejecutará automáticamente en orden alfabético)
 
 -- 1. Responsable Legal (Juliana Silva Santos)
-INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telephone_1, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP008', 'Juliana Silva Santos', NULL, '600080011', '600080011', NULL, 'juliana.silva@email.com', NULL, 'Rúa de la Torre 88, 3º Izq, CP 15002, A Coruña', true);
+INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
+('RESP008', 'Juliana Silva Santos', NULL, '600080011', NULL, 'juliana.silva@email.com', NULL, 'Rúa de la Torre 88, 3º Izq, CP 15002, A Coruña', true);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos de trabajadora de hostelería recién llegada)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

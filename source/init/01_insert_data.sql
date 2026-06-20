@@ -13,7 +13,10 @@ TRUNCATE LINEA_EXPEDIENTE, ASIGNATURA_MATRICULA, MATRICULA, ADMISION, CENTRO,
 INSERT INTO CICLO_EDUCATIVO (cod_ciclo, nombre, real_decreto, decreto_autonomico) VALUES
 ('INF', 'Educación Infantil (Segundo Ciclo)', 'RD 95/2022', 'Decreto 100/2023'),
 ('PRI', 'Educación Primaria', 'RD 157/2022', 'Decreto 101/2023'),
-('ESO', 'Educación Secundaria Obligatoria', 'RD 217/2022', 'Decreto 102/2023');
+('ESO', 'Educación Secundaria Obligatoria', 'RD 217/2022', 'Decreto 102/2023'),
+('BAC', 'Educación Bachillerato', 'RD 243/2022', 'Decreto 157/2022'),
+('FPM', 'Formación Profesional de Grado Medio', 'RD 659/2023', 'Decreto 101/2023'),
+('FPS', 'Formación Profesional de Grado Superior', 'RD 659/2023', 'Decreto 101/2023');
 
 -- =========================================================================
 -- 2. ESPECIALIDAD (Itinerarios / Programas Académicos)
@@ -32,7 +35,11 @@ INSERT INTO ESPECIALIDAD (cod_especialidad, nombre, cod_ciclo) VALUES
 ('PRI-GEN', 'Educación Primaria (Itinerario General)', 'PRI'),
 ('ESO-GEN', 'ESO - Itinerario Ordinario/General', 'ESO'),
 ('ESO-DIV', 'ESO - Programa de Diversificación Curricular', 'ESO'),
-('ESO-GB',  'ESO - Ciclo Formativo de Grado Básico (FP Básica)', 'ESO');
+('ESO-GB',  'ESO - Ciclo Formativo de Grado Básico (FP Básica)', 'ESO'),
+('BAC-CIEN', 'Bachillerato - Itinerario de Ciencias y Tecnología', 'BAC'),
+('BAC-HCS',  'Bachillerato - Itinerario de Humanidades y CC. Sociales', 'BAC'),
+('FPM-SMR',  'FP Grado Medio - Sistemas Microinformáticos y Redes', 'FPM'),
+('FPS-DAW',  'FP Grado Superior - Desarrollo de Aplicaciones Web', 'FPS');
 
 -- =========================================================================
 -- 3. CURSO (Todos los niveles de Infantil, Primaria y ESO)
@@ -65,7 +72,21 @@ INSERT INTO CURSO (num_curso, cod_especialidad, num_optativas) VALUES
 -- ESO - Ciclo Formativo de Grado Básico (3º y 4º de ESO)
 -- Equivale a 1º y 2º de FP Básica
 (3, 'ESO-GB', 0),  -- 1º Grado Básico (equivalente a 3º ESO)
-(4, 'ESO-GB', 0);  -- 2º Grado Básico (equivalente a 4º ESO)
+(4, 'ESO-GB', 0),  -- 2º Grado Básico (equivalente a 4º ESO)
+
+-- Educación Bachillerato (1º y 2º de Bachillerato)
+(1, 'BAC-CIEN', 2), -- 1º Bachillerato de Ciencias
+(2, 'BAC-CIEN', 3), -- 2º Bachillerato de Ciencias
+(1, 'BAC-HCS', 2),  -- 1º Bachillerato de Letras/Sociales
+(2, 'BAC-HCS', 3),  -- 2º Bachillerato de Letras/Sociales
+
+-- FP Grado Medio (SMR - 1º y 2º)
+(1, 'FPM-SMR', 0),  -- 1º Grado Medio SMR
+(2, 'FPM-SMR', 0),  -- 2º Grado Medio SMR
+
+-- FP Grado Superior (DAW - 1º y 2º)
+(1, 'FPS-DAW', 0),  -- 1º Grado Superior DAW
+(2, 'FPS-DAW', 0);  -- 2º Grado Superior DAW
 
 -- =========================================================================
 -- 4. ASIGNATURA (Catálogo Completo Oficial LOMLOE)
@@ -219,7 +240,49 @@ INSERT INTO ASIGNATURA (cod_asignatura, nombre, tipo, num_horas, num_curso, cod_
 ('ESOGB2-ACT', 'Ámbito de Ciencias Aplicadas (Matemáticas y Ciencias)', 'Obligatoria', 180, 4, 'ESO-GB'),
 ('ESOGB2-ALS', 'Ámbito de Comunicación y Ciencias Sociales (Lengua e Inglés)', 'Obligatoria', 200, 4, 'ESO-GB'),
 ('ESOGB2-PRAC', 'Taller Práctico y Formación en Centros de Trabajo (FCT)', 'Obligatoria', 360, 4, 'ESO-GB'),
-('ESOGB2-EFI', 'Educación Física', 'Obligatoria', 70, 4, 'ESO-GB');
+('ESOGB2-EFI', 'Educación Física', 'Obligatoria', 70, 4, 'ESO-GB'),
+
+-- -------------------------------------------------------------------------
+-- 4.6. EDUCACIÓN BACHILLERATO (Materias LOMLOE)
+-- -------------------------------------------------------------------------
+-- 1º Bachillerato - Ciencias y Tecnología (BAC-CIEN)
+('BAC1-LCL', 'Lengua Castellana y Literatura I', 'Obligatoria', 140, 1, 'BAC-CIEN'),
+('BAC1-MAT1', 'Matemáticas I', 'Obligatoria', 140, 1, 'BAC-CIEN'),
+('BAC1-FQ', 'Física y Química', 'Obligatoria', 140, 1, 'BAC-CIEN'),
+('BAC1-ING1', 'Inglés I', 'Obligatoria', 105, 1, 'BAC-CIEN'),
+-- 2º Bachillerato - Ciencias y Tecnología (BAC-CIEN)
+('BAC2-LCL', 'Lengua Castellana y Literatura II', 'Obligatoria', 140, 2, 'BAC-CIEN'),
+('BAC2-MAT2', 'Matemáticas II', 'Obligatoria', 140, 2, 'BAC-CIEN'),
+('BAC2-HIS', 'Historia de España', 'Obligatoria', 105, 2, 'BAC-CIEN'),
+('BAC2-ING2', 'Inglés II', 'Obligatoria', 105, 2, 'BAC-CIEN'),
+
+-- 1º Bachillerato - Humanidades y CC. Sociales (BAC-HCS)
+('BAC1-LCL-H', 'Lengua Castellana y Literatura I', 'Obligatoria', 140, 1, 'BAC-HCS'),
+('BAC1-LAT1', 'Latín I', 'Obligatoria', 140, 1, 'BAC-HCS'),
+('BAC1-ING1-H', 'Inglés I', 'Obligatoria', 105, 1, 'BAC-HCS'),
+-- 2º Bachillerato - Humanidades y CC. Sociales (BAC-HCS)
+('BAC2-LCL-H', 'Lengua Castellana y Literatura II', 'Obligatoria', 140, 2, 'BAC-HCS'),
+('BAC2-HIS-H', 'Historia de España', 'Obligatoria', 105, 2, 'BAC-HCS'),
+('BAC2-ING2-H', 'Inglés II', 'Obligatoria', 105, 2, 'BAC-HCS'),
+
+-- -------------------------------------------------------------------------
+-- 4.7. FORMACIÓN PROFESIONAL DE GRADO MEDIO (Módulos de SMR)
+-- -------------------------------------------------------------------------
+-- 1º FP Grado Medio SMR (FPM-SMR)
+('FPM-SMR-SO', 'Sistemas Operativos Monopuesto', 'Obligatoria', 160, 1, 'FPM-SMR'),
+('FPM-SMR-RED', 'Redes Locales', 'Obligatoria', 160, 1, 'FPM-SMR'),
+('FPM-SMR-MON', 'Montaje y Mantenimiento de Equipos', 'Obligatoria', 180, 1, 'FPM-SMR'),
+-- 2º FP Grado Medio SMR (FPM-SMR)
+('FPM-SMR-AW', 'Aplicaciones Web', 'Obligatoria', 140, 2, 'FPM-SMR'),
+('FPM-SMR-SOR', 'Sistemas Operativos en Red', 'Obligatoria', 140, 2, 'FPM-SMR'),
+
+-- -------------------------------------------------------------------------
+-- 4.8. FORMACIÓN PROFESIONAL DE GRADO SUPERIOR (Módulos de DAW)
+-- -------------------------------------------------------------------------
+-- 1º FP Grado Superior DAW (FPS-DAW)
+('FPS-DAW-PROG', 'Programación', 'Obligatoria', 240, 1, 'FPS-DAW'),
+('FPS-DAW-BD', 'Bases de Datos', 'Obligatoria', 180, 1, 'FPS-DAW'),
+('FPS-DAW-ED', 'Entornos de Desarrollo', 'Obligatoria', 90, 1, 'FPS-DAW');
 
 -- =========================================================================
 -- 5. CENTRO (Red de Centros Educativos en la ciudad de A Coruña)

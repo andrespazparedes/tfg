@@ -23,30 +23,30 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas Anuales
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Primaria
-('MAT-BRUN-PRI6', '2023-09-01', '2023/2024', 'EXP2015049', 'C006', 6, 'PRI-GEN'),
+('M49-PRI6', '2023-09-01', '2023/2024', 'EXP2015049', 'C006', 6, 'PRI-GEN'),
 -- Educación Secundaria
-('MAT-BRUN-ESO1', '2024-09-02', '2024/2025', 'EXP2015049', 'I006', 1, 'ESO-GEN'),
-('MAT-BRUN-ESO2', '2025-09-01', '2025/2026', 'EXP2015049', 'I006', 2, 'ESO-GEN'); -- Curso actual
+('M49-ESO1', '2024-09-02', '2024/2025', 'EXP2015049', 'I006', 1, 'ESO-GEN'),
+('M49-ESO2', '2025-09-01', '2025/2026', 'EXP2015049', 'I006', 2, 'ESO-GEN'); -- Curso actual
 
 -- 6. Historial de Calificaciones
 -- A. 6º PRIMARIA (2023/2024)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-BRUN-PRI6', false), ('PRI6-MAT', 'MAT-BRUN-PRI6', false);
+('PRI6-LCL', 'M49-PRI6', false), ('PRI6-MAT', 'M49-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-BRUN-PRI6', 'Final Ordinaria', 7.50),
-('PRI6-MAT', 'MAT-BRUN-PRI6', 'Final Ordinaria', 7.00);
+('PRI6-LCL', 'M49-PRI6', 'Final Ordinaria', 7.50),
+('PRI6-MAT', 'M49-PRI6', 'Final Ordinaria', 7.00);
 
 -- B. 1º ESO (2024/2025)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-BRUN-ESO1', false), ('ESO1-MAT', 'MAT-BRUN-ESO1', false);
+('ESO1-LCL', 'M49-ESO1', false), ('ESO1-MAT', 'M49-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-BRUN-ESO1', 'Final Ordinaria', 7.50),
-('ESO1-MAT', 'MAT-BRUN-ESO1', 'Final Ordinaria', 7.00);
+('ESO1-LCL', 'M49-ESO1', 'Final Ordinaria', 7.50),
+('ESO1-MAT', 'M49-ESO1', 'Final Ordinaria', 7.00);
 
 -- C. 2º ESO - CURSO ACTUAL (2025/2026 - 1ª Evaluación)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO2-LCL', 'MAT-BRUN-ESO2', false), ('ESO2-MAT', 'MAT-BRUN-ESO2', false), ('ESO2-FQ', 'MAT-BRUN-ESO2', false);
+('ESO2-LCL', 'M49-ESO2', false), ('ESO2-MAT', 'M49-ESO2', false), ('ESO2-FQ', 'M49-ESO2', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO2-LCL', 'MAT-BRUN-ESO2', '1ª Evaluación', 7.50), -- Notable
-('ESO2-MAT', 'MAT-BRUN-ESO2', '1ª Evaluación', 7.00), -- Notable
-('ESO2-FQ',  'MAT-BRUN-ESO2', '1ª Evaluación', 7.50); -- Notable
+('ESO2-LCL', 'M49-ESO2', '1ª Evaluación', 7.50), -- Notable
+('ESO2-MAT', 'M49-ESO2', '1ª Evaluación', 7.00), -- Notable
+('ESO2-FQ',  'M49-ESO2', '1ª Evaluación', 7.50); -- Notable

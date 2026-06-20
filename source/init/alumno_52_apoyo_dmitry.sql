@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Sergio Castro Varela y Ana Gómez Otero)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP052', 'Sergio Castro Varela', 'Ana Gómez Otero', '600520011', '600520022', 'sergio.castro.v@email.com', 'ana.gomez.otero@email.com', 'Rúa Alfredo Vicenti 40, CP 15004, A Coruña', false);
+('RESP052', 'Sergio Castro Varela', 'Ana Gómez Otero', '600520011', '600520022', 'sergio.castro.v@email.com', 'ana.gomez.otero@email.com', 'Rúa Alfredo Vicenti 40, N/A, CP 15004, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos de clase media con gastos médicos cubiertos)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES
@@ -23,10 +23,10 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas Anuales
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Primaria
-('MAT-DMIT-PRI6', '2023-09-01', '2023/2024', 'EXP2015052', 'C002', 6, 'PRI-GEN'),
+('M52-PRI6', '2023-09-01', '2023/2024', 'EXP2015052', 'C002', 6, 'PRI-GEN'),
 -- Educación Secundaria
-('MAT-DMIT-ESO1', '2024-09-02', '2024/2025', 'EXP2015052', 'I001', 1, 'ESO-GEN'),
-('MAT-DMIT-ESO2', '2025-09-01', '2025/2026', 'EXP2015052', 'I001', 2, 'ESO-GEN'); -- Curso actual
+('M52-ESO1', '2024-09-02', '2024/2025', 'EXP2015052', 'I001', 1, 'ESO-GEN'),
+('M52-ESO2', '2025-09-01', '2025/2026', 'EXP2015052', 'I001', 2, 'ESO-GEN'); -- Curso actual
 
 -- 6. Adaptación Curricular / NEAE por Diversidad Funcional Motórica (Activada por parálisis cerebral leve con afectación en escritura manual)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
@@ -41,22 +41,22 @@ INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES
 -- 7. Historial de Calificaciones
 -- A. 6º PRIMARIA (2023/2024)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-DMIT-PRI6', false), ('PRI6-MAT', 'MAT-DMIT-PRI6', false);
+('PRI6-LCL', 'M52-PRI6', false), ('PRI6-MAT', 'M52-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-DMIT-PRI6', 'Final Ordinaria', 7.00),
-('PRI6-MAT', 'MAT-DMIT-PRI6', 'Final Ordinaria', 6.50);
+('PRI6-LCL', 'M52-PRI6', 'Final Ordinaria', 7.00),
+('PRI6-MAT', 'M52-PRI6', 'Final Ordinaria', 6.50);
 
 -- B. 1º ESO (2024/2025 - Transición satisfactoria con adaptación digital)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-DMIT-ESO1', false), ('ESO1-MAT', 'MAT-DMIT-ESO1', false);
+('ESO1-LCL', 'M52-ESO1', false), ('ESO1-MAT', 'M52-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-DMIT-ESO1', 'Final Ordinaria', 7.00),
-('ESO1-MAT', 'MAT-DMIT-ESO1', 'Final Ordinaria', 7.50);
+('ESO1-LCL', 'M52-ESO1', 'Final Ordinaria', 7.00),
+('ESO1-MAT', 'M52-ESO1', 'Final Ordinaria', 7.50);
 
 -- C. 2º ESO - CURSO ACTUAL (2025/2026 - 1ª Evaluación)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO2-LCL', 'MAT-DMIT-ESO2', false), ('ESO2-MAT', 'MAT-DMIT-ESO2', false), ('ESO2-FQ', 'MAT-DMIT-ESO2', false);
+('ESO2-LCL', 'M52-ESO2', false), ('ESO2-MAT', 'M52-ESO2', false), ('ESO2-FQ', 'M52-ESO2', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO2-LCL', 'MAT-DMIT-ESO2', '1ª Evaluación', 7.00), -- Notable
-('ESO2-MAT', 'MAT-DMIT-ESO2', '1ª Evaluación', 7.00), -- Notable
-('ESO2-FQ',  'MAT-DMIT-ESO2', '1ª Evaluación', 6.50); -- Bien
+('ESO2-LCL', 'M52-ESO2', '1ª Evaluación', 7.00), -- Notable
+('ESO2-MAT', 'M52-ESO2', '1ª Evaluación', 7.00), -- Notable
+('ESO2-FQ',  'M52-ESO2', '1ª Evaluación', 6.50); -- Bien

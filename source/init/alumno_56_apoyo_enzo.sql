@@ -30,7 +30,7 @@ INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, co
 
 -- 6. Adaptación Curricular / Plan de Absentismo y Retención (Activado en 2º ESO por inasistencias sistemáticas)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
-('ADAP056', '2025-10-15', 'Apoyo Educativo - Absentismo y Prevención de Abandono', 'Estudiante registra un patrón de inasistencia prolongado no justificado en el segundo curso de la ESO (>20% de faltas acumuladas), condicionado por desapego familiar y desmotivación académica severa. Se activa el protocolo de prevención del abandono escolar temprano, coordinando apoyo socioeducativo continuado.', 'EXP2015056');
+('ADAP056', '2025-10-15', 'Apoyo - Absentismo y Prevención de Abandono', 'Estudiante registra un patrón de inasistencia prolongado no justificado en el segundo curso de la ESO (>20% de faltas acumuladas), condicionado por desapego familiar y desmotivación académica severa. Se activa el protocolo de prevención del abandono escolar temprano, coordinando apoyo socioeducativo continuado.', 'EXP2015056');
 
 -- Relacionamos la adaptación con Matemáticas e instrumentales adaptadas
 INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES

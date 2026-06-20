@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Pedro Iglesias Varela y María Gómez Rey)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP069', 'Pedro Iglesias Varela', 'María Gómez Rey', '600690011', '600690022', 'pedro.iglesias.v@email.com', 'maria.gomez.rey3@email.com', 'Rúa Orillamar 122, CP 15001, A Coruña', false);
+('RESP069', 'Pedro Iglesias Varela', 'María Gómez Rey', '600690011', '600690022', 'pedro.iglesias.v@email.com', 'maria.gomez.rey3@email.com', 'Rúa Orillamar 122, N/A, CP 15001, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

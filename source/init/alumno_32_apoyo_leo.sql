@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Santiago Pintos Varela y Marta Castro Otero)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP032', 'Santiago Pintos Varela', 'Marta Castro Otero', '600320011', NULL, 'santiago.pintos.c@email.com', NULL, 'Rúa Barcelona 30, CP 15011, A Coruña', false);
+('RESP032', 'Santiago Pintos Varela', 'Marta Castro Otero', '600320011', NULL, 'santiago.pintos.c@email.com', NULL, 'Rúa Barcelona 30, N/A, CP 15011, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos bajos del sector servicios y nula brecha digital)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Marcos Romero Otero y Laura Castro Gómez)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP070', 'Marcos Romero Otero', 'Laura Castro Gómez', '600700011', '600700022', 'marcos.romero.o2@email.com', 'laura.castro.go@email.com', 'Rúa Juan Flórez 122, CP 15004, A Coruña', false);
+('RESP070', 'Marcos Romero Otero', 'Laura Castro Gómez', '600700011', '600700022', 'marcos.romero.o2@email.com', 'laura.castro.go@email.com', 'Rúa Juan Flórez 122, N/A, CP 15004, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

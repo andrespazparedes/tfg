@@ -30,7 +30,7 @@ INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, co
 
 -- 6. Adaptación Curricular / NEAE por Trastorno de Conducta - TND (Activada en 1º ESO por extremada conflictividad en el aula)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
-('ADAP062', '2024-10-15', 'Apoyo Educativo - Trastorno Negativista Desafiante (TND)', 'Estudiante diagnosticado con Trastorno Negativista Desafiante (TND). Presenta baja tolerancia a la frustración, respuestas oposicionistas sistemáticas ante la autoridad y constantes amonestaciones de aula. Se prescribe Adaptación de Conducta: contrato diario de puntos, segmentación de tareas y mediación activa con el orientador.', 'EXP2015062');
+('ADAP062', '2024-10-15', 'Apoyo - Trastorno Negativista Desafiante (TND)', 'Estudiante diagnosticado con Trastorno Negativista Desafiante (TND). Presenta baja tolerancia a la frustración, respuestas oposicionistas sistemáticas ante la autoridad y constantes amonestaciones de aula. Se prescribe Adaptación de Conducta: contrato diario de puntos, segmentación de tareas y mediación activa con el orientador.', 'EXP2015062');
 
 -- Relacionamos la adaptación conductual con Matemáticas y Lengua Castellana
 INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES

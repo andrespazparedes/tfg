@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Marcos Blanco Otero y Laura Gómez Rey)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP060', 'Marcos Blanco Otero', 'Laura Gómez Rey', '600600011', '600600022', 'marcos.blanco.o@email.com', 'laura.gomez.rey@email.com', 'Rúa Juan Flórez 102, CP 15004, A Coruña', false);
+('RESP060', 'Marcos Blanco Otero', 'Laura Gómez Rey', '600600011', '600600022', 'marcos.blanco.o@email.com', 'laura.gomez.rey@email.com', 'Rúa Juan Flórez 102, N/A, CP 15004, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES
@@ -30,7 +30,7 @@ INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, co
 
 -- 6. Adaptación Curricular / Plan de Intervención por Ludopatía Digital (Activado en 2º ESO ante sospechas de adicción severa a apuestas en línea y videojuegos)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
-('ADAP060', '2025-10-15', 'Apoyo Educativo - Ludopatía Digital y Adicción Tecnológica', 'Estudiante presenta un cuadro clínico severo de adicción a las tecnologías y juego en línea con apuestas simuladas. Esto ha provocado trastornos de sueño (*vamping* severo), irritabilidad y absentismo selectivo no justificado en las primeras horas. Se activa un plan de intervención psicopedagógica y control digital en el aula.', 'EXP2015060');
+('ADAP060', '2025-10-15', 'Apoyo - Ludopatía y Adicción Tecnológica', 'Estudiante presenta un cuadro clínico severo de adicción a las tecnologías y juego en línea con apuestas simuladas. Esto ha provocado trastornos de sueño (*vamping* severo), irritabilidad y absentismo selectivo no justificado en las primeras horas. Se activa un plan de intervención psicopedagógica y control digital en el aula.', 'EXP2015060');
 
 -- Relacionamos la adaptación con todas las asignaturas troncales instrumentales
 INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES

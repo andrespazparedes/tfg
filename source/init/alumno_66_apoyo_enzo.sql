@@ -4,7 +4,7 @@
 
 -- 1. Responsable Legal (Juan Castro Blanco)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP066', 'Juan Castro Blanco', NULL, '600660011', NULL, 'juan.castro.b@email.com', NULL, 'Rúa Agra do Orzán 122, CP 15010, A Coruña', true);
+('RESP066', 'Juan Castro Blanco', NULL, '600660011', NULL, 'juan.castro.b@email.com', NULL, 'Rúa Agra do Orzán 122, N/A, CP 15010, A Coruña', true);
 
 -- 2. Encuestas Socioeconómicas Históricas (Hogar de extrema vulnerabilidad y brecha digital total)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES
@@ -32,7 +32,7 @@ INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, co
 
 -- 6. Adaptación Curricular / Intento de Retención por Absentismo Familiar (Activado en 4º de ESO antes del cese de asistencia)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
-('ADAP066', '2025-10-15', 'Apoyo Educativo - Prevención de Absentismo por Trabajo', 'Estudiante al cumplir los 16 años registra cese absoluto de asistencia a clase (absentismo >60% no justificado). La mediación escolar confirma la incorporación definitiva del menor al mercado laboral informal en el negocio ambulante familiar. Se activa protocolo oficial de absentismo crónico con derivación a inspección, consumando la situación de Abandono Escolar Temprano (AET).', 'EXP2010066');
+('ADAP066', '2025-10-15', 'Apoyo - Prevención de Absentismo por Trabajo', 'Estudiante al cumplir los 16 años registra cese absoluto de asistencia a clase (absentismo >60% no justificado). La mediación escolar confirma la incorporación definitiva del menor al mercado laboral informal en el negocio ambulante familiar. Se activa protocolo oficial de absentismo crónico con derivación a inspección, consumando la situación de Abandono Escolar Temprano (AET).', 'EXP2010066');
 
 -- Relacionamos la adaptación con materias de 4º ESO
 INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES

@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Manuel Romero Vázquez y Elena Gómez Castro)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP029', 'Manuel Romero Vázquez', 'Elena Gómez Castro', '600290011', NULL, 'manuel.romero@email.com', NULL, 'Rúa San Andrés 40, CP 15003, A Coruña', false);
+('RESP029', 'Manuel Romero Vázquez', 'Elena Gómez Castro', '600290011', NULL, 'manuel.romero@email.com', NULL, 'Rúa San Andrés 40, N/A, CP 15003, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media-baja y nula brecha digital)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

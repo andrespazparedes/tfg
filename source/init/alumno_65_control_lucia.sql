@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Adrián Blanco Varela y Paula Gómez Castro)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP065', 'Adrián Blanco Varela', 'Paula Gómez Castro', '600650011', '600650022', 'adrian.blanco.v2@email.com', 'paula.gomez.c2@email.com', 'Rúa Orillamar 150, CP 15001, A Coruña', false);
+('RESP065', 'Adrián Blanco Varela', 'Paula Gómez Castro', '600650011', '600650022', 'adrian.blanco.v2@email.com', 'paula.gomez.c2@email.com', 'Rúa Orillamar 150, N/A, CP 15001, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media-alta)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

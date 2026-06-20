@@ -13,7 +13,7 @@ INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios
 
 -- 3. Expediente del Estudiante
 INSERT INTO ESTUDIANTE (num_expediente, dni, nombre, fecha_nacimiento, email, cod_responsable) VALUES
-('EXP2015043', '78901239N', 'Martín Seoane Blanco', '2012-12-14', 'martin.seoane@alumno.com', 'RESP043');
+('EXP2015043', '78901239N', 'Martín Seoane Blanco', '2012-12-14', 'martin43.seoane@alumno.com', 'RESP043');
 
 -- 4. Admisiones Oficiales en los Centros de A Coruña
 INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_centro) VALUES

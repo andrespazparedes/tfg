@@ -4,7 +4,7 @@
 
 -- 1. Responsable Legal (Xunta de Galicia - Centro de Acogimiento Residencial CP Adormideras)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP050', 'Xunta de Galicia (Familia)', 'Centro Acogimiento Adormideras', '981005500', NULL, 'acogimiento.adormideras@xunta.gal', NULL, 'Rúa de la Dársena 2, CP 15002, A Coruña', true);
+('RESP050', 'Xunta de Galicia (Familia)', 'Centro Acogimiento Adormideras', '981005500', NULL, 'acogimiento.adormideras@xunta.gal', NULL, 'Rúa de la Dársena 2, N/A, CP 15002, A Coruña', true);
 
 -- 2. Encuestas Socioeconómicas Históricas (Bajos recursos asignados al expediente de tutela pública)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES
@@ -23,9 +23,9 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas Anuales
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Primaria
-('MAT-IRIS-PRI6', '2024-09-02', '2024/2025', 'EXP2016050', 'C006', 6, 'PRI-GEN'),
+('M50-PRI6', '2024-09-02', '2024/2025', 'EXP2016050', 'C006', 6, 'PRI-GEN'),
 -- Educación Secundaria
-('MAT-IRIS-ESO1', '2025-09-01', '2025/2026', 'EXP2016050', 'I005', 1, 'ESO-GEN'); -- Curso actual
+('M50-ESO1', '2025-09-01', '2025/2026', 'EXP2016050', 'I005', 1, 'ESO-GEN'); -- Curso actual
 
 -- 6. Adaptación Curricular / Plan de Inclusión para Alumnos Tutelados (Activado al ingreso en el centro de acogimiento por inestabilidad emocional y absentismo fluctuante)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
@@ -39,15 +39,15 @@ INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES
 -- 7. Historial de Calificaciones
 -- A. 6º PRIMARIA (2024/2025 - Rendimiento condicionado por el desapego escolar inicial)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-IRIS-PRI6', false), ('PRI6-MAT', 'MAT-IRIS-PRI6', false);
+('PRI6-LCL', 'M50-PRI6', false), ('PRI6-MAT', 'M50-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-IRIS-PRI6', 'Final Ordinaria', 5.00), -- Aprobado muy justo
-('PRI6-MAT', 'MAT-IRIS-PRI6', 'Final Ordinaria', 4.50); -- Aprobado en extraordinaria
+('PRI6-LCL', 'M50-PRI6', 'Final Ordinaria', 5.00), -- Aprobado muy justo
+('PRI6-MAT', 'M50-PRI6', 'Final Ordinaria', 4.50); -- Aprobado en extraordinaria
 
 -- B. 1º ESO - CURSO ACTUAL (2025/2026 - 1ª Evaluación - Rendimiento bajo pero estabilizándose con el apoyo activo)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-IRIS-ESO1', false), ('ESO1-MAT', 'MAT-IRIS-ESO1', false), ('ESO1-ING', 'MAT-IRIS-ESO1', false);
+('ESO1-LCL', 'M50-ESO1', false), ('ESO1-MAT', 'M50-ESO1', false), ('ESO1-ING', 'M50-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-IRIS-ESO1', '1ª Evaluación', 5.00), -- Aprobado justo
-('ESO1-MAT', 'MAT-IRIS-ESO1', '1ª Evaluación', 4.00), -- Suspenso por inasistencia transitoria
-('ESO1-ING', 'MAT-IRIS-ESO1', '1ª Evaluación', 5.00); -- Aprobado justo
+('ESO1-LCL', 'M50-ESO1', '1ª Evaluación', 5.00), -- Aprobado justo
+('ESO1-MAT', 'M50-ESO1', '1ª Evaluación', 4.00), -- Suspenso por inasistencia transitoria
+('ESO1-ING', 'M50-ESO1', '1ª Evaluación', 5.00); -- Aprobado justo

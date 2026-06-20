@@ -13,7 +13,7 @@ INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios
 
 -- 3. Expediente del Estudiante
 INSERT INTO ESTUDIANTE (num_expediente, dni, nombre, fecha_nacimiento, email, cod_responsable) VALUES
-('EXP2016045', '78901241Q', 'Lucía Iglesias Gómez', '2013-05-24', 'lucia.iglesias@alumno.com', 'RESP045');
+('EXP2016045', '78901241Q', 'Lucía Iglesias Gómez', '2013-05-24', 'lucia45.iglesias@alumno.com', 'RESP045');
 
 -- 4. Admisiones Oficiales en los Centros de A Coruña
 INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_centro) VALUES
@@ -23,30 +23,30 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas Anuales
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Primaria
-('MAT-LUCI-PRI5', '2023-09-01', '2023/2024', 'EXP2016045', 'C006', 5, 'PRI-GEN'),
-('MAT-LUCI-PRI6', '2024-09-02', '2024/2025', 'EXP2016045', 'C006', 6, 'PRI-GEN'),
+('M45-PRI5', '2023-09-01', '2023/2024', 'EXP2016045', 'C006', 5, 'PRI-GEN'),
+('M45-PRI6', '2024-09-02', '2024/2025', 'EXP2016045', 'C006', 6, 'PRI-GEN'),
 -- Educación Secundaria
-('MAT-LUCI-ESO1', '2025-09-01', '2025/2026', 'EXP2016045', 'I006', 1, 'ESO-GEN'); -- Curso actual
+('M45-ESO1', '2025-09-01', '2025/2026', 'EXP2016045', 'I006', 1, 'ESO-GEN'); -- Curso actual
 
 -- 6. Historial de Calificaciones
 -- A. 5º PRIMARIA (2023/2024 - Excelente)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI5-LCL', 'MAT-LUCI-PRI5', false), ('PRI5-MAT', 'MAT-LUCI-PRI5', false);
+('PRI5-LCL', 'M45-PRI5', false), ('PRI5-MAT', 'M45-PRI5', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI5-LCL', 'MAT-LUCI-PRI5', 'Final Ordinaria', 8.50),
-('PRI5-MAT', 'MAT-LUCI-PRI5', 'Final Ordinaria', 9.00);
+('PRI5-LCL', 'M45-PRI5', 'Final Ordinaria', 8.50),
+('PRI5-MAT', 'M45-PRI5', 'Final Ordinaria', 9.00);
 
 -- B. 6º PRIMARIA (2024/2025 - Excelente continuo)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-LUCI-PRI6', false), ('PRI6-MAT', 'MAT-LUCI-PRI6', false);
+('PRI6-LCL', 'M45-PRI6', false), ('PRI6-MAT', 'M45-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-LUCI-PRI6', 'Final Ordinaria', 9.00),
-('PRI6-MAT', 'MAT-LUCI-PRI6', 'Final Ordinaria', 9.50);
+('PRI6-LCL', 'M45-PRI6', 'Final Ordinaria', 9.00),
+('PRI6-MAT', 'M45-PRI6', 'Final Ordinaria', 9.50);
 
 -- C. 1º ESO - CURSO ACTUAL (2025/2026 - 1ª Evaluación)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-LUCI-ESO1', false), ('ESO1-MAT', 'MAT-LUCI-ESO1', false), ('ESO1-ING', 'MAT-LUCI-ESO1', false);
+('ESO1-LCL', 'M45-ESO1', false), ('ESO1-MAT', 'M45-ESO1', false), ('ESO1-ING', 'M45-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-LUCI-ESO1', '1ª Evaluación', 9.00), -- Sobresaliente
-('ESO1-MAT', 'MAT-LUCI-ESO1', '1ª Evaluación', 9.50), -- Sobresaliente
-('ESO1-ING', 'MAT-LUCI-ESO1', '1ª Evaluación', 9.00); -- Sobresaliente
+('ESO1-LCL', 'M45-ESO1', '1ª Evaluación', 9.00), -- Sobresaliente
+('ESO1-MAT', 'M45-ESO1', '1ª Evaluación', 9.50), -- Sobresaliente
+('ESO1-ING', 'M45-ESO1', '1ª Evaluación', 9.00); -- Sobresaliente

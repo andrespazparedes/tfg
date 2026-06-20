@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Fernando Veiga Castro y Laura Gómez Otero)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP044', 'Fernando Veiga Castro', 'Laura Gómez Otero', '600440011', '600440022', 'fernando.veiga@email.com', 'laura.gomez.o@email.com', 'Rúa Monelos 40, CP 15009, A Coruña', false);
+('RESP044', 'Fernando Veiga Castro', 'Laura Gómez Otero', '600440011', '600440022', 'fernando.veiga@email.com', 'laura.gomez.o@email.com', 'Rúa Monelos 40, N/A, CP 15009, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

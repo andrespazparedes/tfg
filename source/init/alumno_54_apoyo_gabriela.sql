@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Sergio Blanco Otero y María Castro Veiga)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP054', 'Sergio Blanco Otero', 'María Castro Veiga', '600540011', '600540022', 'sergio.blanco.o@email.com', 'maria.castro.v@email.com', 'Rúa Real 30, CP 15003, A Coruña', false);
+('RESP054', 'Sergio Blanco Otero', 'María Castro Veiga', '600540011', '600540022', 'sergio.blanco.o@email.com', 'maria.castro.v@email.com', 'Rúa Real 30, N/A, CP 15003, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables y nula brecha digital)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES
@@ -30,7 +30,7 @@ INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, co
 
 -- 6. Adaptación Curricular / NEAE por Altas Capacidades (Activada en 2º de ESO por el departamento de orientación ante desenganche y subrendimiento escolar)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
-('ADAP054', '2025-10-15', 'Apoyo Educativo - Enriquecimiento Altas Capacidades', 'Estudiante diagnosticada con Altas Capacidades Intelectuales (CI >130). Presenta aburrimiento sistemático en el aula, desmotivación hacia tareas rutinarias y un notable subrendimiento (calificaciones raspadas pese a su potencial). Se prescribe Plan de Enriquecimiento Curricular Horizontal y ampliación de retos en áreas científicas y tecnológicas.', 'EXP2015054');
+('ADAP054', '2025-10-15', 'Apoyo Educativo - Enriquecimiento AACC', 'Estudiante diagnosticada con Altas Capacidades Intelectuales (CI >130). Presenta aburrimiento sistemático en el aula, desmotivación hacia tareas rutinarias y un notable subrendimiento (calificaciones raspadas pese a su potencial). Se prescribe Plan de Enriquecimiento Curricular Horizontal y ampliación de retos en áreas científicas y tecnológicas.', 'EXP2015054');
 
 -- Relacionamos la adaptación con Matemáticas y Física y Química
 INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES

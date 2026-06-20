@@ -23,13 +23,13 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas Anuales (Historial brillante y descalabro gradual en ESO)
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Infantil (CEIP Ramón de la Sagra)
-('MAT-MART-INF3', '2017-09-01', '2017/2018', 'EXP2015009', 'C005', 3, 'INF-GEN'), -- 3º Infantil
+('M9-INF3', '2017-09-01', '2017/2018', 'EXP2015009', 'C005', 3, 'INF-GEN'), -- 3º Infantil
 -- Educación Primaria (CEIP Ramón de la Sagra)
-('MAT-MART-PRI1', '2018-09-03', '2018/2019', 'EXP2015009', 'C005', 1, 'PRI-GEN'), -- 1º Primaria
-('MAT-MART-PRI6', '2023-09-01', '2023/2024', 'EXP2015009', 'C005', 6, 'PRI-GEN'), -- 6º Primaria
+('M9-PRI1', '2018-09-03', '2018/2019', 'EXP2015009', 'C005', 1, 'PRI-GEN'), -- 1º Primaria
+('M9-PRI6', '2023-09-01', '2023/2024', 'EXP2015009', 'C005', 6, 'PRI-GEN'), -- 6º Primaria
 -- Educación Secundaria - ESO (IES Fernando Wirtz Suárez)
-('MAT-MART-ESO1', '2024-09-02', '2024/2025', 'EXP2015009', 'I002',     1, 'ESO-GEN'), -- 1º ESO (Primeros indicios de bullying)
-('MAT-MART-ESO2', '2025-09-01', '2025/2026', 'EXP2015009', 'I002',     2, 'ESO-GEN'); -- 2º ESO (Curso actual, colapso)
+('M9-ESO1', '2024-09-02', '2024/2025', 'EXP2015009', 'I002',     1, 'ESO-GEN'), -- 1º ESO (Primeros indicios de bullying)
+('M9-ESO2', '2025-09-01', '2025/2026', 'EXP2015009', 'I002',     2, 'ESO-GEN'); -- 2º ESO (Curso actual, colapso)
 
 -- 6. Adaptación Curricular / Protocolo de Convivencia (Activado a mitad de 2º ESO por Bullying y Fobia Escolar)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
@@ -44,41 +44,41 @@ INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES
 -- 7. Historial de Calificaciones
 -- A. 3º INFANTIL (2017/2018 - Excelente)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('INF3-CRE', 'MAT-MART-INF3', false), ('INF3-DES', 'MAT-MART-INF3', false), ('INF3-COM', 'MAT-MART-INF3', false);
+('INF3-CRE', 'M9-INF3', false), ('INF3-DES', 'M9-INF3', false), ('INF3-COM', 'M9-INF3', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('INF3-CRE', 'MAT-MART-INF3', 'Final Ordinaria', 8.50),
-('INF3-DES', 'MAT-MART-INF3', 'Final Ordinaria', 9.00),
-('INF3-COM', 'MAT-MART-INF3', 'Final Ordinaria', 8.50);
+('INF3-CRE', 'M9-INF3', 'Final Ordinaria', 8.50),
+('INF3-DES', 'M9-INF3', 'Final Ordinaria', 9.00),
+('INF3-COM', 'M9-INF3', 'Final Ordinaria', 8.50);
 
 -- B. 1º PRIMARIA (2018/2019)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI1-LCL', 'MAT-MART-PRI1', false), ('PRI1-MAT', 'MAT-MART-PRI1', false);
+('PRI1-LCL', 'M9-PRI1', false), ('PRI1-MAT', 'M9-PRI1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI1-LCL', 'MAT-MART-PRI1', 'Final Ordinaria', 7.50),
-('PRI1-MAT', 'MAT-MART-PRI1', 'Final Ordinaria', 8.00);
+('PRI1-LCL', 'M9-PRI1', 'Final Ordinaria', 7.50),
+('PRI1-MAT', 'M9-PRI1', 'Final Ordinaria', 8.00);
 
 -- C. 6º PRIMARIA (2023/2024 - Rendimiento notable-alto consolidado)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-MART-PRI6', false), ('PRI6-MAT', 'MAT-MART-PRI6', false);
+('PRI6-LCL', 'M9-PRI6', false), ('PRI6-MAT', 'M9-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-MART-PRI6', 'Final Ordinaria', 7.50),
-('PRI6-MAT', 'MAT-MART-PRI6', 'Final Ordinaria', 7.00);
+('PRI6-LCL', 'M9-PRI6', 'Final Ordinaria', 7.50),
+('PRI6-MAT', 'M9-PRI6', 'Final Ordinaria', 7.00);
 
 -- D. 1º ESO (2024/2025 - Inicio del bullying: caída del notable a aprobados raspados en junio)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-MART-ESO1', false), ('ESO1-MAT', 'MAT-MART-ESO1', false), ('ESO1-GH', 'MAT-MART-ESO1', false);
+('ESO1-LCL', 'M9-ESO1', false), ('ESO1-MAT', 'M9-ESO1', false), ('ESO1-GH', 'M9-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-MART-ESO1', 'Final Ordinaria', 5.00),
-('ESO1-MAT', 'MAT-MART-ESO1', 'Final Ordinaria', 5.50),
-('ESO1-GH',  'MAT-MART-ESO1', 'Final Ordinaria', 5.00);
+('ESO1-LCL', 'M9-ESO1', 'Final Ordinaria', 5.00),
+('ESO1-MAT', 'M9-ESO1', 'Final Ordinaria', 5.50),
+('ESO1-GH',  'M9-ESO1', 'Final Ordinaria', 5.00);
 
 -- E. 2º ESO - CURSO ACTUAL (2025/2026 - Colapso absoluto por fobia escolar y ansiedad en 1ª Ev)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO2-LCL', 'MAT-MART-ESO2', false),
-('ESO2-MAT', 'MAT-MART-ESO2', false),
-('ESO2-FQ',  'MAT-MART-ESO2', false);
+('ESO2-LCL', 'M9-ESO2', false),
+('ESO2-MAT', 'M9-ESO2', false),
+('ESO2-FQ',  'M9-ESO2', false);
 
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO2-LCL', 'MAT-MART-ESO2', '1ª Evaluación', 3.00), -- Suspenso severo
-('ESO2-MAT', 'MAT-MART-ESO2', '1ª Evaluación', 2.50), -- Suspenso severo por crisis de pánico en el examen
-('ESO2-FQ',  'MAT-MART-ESO2', '1ª Evaluación', 3.00); -- Suspenso severo
+('ESO2-LCL', 'M9-ESO2', '1ª Evaluación', 3.00), -- Suspenso severo
+('ESO2-MAT', 'M9-ESO2', '1ª Evaluación', 2.50), -- Suspenso severo por crisis de pánico en el examen
+('ESO2-FQ',  'M9-ESO2', '1ª Evaluación', 3.00); -- Suspenso severo

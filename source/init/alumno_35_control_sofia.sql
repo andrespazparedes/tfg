@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Carlos Seoane Fraga y Laura Otero Díaz)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP035', 'Carlos Seoane Fraga', 'Laura Otero Díaz', '600350011', '600350022', 'carlos.seoane.o@email.com', 'laura.otero.d@email.com', 'Rúa Alfredo Vicenti 18, CP 15004, A Coruña', false);
+('RESP035', 'Carlos Seoane Fraga', 'Laura Otero Díaz', '600350011', '600350022', 'carlos.seoane.o@email.com', 'laura.otero.d@email.com', 'Rúa Alfredo Vicenti 18, N/A, CP 15004, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media-baja y nula brecha digital)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES

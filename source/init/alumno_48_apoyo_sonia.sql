@@ -23,10 +23,10 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas Anuales
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Primaria
-('MAT-SONI-PRI6', '2023-09-01', '2023/2024', 'EXP2015048', 'C003', 6, 'PRI-GEN'),
+('M48-PRI6', '2023-09-01', '2023/2024', 'EXP2015048', 'C003', 6, 'PRI-GEN'),
 -- Educación Secundaria
-('MAT-SONI-ESO1', '2024-09-02', '2024/2025', 'EXP2015048', 'I004', 1, 'ESO-GEN'),
-('MAT-SONI-ESO2', '2025-09-01', '2025/2026', 'EXP2015048', 'I004', 2, 'ESO-GEN'); -- Curso actual
+('M48-ESO1', '2024-09-02', '2024/2025', 'EXP2015048', 'I004', 1, 'ESO-GEN'),
+('M48-ESO2', '2025-09-01', '2025/2026', 'EXP2015048', 'I004', 2, 'ESO-GEN'); -- Curso actual
 
 -- 6. Adaptación Curricular / Plan de Acogida e Inserción (Activada en 2º ESO por desfase curricular en áreas de ciencias)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
@@ -39,22 +39,22 @@ INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES
 -- 7. Historial de Calificaciones
 -- A. 6º PRIMARIA (2023/2024 - Rendimiento medio correcto antes del traslado)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-SONI-PRI6', false), ('PRI6-MAT', 'MAT-SONI-PRI6', false);
+('PRI6-LCL', 'M48-PRI6', false), ('PRI6-MAT', 'M48-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-SONI-PRI6', 'Final Ordinaria', 6.00),
-('PRI6-MAT', 'MAT-SONI-PRI6', 'Final Ordinaria', 6.50);
+('PRI6-LCL', 'M48-PRI6', 'Final Ordinaria', 6.00),
+('PRI6-MAT', 'M48-PRI6', 'Final Ordinaria', 6.50);
 
 -- B. 1º ESO (2024/2025 - Adaptación transitoria al centro)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-SONI-ESO1', false), ('ESO1-MAT', 'MAT-SONI-ESO1', false);
+('ESO1-LCL', 'M48-ESO1', false), ('ESO1-MAT', 'M48-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-SONI-ESO1', 'Final Ordinaria', 5.50),
-('ESO1-MAT', 'MAT-SONI-ESO1', 'Final Ordinaria', 5.00);
+('ESO1-LCL', 'M48-ESO1', 'Final Ordinaria', 5.50),
+('ESO1-MAT', 'M48-ESO1', 'Final Ordinaria', 5.00);
 
 -- C. 2º ESO - CURSO ACTUAL (2025/2026 - 1ª Evaluación - Afectada por desfase en FQ)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO2-LCL', 'MAT-SONI-ESO2', false), ('ESO2-MAT', 'MAT-SONI-ESO2', false), ('ESO2-FQ', 'MAT-SONI-ESO2', false);
+('ESO2-LCL', 'M48-ESO2', false), ('ESO2-MAT', 'M48-ESO2', false), ('ESO2-FQ', 'M48-ESO2', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO2-LCL', 'MAT-SONI-ESO2', '1ª Evaluación', 5.50), -- Aprobado raspado
-('ESO2-MAT', 'MAT-SONI-ESO2', '1ª Evaluación', 5.00), -- Aprobado raspado
-('ESO2-FQ',  'MAT-SONI-ESO2', '1ª Evaluación', 4.00); -- Suspenso por desfase curricular de origen
+('ESO2-LCL', 'M48-ESO2', '1ª Evaluación', 5.50), -- Aprobado raspado
+('ESO2-MAT', 'M48-ESO2', '1ª Evaluación', 5.00), -- Aprobado raspado
+('ESO2-FQ',  'M48-ESO2', '1ª Evaluación', 4.00); -- Suspenso por desfase curricular de origen

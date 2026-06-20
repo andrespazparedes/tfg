@@ -23,11 +23,11 @@ INSERT INTO ADMISION (num_expediente, fecha, num_curso, cod_especialidad, cod_ce
 -- 5. Historial Longitudinal de Matrículas (Incluye la Repetición de 6º de Primaria)
 INSERT INTO MATRICULA (cod_matricula, fecha, curso_academico, num_expediente, cod_centro, num_curso, cod_especialidad) VALUES
 -- Educación Primaria (CEIP Cidade Vella)
-('MAT-SARA-PRI5',  '2022-09-01', '2022/2023', 'EXP2016002', 'C006', 5, 'PRI-GEN'), -- 5º Primaria (Aprobado raspado)
-('MAT-SARA-PRI6',  '2023-09-03', '2023/2024', 'EXP2016002', 'C006', 6, 'PRI-GEN'), -- 6º Primaria (1er intento - Suspenso)
-('MAT-SARA-PRI6R', '2024-09-02', '2024/2025', 'EXP2016002', 'C006', 6, 'PRI-GEN'), -- 6º Primaria (Repetición - Aprobado)
+('MAT-SARA2-PRI5',  '2022-09-01', '2022/2023', 'EXP2016002', 'C006', 5, 'PRI-GEN'), -- 5º Primaria (Aprobado raspado)
+('MAT-SARA2-PRI6',  '2023-09-03', '2023/2024', 'EXP2016002', 'C006', 6, 'PRI-GEN'), -- 6º Primaria (1er intento - Suspenso)
+('MAT-SARA2-PRI6R', '2024-09-02', '2024/2025', 'EXP2016002', 'C006', 6, 'PRI-GEN'), -- 6º Primaria (Repetición - Aprobado)
 -- Educación Secundaria - ESO (IES Agra do Orzán)
-('MAT-SARA-ESO1',  '2025-09-02', '2025/2026', 'EXP2016002', 'I003',      1, 'ESO-GEN'); -- 1º ESO (Curso actual)
+('MAT-SARA2-ESO1',  '2025-09-02', '2025/2026', 'EXP2016002', 'I003',      1, 'ESO-GEN'); -- 1º ESO (Curso actual)
 
 -- 6. Adaptación Curricular (Registrada durante su repetición en Primaria)
 INSERT INTO ADAPTACION_CURRICULAR (cod_adaptacion, fecha, tipo, informe, num_expediente) VALUES
@@ -42,33 +42,33 @@ INSERT INTO ADAPTACION_ASIGNATURA (cod_adaptacion, cod_asignatura) VALUES
 -- 7. Historial de Calificaciones
 -- A. 5º PRIMARIA (2022/2023 - Rendimiento muy justo)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI5-LCL', 'MAT-SARA-PRI5', false), ('PRI5-MAT', 'MAT-SARA-PRI5', false), ('PRI5-ING', 'MAT-SARA-PRI5', false);
+('PRI5-LCL', 'MAT-SARA2-PRI5', false), ('PRI5-MAT', 'MAT-SARA2-PRI5', false), ('PRI5-ING', 'MAT-SARA2-PRI5', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI5-LCL', 'MAT-SARA-PRI5', 'Final Ordinaria', 5.50),
-('PRI5-MAT', 'MAT-SARA-PRI5', 'Final Ordinaria', 5.00),
-('PRI5-ING', 'MAT-SARA-PRI5', 'Final Ordinaria', 5.00);
+('PRI5-LCL', 'MAT-SARA2-PRI5', 'Final Ordinaria', 5.50),
+('PRI5-MAT', 'MAT-SARA2-PRI5', 'Final Ordinaria', 5.00),
+('PRI5-ING', 'MAT-SARA2-PRI5', 'Final Ordinaria', 5.00);
 
 -- B. 6º PRIMARIA (2023/2024 - 1er Intento - Fracaso y decisión de repetir)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-SARA-PRI6', false), ('PRI6-MAT', 'MAT-SARA-PRI6', false), ('PRI6-ING', 'MAT-SARA-PRI6', false);
+('PRI6-LCL', 'MAT-SARA2-PRI6', false), ('PRI6-MAT', 'MAT-SARA2-PRI6', false), ('PRI6-ING', 'MAT-SARA2-PRI6', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-SARA-PRI6', 'Final Ordinaria', 4.50), -- Suspenso
-('PRI6-MAT', 'MAT-SARA-PRI6', 'Final Ordinaria', 3.00), -- Suspenso severo
-('PRI6-ING', 'MAT-SARA-PRI6', 'Final Ordinaria', 5.00); -- Aprobado raspado
+('PRI6-LCL', 'MAT-SARA2-PRI6', 'Final Ordinaria', 4.50), -- Suspenso
+('PRI6-MAT', 'MAT-SARA2-PRI6', 'Final Ordinaria', 3.00), -- Suspenso severo
+('PRI6-ING', 'MAT-SARA2-PRI6', 'Final Ordinaria', 5.00); -- Aprobado raspado
 
 -- C. 6º PRIMARIA (2024/2025 - Repetición - Consigue superar la etapa con adaptaciones)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('PRI6-LCL', 'MAT-SARA-PRI6R', false), ('PRI6-MAT', 'MAT-SARA-PRI6R', false), ('PRI6-ING', 'MAT-SARA-PRI6R', false);
+('PRI6-LCL', 'MAT-SARA2-PRI6R', false), ('PRI6-MAT', 'MAT-SARA2-PRI6R', false), ('PRI6-ING', 'MAT-SARA2-PRI6R', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('PRI6-LCL', 'MAT-SARA-PRI6R', 'Final Ordinaria', 6.00),
-('PRI6-MAT', 'MAT-SARA-PRI6R', 'Final Ordinaria', 5.00), -- Consigue el aprobado
-('PRI6-ING', 'MAT-SARA-PRI6R', 'Final Ordinaria', 5.50);
+('PRI6-LCL', 'MAT-SARA2-PRI6R', 'Final Ordinaria', 6.00),
+('PRI6-MAT', 'MAT-SARA2-PRI6R', 'Final Ordinaria', 5.00), -- Consigue el aprobado
+('PRI6-ING', 'MAT-SARA2-PRI6R', 'Final Ordinaria', 5.50);
 
 -- D. 1º ESO - CURSO ACTUAL (2025/2026 - Choque severo, hundiéndose en la 1ª Evaluación)
 INSERT INTO ASIGNATURA_MATRICULA (cod_asignatura, cod_matricula, suspenso_curso_anterior) VALUES
-('ESO1-LCL', 'MAT-SARA-ESO1', false), ('ESO1-MAT', 'MAT-SARA-ESO1', false), ('ESO1-ING', 'MAT-SARA-ESO1', false), ('ESO1-GH', 'MAT-SARA-ESO1', false);
+('ESO1-LCL', 'MAT-SARA2-ESO1', false), ('ESO1-MAT', 'MAT-SARA2-ESO1', false), ('ESO1-ING', 'MAT-SARA2-ESO1', false), ('ESO1-GH', 'MAT-SARA2-ESO1', false);
 INSERT INTO LINEA_EXPEDIENTE (cod_asignatura, cod_matricula, evaluacion, nota) VALUES
-('ESO1-LCL', 'MAT-SARA-ESO1', '1ª Evaluación', 4.00), -- Suspenso en Lengua
-('ESO1-MAT', 'MAT-SARA-ESO1', '1ª Evaluación', 2.00), -- Suspenso crítico en Matemáticas
-('ESO1-ING', 'MAT-SARA-ESO1', '1ª Evaluación', 3.50), -- Suspenso en Inglés
-('ESO1-GH',  'MAT-SARA-ESO1', '1ª Evaluación', 4.50); -- Suspenso en Geografía e Historia
+('ESO1-LCL', 'MAT-SARA2-ESO1', '1ª Evaluación', 4.00), -- Suspenso en Lengua
+('ESO1-MAT', 'MAT-SARA2-ESO1', '1ª Evaluación', 2.00), -- Suspenso crítico en Matemáticas
+('ESO1-ING', 'MAT-SARA2-ESO1', '1ª Evaluación', 3.50), -- Suspenso en Inglés
+('ESO1-GH',  'MAT-SARA2-ESO1', '1ª Evaluación', 4.50); -- Suspenso en Geografía e Historia

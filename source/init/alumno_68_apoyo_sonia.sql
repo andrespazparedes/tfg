@@ -4,7 +4,7 @@
 
 -- 1. Responsables Legales (Marcos Blanco Rey y Paula Otero Castro)
 INSERT INTO RESPONSABLE_LEGAL (cod_responsable, nombre_1, nombre_2, telefono_1, telefono_2, email_1, email_2, direccion, monoparental) VALUES
-('RESP068', 'Marcos Blanco Rey', 'Paula Otero Castro', '600680011', '600680022', 'marcos.blanco.re@email.com', 'paula.otero.ca@email.com', 'Rúa Monelos 180, CP 15009, A Coruña', false);
+('RESP068', 'Marcos Blanco Rey', 'Paula Otero Castro', '600680011', '600680022', 'marcos.blanco.re@email.com', 'paula.otero.ca@email.com', 'Rúa Monelos 180, N/A, CP 15009, A Coruña', false);
 
 -- 2. Encuestas Socioeconómicas Históricas (Reflejan ingresos estables de clase media)
 INSERT INTO ENCUESTA (cod_responsable, fecha, ingresos, internet, nivel_estudios_1, nivel_estudios_2, num_ordenadores, num_integrantes) VALUES
