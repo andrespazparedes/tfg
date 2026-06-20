@@ -84,6 +84,12 @@ services:
       - DB_DWH_DB=${DB_DWH_DB}
       - DB_DWH_USER=${DB_DWH_USER}
       - DB_DWH_PASS=${DB_DWH_PASS}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_ALGORITHM=${JWT_ALGORITHM}
+      - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=${JWT_ACCESS_TOKEN_EXPIRE_MINUTES}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - PROJECT_NAME=${PROJECT_NAME}
+      - API_V1_STR=${API_V1_STR}
     networks:
       - tfg-network
     depends_on:
