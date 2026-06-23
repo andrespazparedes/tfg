@@ -90,10 +90,11 @@ CREATE TABLE dwh.dim_tiempo (
     id_tiempo BIGSERIAL,
     curso_academico VARCHAR(9), -- '2024/2025', '2025/2026'
     evaluacion VARCHAR(50), -- '1ª Evaluación', 'Final Ordinaria', 'Final Extraordinaria'
+    orden_evaluacion SMALLINT,
     is_final BOOLEAN
 );
 CREATE INDEX idx_dim_tiempo_tk ON dwh.dim_tiempo(id_tiempo);
-CREATE INDEX idx_dim_tiempo_lookup ON dwh.dim_tiempo(curso_academico, evaluacion);
+CREATE INDEX idx_dim_tiempo_lookup ON dwh.dim_tiempo(curso_academico, orden_evaluacion);
 
 -- 1.6. DIMENSIÓN DEMOGRAFÍA FAMILIAR (Optimización Kimball de baja cardinalidad)
 -- Nota de Diseño (Tramos de Renta per unidad de consumo):
@@ -148,11 +149,11 @@ CREATE TABLE dwh.fact_calificaciones (
 -- 2.2. HECHOS: RENDIMIENTO ANUAL (Granularidad: Estudiante - Curso Académico)
 CREATE TABLE dwh.fact_rendimiento_anual (
     id_estudiante BIGINT NOT NULL,
-    id_centro DOUBLE PRECISION NOT NULL,
-    id_curso DOUBLE PRECISION NOT NULL, 
-    id_tiempo DOUBLE PRECISION NOT NULL, 
-    id_demografia_familiar DOUBLE PRECISION NOT NULL,
-    id_adaptacion DOUBLE PRECISION NOT NULL,
+    id_centro BIGINT NOT NULL,
+    id_curso BIGINT NOT NULL, 
+    id_tiempo BIGINT NOT NULL, 
+    id_demografia_familiar BIGINT NOT NULL,
+    id_adaptacion BIGINT NOT NULL,
     num_cursadas BIGINT NOT NULL,
     num_aprobadas DOUBLE PRECISION NOT NULL,
     num_suspensas DOUBLE PRECISION NOT NULL,

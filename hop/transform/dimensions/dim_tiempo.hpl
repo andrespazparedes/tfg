@@ -41,23 +41,8 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Merge join</from>
-      <to>Sort rows</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Combination lookup/update</from>
       <to>Update</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sort rows</from>
-      <to>Select values</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select values</from>
-      <to>Filter rows</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -85,6 +70,26 @@
       <to>Combination lookup/update</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>Merge join</from>
+      <to>orden_evaluacion</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>orden_evaluacion</from>
+      <to>Select values</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select values</from>
+      <to>Sort rows</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort rows</from>
+      <to>Filter rows</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <transform>
     <name>Add constants false</name>
@@ -110,7 +115,7 @@
     <attributes/>
     <GUI>
       <xloc>608</xloc>
-      <yloc>608</yloc>
+      <yloc>688</yloc>
     </GUI>
   </transform>
   <transform>
@@ -137,7 +142,7 @@
     <attributes/>
     <GUI>
       <xloc>608</xloc>
-      <yloc>416</yloc>
+      <yloc>496</yloc>
     </GUI>
   </transform>
   <transform>
@@ -162,11 +167,12 @@
         <name>curso_academico</name>
       </key>
       <key>
-        <lookup>evaluacion</lookup>
-        <name>evaluacion</name>
+        <lookup>orden_evaluacion</lookup>
+        <name>orden_evaluacion</name>
       </key>
       <return>
         <creation_method>autoinc</creation_method>
+        <last_update_field/>
         <name>id_tiempo</name>
         <use_autoinc>Y</use_autoinc>
       </return>
@@ -178,7 +184,7 @@
     <attributes/>
     <GUI>
       <xloc>864</xloc>
-      <yloc>512</yloc>
+      <yloc>592</yloc>
     </GUI>
   </transform>
   <transform>
@@ -195,7 +201,7 @@
     <attributes/>
     <GUI>
       <xloc>720</xloc>
-      <yloc>512</yloc>
+      <yloc>592</yloc>
     </GUI>
   </transform>
   <transform>
@@ -280,7 +286,7 @@
     <attributes/>
     <GUI>
       <xloc>528</xloc>
-      <yloc>512</yloc>
+      <yloc>592</yloc>
     </GUI>
   </transform>
   <transform>
@@ -306,7 +312,7 @@
     <attributes/>
     <GUI>
       <xloc>304</xloc>
-      <yloc>416</yloc>
+      <yloc>400</yloc>
     </GUI>
   </transform>
   <transform>
@@ -331,12 +337,28 @@
         <name>evaluacion</name>
         <precision>-2</precision>
       </field>
+      <field>
+        <length>-2</length>
+        <name>orden_evaluacion</name>
+        <precision>-2</precision>
+      </field>
+      <meta>
+        <date_format_lenient>N</date_format_lenient>
+        <length>-2</length>
+        <lenient_string_to_number>N</lenient_string_to_number>
+        <name>orden_evaluacion</name>
+        <precision>-2</precision>
+        <rename>orden_evaluacion</rename>
+        <roundingType>half_even</roundingType>
+        <storage_type/>
+        <type>Integer</type>
+      </meta>
       <select_unspecified>N</select_unspecified>
     </fields>
     <attributes/>
     <GUI>
-      <xloc>416</xloc>
-      <yloc>512</yloc>
+      <xloc>304</xloc>
+      <yloc>592</yloc>
     </GUI>
   </transform>
   <transform>
@@ -430,7 +452,7 @@
         <case_sensitive>N</case_sensitive>
         <collator_enabled>N</collator_enabled>
         <collator_strength>0</collator_strength>
-        <name>evaluacion</name>
+        <name>orden_evaluacion</name>
         <presorted>N</presorted>
       </field>
     </fields>
@@ -439,8 +461,8 @@
     <unique_rows>Y</unique_rows>
     <attributes/>
     <GUI>
-      <xloc>304</xloc>
-      <yloc>512</yloc>
+      <xloc>416</xloc>
+      <yloc>592</yloc>
     </GUI>
   </transform>
   <transform>
@@ -471,13 +493,17 @@
         <name>is_final</name>
         <rename>is_final</rename>
       </value>
+      <value>
+        <name>evaluacion</name>
+        <rename>evaluacion</rename>
+      </value>
     </lookup>
     <skip_lookup>N</skip_lookup>
     <use_batch>N</use_batch>
     <attributes/>
     <GUI>
       <xloc>864</xloc>
-      <yloc>384</yloc>
+      <yloc>464</yloc>
     </GUI>
   </transform>
   <transform>
@@ -537,6 +563,44 @@ FROM raw.matricula
     <GUI>
       <xloc>400</xloc>
       <yloc>192</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>orden_evaluacion</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <field_to_use>evaluacion</field_to_use>
+    <fields>
+      <field>
+        <source_value>1ª Evaluación</source_value>
+        <target_value>1</target_value>
+      </field>
+      <field>
+        <source_value>2ª Evaluación</source_value>
+        <target_value>2</target_value>
+      </field>
+      <field>
+        <source_value>3ª Evaluación</source_value>
+        <target_value>3</target_value>
+      </field>
+      <field>
+        <source_value>Final Ordinaria</source_value>
+        <target_value>4</target_value>
+      </field>
+    </fields>
+    <non_match_default>4</non_match_default>
+    <target_field>orden_evaluacion</target_field>
+    <attributes/>
+    <GUI>
+      <xloc>304</xloc>
+      <yloc>496</yloc>
     </GUI>
   </transform>
   <transform_error_handling>

@@ -26,13 +26,18 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>dim_tiempo lookup</from>
-      <to>dim_curso lookup</to>
+      <from>dim_adaptacion lookup</from>
+      <to>dim_demografia_familiar</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>id_estudiante curso_academico sort</from>
-      <to>id_estudiante curso_academico group by</to>
+      <from>dim_demografia_familiar</from>
+      <to>flags analiticos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>dim_tiempo lookup</from>
+      <to>dim_curso lookup</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -41,63 +46,73 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>dim_adaptacion lookup</from>
-      <to>suspensos calculator</to>
+      <from>flags analiticos</from>
+      <to>id_estudiante id_tiempo sort</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>suspensos calculator</from>
-      <to>id_estudiante curso_academico sort</to>
+      <from>id_estudiante id_tiempo sort</from>
+      <to>id_estudiante id_tiempo group by</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>id_estudiante curso_academico group by</from>
+      <from>id_estudiante id_tiempo group by</from>
       <to>repetidor sort</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>repetidor sort</from>
-      <to>curso_anterior</to>
+      <to>repetidor Group by</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>curso_anterior</from>
-      <to>suspensos repetidor</to>
+      <from>repetidor Group by</from>
+      <to>repetidor sort 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>suspensos repetidor</from>
-      <to>aprobadas</to>
+      <from>repetidor sort 2</from>
+      <to>Analytic query</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>aprobadas</from>
-      <to>riesgo</to>
+      <from>id_estudiante id_tiempo group by</from>
+      <to>historico sort</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>riesgo</from>
-      <to>riesgo_academico</to>
+      <from>historico sort</from>
+      <to>historico Group by</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>riesgo_academico</from>
-      <to>dim_demografia_familiar</to>
+      <from>Analytic query</from>
+      <to>is_repetidor</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>dim_demografia_familiar</from>
-      <to>riesgo_socioeconomico</to>
+      <from>historico Group by</from>
+      <to>reencuentro</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>riesgo_socioeconomico</from>
-      <to>riesgo_abandono</to>
+      <from>reencuentro</from>
+      <to>Formula Riesgos</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>riesgo_abandono</from>
-      <to>Select values</to>
+      <from>is_repetidor</from>
+      <to>repetidor sort 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>repetidor sort 3</from>
+      <to>repetir_pri_1_2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>repetir_pri_1_2</from>
+      <to>reencuentro</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -105,7 +120,363 @@
       <to>Table output</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>Formula Riesgos</from>
+      <to>Calculator</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calculator</from>
+      <to>Select values</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <transform>
+    <name>Analytic query</name>
+    <type>AnalyticQuery</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <aggregate>curso_anterior</aggregate>
+        <subject>curso_academico</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+    </fields>
+    <group>
+      <field>
+        <name>id_estudiante</name>
+      </field>
+      <field>
+        <name>id_curso</name>
+      </field>
+    </group>
+    <attributes/>
+    <GUI>
+      <xloc>544</xloc>
+      <yloc>544</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Formula Riesgos</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formulas>
+      <formula>
+        <field_name>tasa_aprobado</field_name>
+        <formula>[num_aprobadas] / [num_cursadas] * 100</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>riesgo_academico</field_name>
+        <formula>([num_suspensas_1_2_pri_final] * 20) + ([num_suspensas_1_2_pri_parc] * 10) + ([num_suspensas_resto_final] * 5) + [num_suspensas_resto_parc] + ([num_repetir_1_2_pri] * 40) + ([num_repetir_resto]*10)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>pts_riesgo_socioeconomico</field_name>
+        <formula>IF([riesgo_socioeconomico] > 21, 10, IF([riesgo_socioeconomico] >= 16, 5, 0))</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+    </formulas>
+    <attributes/>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>832</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <length>-2</length>
+        <name>id_estudiante</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>id_tiempo</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>id_centro</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>id_curso</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>id_demografia_familiar</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>id_adaptacion</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>desfase_edad</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>renta_unidades_consumo</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>num_cursadas</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>num_aprobadas</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>num_suspensas</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>is_repetidor</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>tasa_aprobado</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>riesgo_socioeconomico</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>riesgo_adaptacion</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>riesgo_academico</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <field>
+        <length>-2</length>
+        <name>riesgo_abandono</name>
+        <precision>-2</precision>
+        <rename/>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>1024</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Table output</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgres-dwh</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+      <field>
+        <column_name>id_estudiante</column_name>
+        <stream_name>id_estudiante</stream_name>
+      </field>
+      <field>
+        <column_name>id_tiempo</column_name>
+        <stream_name>id_tiempo</stream_name>
+      </field>
+      <field>
+        <column_name>id_centro</column_name>
+        <stream_name>id_centro</stream_name>
+      </field>
+      <field>
+        <column_name>id_curso</column_name>
+        <stream_name>id_curso</stream_name>
+      </field>
+      <field>
+        <column_name>id_demografia_familiar</column_name>
+        <stream_name>id_demografia_familiar</stream_name>
+      </field>
+      <field>
+        <column_name>id_adaptacion</column_name>
+        <stream_name>id_adaptacion</stream_name>
+      </field>
+      <field>
+        <column_name>desfase_edad</column_name>
+        <stream_name>desfase_edad</stream_name>
+      </field>
+      <field>
+        <column_name>renta_unidades_consumo</column_name>
+        <stream_name>renta_unidades_consumo</stream_name>
+      </field>
+      <field>
+        <column_name>num_cursadas</column_name>
+        <stream_name>num_cursadas</stream_name>
+      </field>
+      <field>
+        <column_name>num_aprobadas</column_name>
+        <stream_name>num_aprobadas</stream_name>
+      </field>
+      <field>
+        <column_name>num_suspensas</column_name>
+        <stream_name>num_suspensas</stream_name>
+      </field>
+      <field>
+        <column_name>is_repetidor</column_name>
+        <stream_name>is_repetidor</stream_name>
+      </field>
+      <field>
+        <column_name>tasa_aprobado</column_name>
+        <stream_name>tasa_aprobado</stream_name>
+      </field>
+      <field>
+        <column_name>riesgo_socioeconomico</column_name>
+        <stream_name>riesgo_socioeconomico</stream_name>
+      </field>
+      <field>
+        <column_name>riesgo_adaptacion</column_name>
+        <stream_name>riesgo_adaptacion</stream_name>
+      </field>
+      <field>
+        <column_name>riesgo_academico</column_name>
+        <stream_name>riesgo_academico</stream_name>
+      </field>
+      <field>
+        <column_name>riesgo_abandono</column_name>
+        <stream_name>riesgo_abandono</stream_name>
+      </field>
+    </fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field>id_tiempo</partitioning_field>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>dwh</schema>
+    <specify_fields>Y</specify_fields>
+    <table>fact_rendimiento_anual</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>N</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>1136</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>dim_adaptacion lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <connection>postgres-dwh</connection>
+    <lookup>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <fail_on_multiple>N</fail_on_multiple>
+      <key>
+        <condition>=</condition>
+        <field>id_adaptacion</field>
+        <name>id_adaptacion</name>
+      </key>
+      <schema>dwh</schema>
+      <table>dim_adaptacion</table>
+      <value>
+        <name>riesgo_adaptacion</name>
+        <rename>riesgo_adaptacion</rename>
+        <trim_type>none</trim_type>
+        <type>Number</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>144</yloc>
+    </GUI>
+  </transform>
   <transform>
     <name>dim_curso lookup</name>
     <type>DBLookup</type>
@@ -146,8 +517,46 @@
     </lookup>
     <attributes/>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>224</yloc>
+      <xloc>256</xloc>
+      <yloc>144</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>dim_demografia_familiar</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <connection>postgres-dwh</connection>
+    <lookup>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <fail_on_multiple>N</fail_on_multiple>
+      <key>
+        <condition>=</condition>
+        <field>id_demografia_familiar</field>
+        <name>id_demografia_familiar</name>
+      </key>
+      <schema>dwh</schema>
+      <table>dim_demografia_familiar</table>
+      <value>
+        <name>riesgo_socioeconomico</name>
+        <rename>riesgo_socioeconomico</rename>
+        <trim_type>none</trim_type>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <GUI>
+      <xloc>544</xloc>
+      <yloc>144</yloc>
     </GUI>
   </transform>
   <transform>
@@ -182,6 +591,12 @@
         <type>String</type>
       </value>
       <value>
+        <name>orden_evaluacion</name>
+        <rename>orden_evaluacion</rename>
+        <trim_type>none</trim_type>
+        <type>Integer</type>
+      </value>
+      <value>
         <name>is_final</name>
         <rename>is_final</rename>
         <trim_type>none</trim_type>
@@ -190,8 +605,8 @@
     </lookup>
     <attributes/>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>224</yloc>
+      <xloc>112</xloc>
+      <yloc>144</yloc>
     </GUI>
   </transform>
   <transform>
@@ -224,12 +639,12 @@ FROM dwh.fact_calificaciones
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>128</yloc>
+      <xloc>112</xloc>
+      <yloc>48</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>suspensos calculator</name>
+    <name>flags analiticos</name>
     <type>Formula</type>
     <description/>
     <distribute>Y</distribute>
@@ -241,38 +656,120 @@ FROM dwh.fact_calificaciones
     </partitioning>
     <formulas>
       <formula>
-        <field_name>num_suspensos_eval</field_name>
-        <formula>IF(AND([nota] &lt; 5, NOT([is_final])), TRUE(), FALSE())</formula>
+        <field_name>is_prim_1_2</field_name>
+        <formula>IF(AND([cod_ciclo]="PRI", [num_curso]&lt;=2), TRUE(), FALSE())</formula>
         <set_na>N</set_na>
         <value_length>-1</value_length>
         <value_precision>-1</value_precision>
         <value_type>4</value_type>
       </formula>
       <formula>
-        <field_name>num_suspensos_final</field_name>
-        <formula>IF(AND([nota] &lt; 5, [is_final]), TRUE(), FALSE())</formula>
+        <field_name>flag_aprobada</field_name>
+        <formula>IF([nota] >= 5, 1, 0)</formula>
         <set_na>N</set_na>
         <value_length>-1</value_length>
         <value_precision>-1</value_precision>
-        <value_type>4</value_type>
+        <value_type>5</value_type>
       </formula>
       <formula>
-        <field_name>is_primaria_1_2</field_name>
-        <formula>IF(AND([cod_ciclo] = "PRI", [num_curso] &lt;= 2), TRUE(), FALSE())</formula>
+        <field_name>flag_suspensa</field_name>
+        <formula>IF([nota] &lt; 5, 1, 0)</formula>
         <set_na>N</set_na>
         <value_length>-1</value_length>
         <value_precision>-1</value_precision>
-        <value_type>4</value_type>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>flag_susp_1_2_pri_final</field_name>
+        <formula>IF(AND([nota]&lt;5, [is_prim_1_2], [is_final]), 1, 0)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>flag_susp_1_2_pri_parc</field_name>
+        <formula>IF(AND([nota]&lt;5, [is_prim_1_2], NOT([is_final])), 1, 0)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>flag_susp_resto_final</field_name>
+        <formula>IF(AND([nota]&lt;5, NOT([is_prim_1_2]), [is_final]), 1, 0)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>flag_susp_resto_parc</field_name>
+        <formula>IF(AND([nota]&lt;5, NOT([is_prim_1_2]), NOT([is_final])), 1, 0)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
       </formula>
     </formulas>
     <attributes/>
     <GUI>
-      <xloc>576</xloc>
-      <yloc>224</yloc>
+      <xloc>112</xloc>
+      <yloc>240</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>id_estudiante curso_academico sort</name>
+    <name>historico Group by</name>
+    <type>GroupBy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_linenr>N</add_linenr>
+    <all_rows>Y</all_rows>
+    <directory>${java.io.tmpdir}</directory>
+    <fields>
+      <field>
+        <aggregate>num_suspensas_1_2_pri_final</aggregate>
+        <subject>susp_1_2_pri_final</subject>
+        <type>CUM_SUM</type>
+      </field>
+      <field>
+        <aggregate>num_suspensas_1_2_pri_parc</aggregate>
+        <subject>susp_1_2_pri_parc</subject>
+        <type>CUM_SUM</type>
+      </field>
+      <field>
+        <aggregate>num_suspensas_resto_final</aggregate>
+        <subject>susp_resto_final</subject>
+        <type>CUM_SUM</type>
+      </field>
+      <field>
+        <aggregate>num_suspensas_resto_parc</aggregate>
+        <subject>susp_resto_parc</subject>
+        <type>CUM_SUM</type>
+      </field>
+    </fields>
+    <give_back_row>N</give_back_row>
+    <group>
+      <field>
+        <name>id_estudiante</name>
+      </field>
+    </group>
+    <ignore_aggregate>N</ignore_aggregate>
+    <prefix>grp</prefix>
+    <attributes/>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>544</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>historico sort</name>
     <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -283,7 +780,6 @@ FROM dwh.fact_calificaciones
       <schema_name/>
     </partitioning>
     <compress>N</compress>
-    <compress_variables/>
     <directory>${java.io.tmpdir}</directory>
     <fields>
       <field>
@@ -302,22 +798,29 @@ FROM dwh.fact_calificaciones
         <name>curso_academico</name>
         <presorted>N</presorted>
       </field>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>orden_evaluacion</name>
+        <presorted>N</presorted>
+      </field>
     </fields>
-    <free_memory/>
     <sort_prefix>out</sort_prefix>
     <sort_size>1000000</sort_size>
     <unique_rows>N</unique_rows>
     <attributes/>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>336</yloc>
+      <xloc>240</xloc>
+      <yloc>448</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>id_estudiante curso_academico group by</name>
+    <name>id_estudiante id_tiempo group by</name>
     <type>GroupBy</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -332,73 +835,96 @@ FROM dwh.fact_calificaciones
         <aggregate>id_centro</aggregate>
         <subject>id_centro</subject>
         <type>FIRST_INCL_NULL</type>
-        <valuefield/>
       </field>
       <field>
         <aggregate>id_curso</aggregate>
         <subject>id_curso</subject>
         <type>FIRST_INCL_NULL</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>id_tiempo</aggregate>
-        <subject>id_tiempo</subject>
-        <type>MAX</type>
-        <valuefield/>
       </field>
       <field>
         <aggregate>id_demografia_familiar</aggregate>
         <subject>id_demografia_familiar</subject>
         <type>FIRST_INCL_NULL</type>
-        <valuefield/>
       </field>
       <field>
         <aggregate>id_adaptacion</aggregate>
         <subject>id_adaptacion</subject>
-        <type>MAX</type>
-        <valuefield/>
+        <type>FIRST_INCL_NULL</type>
+      </field>
+      <field>
+        <aggregate>orden_evaluacion</aggregate>
+        <subject>orden_evaluacion</subject>
+        <type>FIRST_INCL_NULL</type>
+      </field>
+      <field>
+        <aggregate>curso_academico</aggregate>
+        <subject>curso_academico</subject>
+        <type>FIRST_INCL_NULL</type>
       </field>
       <field>
         <aggregate>desfase_edad</aggregate>
         <subject>desfase_edad</subject>
         <type>FIRST_INCL_NULL</type>
-        <valuefield/>
       </field>
       <field>
         <aggregate>renta_unidades_consumo</aggregate>
         <subject>renta_unidades_consumo</subject>
         <type>FIRST_INCL_NULL</type>
-        <valuefield/>
       </field>
       <field>
-        <aggregate>is_primaria_1_2</aggregate>
-        <subject>is_primaria_1_2</subject>
+        <aggregate>riesgo_adaptacion</aggregate>
+        <subject>riesgo_adaptacion</subject>
         <type>FIRST_INCL_NULL</type>
-        <valuefield/>
+      </field>
+      <field>
+        <aggregate>riesgo_socioeconomico</aggregate>
+        <subject>riesgo_socioeconomico</subject>
+        <type>FIRST_INCL_NULL</type>
+      </field>
+      <field>
+        <aggregate>is_final</aggregate>
+        <subject>is_final</subject>
+        <type>FIRST_INCL_NULL</type>
+      </field>
+      <field>
+        <aggregate>is_prim_1_2</aggregate>
+        <subject>is_prim_1_2</subject>
+        <type>FIRST_INCL_NULL</type>
       </field>
       <field>
         <aggregate>num_cursadas</aggregate>
         <subject>id_asignatura</subject>
         <type>COUNT_DISTINCT</type>
-        <valuefield/>
       </field>
       <field>
-        <aggregate>num_suspensos_eval</aggregate>
-        <subject>num_suspensos_eval</subject>
+        <aggregate>num_aprobadas</aggregate>
+        <subject>flag_aprobada</subject>
         <type>SUM</type>
-        <valuefield/>
       </field>
       <field>
-        <aggregate>num_suspensos_final</aggregate>
-        <subject>num_suspensos_final</subject>
+        <aggregate>num_suspensas</aggregate>
+        <subject>flag_suspensa</subject>
         <type>SUM</type>
-        <valuefield/>
       </field>
       <field>
-        <aggregate>riesgo_adaptacion</aggregate>
-        <subject>riesgo_adaptacion</subject>
-        <type>MAX</type>
-        <valuefield/>
+        <aggregate>susp_1_2_pri_final</aggregate>
+        <subject>flag_susp_1_2_pri_final</subject>
+        <type>SUM</type>
+      </field>
+      <field>
+        <aggregate>susp_1_2_pri_parc</aggregate>
+        <subject>flag_susp_1_2_pri_parc</subject>
+        <type>SUM</type>
+      </field>
+      <field>
+        <aggregate>susp_resto_final</aggregate>
+        <subject>flag_susp_resto_final</subject>
+        <type>SUM</type>
+      </field>
+      <field>
+        <aggregate>susp_resto_parc</aggregate>
+        <subject>flag_susp_resto_parc</subject>
+        <type>SUM</type>
       </field>
     </fields>
     <give_back_row>N</give_back_row>
@@ -407,21 +933,20 @@ FROM dwh.fact_calificaciones
         <name>id_estudiante</name>
       </field>
       <field>
-        <name>curso_academico</name>
+        <name>id_tiempo</name>
       </field>
     </group>
     <ignore_aggregate>N</ignore_aggregate>
-    <linenr_fieldname/>
     <prefix>grp</prefix>
     <attributes/>
     <GUI>
-      <xloc>448</xloc>
+      <xloc>320</xloc>
       <yloc>336</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>dim_adaptacion lookup</name>
-    <type>DBLookup</type>
+    <name>id_estudiante id_tiempo sort</name>
+    <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -430,34 +955,167 @@ FROM dwh.fact_calificaciones
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <connection>postgres-dwh</connection>
+    <compress>N</compress>
+    <directory>${java.io.tmpdir}</directory>
+    <fields>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>id_estudiante</name>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>id_tiempo</name>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <sort_prefix>out</sort_prefix>
+    <sort_size>1000000</sort_size>
+    <unique_rows>N</unique_rows>
+    <attributes/>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>336</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>is_repetidor</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formulas>
+      <formula>
+        <field_name>is_repetidor</field_name>
+        <formula>IF(ISBLANK([curso_anterior]), FALSE(), TRUE())</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>4</value_type>
+      </formula>
+      <formula>
+        <field_name>flag_repetidor_1_2_pri</field_name>
+        <formula>IF(AND([is_repetidor], [is_prim_1_2]), 1, 0)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+      <formula>
+        <field_name>flag_repetidor_resto</field_name>
+        <formula>IF(AND([is_repetidor], NOT([is_prim_1_2])), 1, 0)</formula>
+        <set_na>N</set_na>
+        <value_length>-1</value_length>
+        <value_precision>-1</value_precision>
+        <value_type>5</value_type>
+      </formula>
+    </formulas>
+    <attributes/>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>640</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>reencuentro</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>repetir_pri_1_2</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
     <lookup>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <fail_on_multiple>N</fail_on_multiple>
       <key>
-        <condition>=</condition>
-        <field>id_adaptacion</field>
-        <name>id_adaptacion</name>
-        <name2/>
+        <name>id_estudiante</name>
+        <field>id_estudiante</field>
       </key>
-      <orderby/>
-      <schema>dwh</schema>
-      <table>dim_adaptacion</table>
+      <key>
+        <name>curso_academico</name>
+        <field>curso_academico</field>
+      </key>
       <value>
+        <name>is_repetidor</name>
+        <rename>is_repetidor</rename>
         <default/>
-        <name>riesgo_adaptacion</name>
-        <rename>riesgo_adaptacion</rename>
-        <trim_type>none</trim_type>
-        <type>Number</type>
+        <type>Boolean</type>
+      </value>
+      <value>
+        <name>num_repetir_1_2_pri</name>
+        <rename>num_repetir_1_2_pri</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>num_repetir_resto</name>
+        <rename>num_repetir_resto</rename>
+        <default/>
+        <type>Integer</type>
       </value>
     </lookup>
     <attributes/>
     <GUI>
-      <xloc>448</xloc>
-      <yloc>224</yloc>
+      <xloc>240</xloc>
+      <yloc>736</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>repetidor Group by</name>
+    <type>GroupBy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_linenr>N</add_linenr>
+    <all_rows>N</all_rows>
+    <directory>${java.io.tmpdir}</directory>
+    <fields>
+      <field>
+        <aggregate>is_prim_1_2</aggregate>
+        <subject>is_prim_1_2</subject>
+        <type>FIRST_INCL_NULL</type>
+      </field>
+    </fields>
+    <give_back_row>N</give_back_row>
+    <group>
+      <field>
+        <name>id_estudiante</name>
+      </field>
+      <field>
+        <name>id_curso</name>
+      </field>
+      <field>
+        <name>curso_academico</name>
+      </field>
+    </group>
+    <ignore_aggregate>N</ignore_aggregate>
+    <prefix>grp</prefix>
+    <attributes/>
+    <GUI>
+      <xloc>544</xloc>
+      <yloc>448</yloc>
     </GUI>
   </transform>
   <transform>
@@ -472,7 +1130,102 @@ FROM dwh.fact_calificaciones
       <schema_name/>
     </partitioning>
     <compress>N</compress>
-    <compress_variables/>
+    <directory>${java.io.tmpdir}</directory>
+    <fields>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>id_estudiante</name>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>id_curso</name>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>curso_academico</name>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <sort_prefix>out</sort_prefix>
+    <sort_size>1000000</sort_size>
+    <unique_rows>N</unique_rows>
+    <attributes/>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>448</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>repetidor sort 2</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compress>N</compress>
+    <directory>${java.io.tmpdir}</directory>
+    <fields>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>id_estudiante</name>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>id_curso</name>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <name>curso_academico</name>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <sort_prefix>out</sort_prefix>
+    <sort_size>1000000</sort_size>
+    <unique_rows>N</unique_rows>
+    <attributes/>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>544</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>repetidor sort 3</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compress>N</compress>
     <directory>${java.io.tmpdir}</directory>
     <fields>
       <field>
@@ -491,28 +1244,19 @@ FROM dwh.fact_calificaciones
         <name>curso_academico</name>
         <presorted>N</presorted>
       </field>
-      <field>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <name>id_curso</name>
-        <presorted>N</presorted>
-      </field>
     </fields>
-    <free_memory/>
     <sort_prefix>out</sort_prefix>
     <sort_size>1000000</sort_size>
     <unique_rows>N</unique_rows>
     <attributes/>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>448</yloc>
+      <xloc>544</xloc>
+      <yloc>640</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>curso_anterior</name>
-    <type>AnalyticQuery</type>
+    <name>repetir_pri_1_2</name>
+    <type>GroupBy</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -521,263 +1265,37 @@ FROM dwh.fact_calificaciones
       <method>none</method>
       <schema_name/>
     </partitioning>
+    <add_linenr>N</add_linenr>
+    <all_rows>Y</all_rows>
+    <directory>${java.io.tmpdir}</directory>
     <fields>
       <field>
-        <aggregate>curso_anterior</aggregate>
-        <subject>curso_academico</subject>
-        <type>LAG</type>
-        <valuefield>1</valuefield>
+        <aggregate>num_repetir_1_2_pri</aggregate>
+        <subject>flag_repetidor_1_2_pri</subject>
+        <type>CUM_SUM</type>
+      </field>
+      <field>
+        <aggregate>num_repetir_resto</aggregate>
+        <subject>flag_repetidor_resto</subject>
+        <type>CUM_SUM</type>
       </field>
     </fields>
+    <give_back_row>N</give_back_row>
     <group>
       <field>
         <name>id_estudiante</name>
       </field>
-      <field>
-        <name>id_curso</name>
-      </field>
     </group>
+    <ignore_aggregate>N</ignore_aggregate>
+    <prefix>grp</prefix>
     <attributes/>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>448</yloc>
+      <xloc>400</xloc>
+      <yloc>736</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>suspensos repetidor</name>
-    <type>Formula</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <formulas>
-      <formula>
-        <field_name>suspensos_efectivos</field_name>
-        <formula>MAX([num_suspensos_eval], [num_suspensos_final])</formula>
-        <replace_field/>
-        <set_na>N</set_na>
-        <value_length>-1</value_length>
-        <value_precision>-1</value_precision>
-        <value_type>5</value_type>
-      </formula>
-      <formula>
-        <field_name>is_repetidor</field_name>
-        <formula>IF(ISBLANK([curso_anterior]), FALSE(), TRUE())</formula>
-        <replace_field/>
-        <set_na>N</set_na>
-        <value_length>-1</value_length>
-        <value_precision>-1</value_precision>
-        <value_type>4</value_type>
-      </formula>
-    </formulas>
-    <attributes/>
-    <GUI>
-      <xloc>176</xloc>
-      <yloc>560</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>aprobadas</name>
-    <type>Calculator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <calculation>
-      <calc_type>SUBTRACT</calc_type>
-      <conversion_mask/>
-      <currency_symbol/>
-      <decimal_symbol/>
-      <field_a>num_cursadas</field_a>
-      <field_b>suspensos_efectivos</field_b>
-      <field_c/>
-      <field_name>num_aprobadas</field_name>
-      <grouping_symbol/>
-      <remove>N</remove>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <value_type>Integer</value_type>
-    </calculation>
-    <calculation>
-      <calc_type>PERCENT_1</calc_type>
-      <conversion_mask/>
-      <currency_symbol/>
-      <decimal_symbol/>
-      <field_a>num_aprobadas</field_a>
-      <field_b>num_cursadas</field_b>
-      <field_c/>
-      <field_name>tasa_aprobado</field_name>
-      <grouping_symbol/>
-      <remove>N</remove>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <value_type>Integer</value_type>
-    </calculation>
-    <failIfNoFile>Y</failIfNoFile>
-    <attributes/>
-    <GUI>
-      <xloc>320</xloc>
-      <yloc>560</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>riesgo</name>
-    <type>Formula</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <formulas>
-      <formula>
-        <field_name>riesgo_suspensos_evaluacion</field_name>
-        <formula>IF([is_primaria_1_2], [num_suspensos_eval] * 10, [num_suspensos_eval] * 1)</formula>
-        <replace_field/>
-        <set_na>N</set_na>
-        <value_length>-1</value_length>
-        <value_precision>-1</value_precision>
-        <value_type>5</value_type>
-      </formula>
-      <formula>
-        <field_name>riesgo_suspensos_final</field_name>
-        <formula>IF([is_primaria_1_2], [num_suspensos_final] * 20, [num_suspensos_final] * 5)</formula>
-        <replace_field/>
-        <set_na>N</set_na>
-        <value_length>-1</value_length>
-        <value_precision>-1</value_precision>
-        <value_type>5</value_type>
-      </formula>
-      <formula>
-        <field_name>riesgo_repetidor</field_name>
-        <formula>IF([is_repetidor], IF([is_primaria_1_2], 40, 10), 0)</formula>
-        <replace_field/>
-        <set_na>N</set_na>
-        <value_length>-1</value_length>
-        <value_precision>-1</value_precision>
-        <value_type>5</value_type>
-      </formula>
-    </formulas>
-    <attributes/>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>560</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>riesgo_academico</name>
-    <type>Calculator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <calculation>
-      <calc_type>ADD3</calc_type>
-      <conversion_mask/>
-      <currency_symbol/>
-      <decimal_symbol/>
-      <field_a>riesgo_suspensos_evaluacion</field_a>
-      <field_b>riesgo_suspensos_final</field_b>
-      <field_c>riesgo_repetidor</field_c>
-      <field_name>riesgo_academico</field_name>
-      <grouping_symbol/>
-      <remove>N</remove>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <value_type>Integer</value_type>
-    </calculation>
-    <failIfNoFile>Y</failIfNoFile>
-    <attributes/>
-    <GUI>
-      <xloc>576</xloc>
-      <yloc>560</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>dim_demografia_familiar</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <connection>postgres-dwh</connection>
-    <lookup>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <fail_on_multiple>N</fail_on_multiple>
-      <key>
-        <condition>=</condition>
-        <field>id_demografia_familiar</field>
-        <name>id_demografia_familiar</name>
-        <name2/>
-      </key>
-      <orderby/>
-      <schema>dwh</schema>
-      <table>dim_demografia_familiar</table>
-      <value>
-        <default/>
-        <name>riesgo_socioeconomico</name>
-        <rename>pre_riesgo_socioeconomico</rename>
-        <trim_type>none</trim_type>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <GUI>
-      <xloc>176</xloc>
-      <yloc>672</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>riesgo_socioeconomico</name>
-    <type>Formula</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <formulas>
-      <formula>
-        <field_name>riesgo_socioeconomico</field_name>
-        <formula>IF([pre_riesgo_socioeconomico] > 21, 10, IF([pre_riesgo_socioeconomico] >= 16, 5, 0))</formula>
-        <replace_field/>
-        <set_na>N</set_na>
-        <value_length>-1</value_length>
-        <value_precision>-1</value_precision>
-        <value_type>5</value_type>
-      </formula>
-    </formulas>
-    <attributes/>
-    <GUI>
-      <xloc>320</xloc>
-      <yloc>672</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>riesgo_abandono</name>
+    <name>Calculator</name>
     <type>Calculator</type>
     <description/>
     <distribute>Y</distribute>
@@ -793,8 +1311,8 @@ FROM dwh.fact_calificaciones
       <currency_symbol/>
       <decimal_symbol/>
       <field_a>riesgo_academico</field_a>
-      <field_b>riesgo_socioeconomico</field_b>
-      <field_c>riesgo_adaptacion</field_c>
+      <field_b>riesgo_adaptacion</field_b>
+      <field_c>pts_riesgo_socioeconomico</field_c>
       <field_name>riesgo_abandono</field_name>
       <grouping_symbol/>
       <remove>N</remove>
@@ -805,240 +1323,8 @@ FROM dwh.fact_calificaciones
     <failIfNoFile>Y</failIfNoFile>
     <attributes/>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>784</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Select values</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <length>-2</length>
-        <name>id_estudiante</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>id_centro</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>id_curso</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>id_tiempo</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>id_demografia_familiar</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>id_adaptacion</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>num_cursadas</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>num_aprobadas</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>suspensos_efectivos</name>
-        <precision>-2</precision>
-        <rename>num_suspensas</rename>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>tasa_aprobado</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>is_repetidor</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>desfase_edad</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>renta_unidades_consumo</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>riesgo_academico</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>riesgo_adaptacion</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>riesgo_socioeconomico</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <field>
-        <length>-2</length>
-        <name>riesgo_abandono</name>
-        <precision>-2</precision>
-        <rename/>
-      </field>
-      <select_unspecified>N</select_unspecified>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>176</xloc>
-      <yloc>896</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Table output</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <add_columns>N</add_columns>
-    <always_drop_and_recreate>N</always_drop_and_recreate>
-    <auto_update_table_structure>N</auto_update_table_structure>
-    <change_column_types>N</change_column_types>
-    <commit>1000</commit>
-    <connection>postgres-dwh</connection>
-    <drop_columns>N</drop_columns>
-    <fields>
-      <field>
-        <column_name>id_estudiante</column_name>
-        <stream_name>id_estudiante</stream_name>
-      </field>
-      <field>
-        <column_name>id_centro</column_name>
-        <stream_name>id_centro</stream_name>
-      </field>
-      <field>
-        <column_name>id_curso</column_name>
-        <stream_name>id_curso</stream_name>
-      </field>
-      <field>
-        <column_name>id_tiempo</column_name>
-        <stream_name>id_tiempo</stream_name>
-      </field>
-      <field>
-        <column_name>id_demografia_familiar</column_name>
-        <stream_name>id_demografia_familiar</stream_name>
-      </field>
-      <field>
-        <column_name>id_adaptacion</column_name>
-        <stream_name>id_adaptacion</stream_name>
-      </field>
-      <field>
-        <column_name>num_cursadas</column_name>
-        <stream_name>num_cursadas</stream_name>
-      </field>
-      <field>
-        <column_name>num_aprobadas</column_name>
-        <stream_name>num_aprobadas</stream_name>
-      </field>
-      <field>
-        <column_name>num_suspensas</column_name>
-        <stream_name>num_suspensas</stream_name>
-      </field>
-      <field>
-        <column_name>tasa_aprobado</column_name>
-        <stream_name>tasa_aprobado</stream_name>
-      </field>
-      <field>
-        <column_name>is_repetidor</column_name>
-        <stream_name>is_repetidor</stream_name>
-      </field>
-      <field>
-        <column_name>desfase_edad</column_name>
-        <stream_name>desfase_edad</stream_name>
-      </field>
-      <field>
-        <column_name>renta_unidades_consumo</column_name>
-        <stream_name>renta_unidades_consumo</stream_name>
-      </field>
-      <field>
-        <column_name>riesgo_academico</column_name>
-        <stream_name>riesgo_academico</stream_name>
-      </field>
-      <field>
-        <column_name>riesgo_adaptacion</column_name>
-        <stream_name>riesgo_adaptacion</stream_name>
-      </field>
-      <field>
-        <column_name>riesgo_socioeconomico</column_name>
-        <stream_name>riesgo_socioeconomico</stream_name>
-      </field>
-      <field>
-        <column_name>riesgo_abandono</column_name>
-        <stream_name>riesgo_abandono</stream_name>
-      </field>
-    </fields>
-    <ignore_errors>N</ignore_errors>
-    <only_when_have_rows>N</only_when_have_rows>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <return_field/>
-    <return_keys>N</return_keys>
-    <schema>dwh</schema>
-    <specify_fields>Y</specify_fields>
-    <table>fact_rendimiento_anual</table>
-    <tablename_field/>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_in_table>Y</tablename_in_table>
-    <truncate>Y</truncate>
-    <use_batch>Y</use_batch>
-    <attributes/>
-    <GUI>
-      <xloc>176</xloc>
-      <yloc>1008</yloc>
+      <xloc>240</xloc>
+      <yloc>928</yloc>
     </GUI>
   </transform>
   <transform_error_handling>

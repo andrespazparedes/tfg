@@ -33,8 +33,8 @@
       <fontname>Verdana, "Lucida Sans", Arial, Helvetica, sans-serif</fontname>
       <fontsize>12</fontsize>
       <height>20</height>
-      <xloc>16</xloc>
-      <yloc>16</yloc>
+      <xloc>224</xloc>
+      <yloc>32</yloc>
       <note>**Capa RAW: Clonación de Tablas Origen**
 Realiza una extracción completa (Full Load) vaciando las tablas del esquema 'raw' y volcando los datos frescos del origen en bloque.
 Las tablas raw no tienen foreign keys para maximizar la velocidad de inserción en paralelo.</note>
@@ -737,8 +737,8 @@ FROM "public".curso
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>688</yloc>
+      <xloc>640</xloc>
+      <yloc>128</yloc>
     </GUI>
   </transform>
   <transform>
@@ -788,8 +788,8 @@ FROM "public".curso
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>688</yloc>
+      <xloc>848</xloc>
+      <yloc>128</yloc>
     </GUI>
   </transform>
   <transform>
@@ -820,8 +820,8 @@ FROM "public".encuesta
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>768</yloc>
+      <xloc>640</xloc>
+      <yloc>208</yloc>
     </GUI>
   </transform>
   <transform>
@@ -891,8 +891,8 @@ FROM "public".encuesta
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>768</yloc>
+      <xloc>848</xloc>
+      <yloc>208</yloc>
     </GUI>
   </transform>
   <transform>
@@ -918,8 +918,8 @@ FROM "public".especialidad
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>848</yloc>
+      <xloc>640</xloc>
+      <yloc>288</yloc>
     </GUI>
   </transform>
   <transform>
@@ -969,8 +969,8 @@ FROM "public".especialidad
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>848</yloc>
+      <xloc>848</xloc>
+      <yloc>288</yloc>
     </GUI>
   </transform>
   <transform>
@@ -999,8 +999,8 @@ FROM "public".estudiante
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>928</yloc>
+      <xloc>640</xloc>
+      <yloc>368</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1062,8 +1062,8 @@ FROM "public".estudiante
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>928</yloc>
+      <xloc>848</xloc>
+      <yloc>368</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1090,8 +1090,8 @@ FROM "public".linea_expediente
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>1008</yloc>
+      <xloc>640</xloc>
+      <yloc>448</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1145,8 +1145,8 @@ FROM "public".linea_expediente
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>1008</yloc>
+      <xloc>848</xloc>
+      <yloc>448</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1176,8 +1176,8 @@ FROM "public".matricula
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>1088</yloc>
+      <xloc>640</xloc>
+      <yloc>528</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1243,8 +1243,8 @@ FROM "public".matricula
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>1088</yloc>
+      <xloc>848</xloc>
+      <yloc>528</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1318,8 +1318,8 @@ FROM "public".matricula
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>1168</yloc>
+      <xloc>848</xloc>
+      <yloc>608</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1351,8 +1351,8 @@ FROM "public".responsable_legal
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>1168</yloc>
+      <xloc>640</xloc>
+      <yloc>608</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
