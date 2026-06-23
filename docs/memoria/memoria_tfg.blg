@@ -1,0 +1,87 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: memoria_tfg.aux
+Reallocating 'name_of_file' (item size: 1) to 20 items.
+A level-1 auxiliary file: portada/portada.aux
+Reallocating 'name_of_file' (item size: 1) to 19 items.
+A level-1 auxiliary file: portada/resumo.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: contido/introducion.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: contido/estado_arte.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: contido/metodologia.aux
+Reallocating 'name_of_file' (item size: 1) to 34 items.
+A level-1 auxiliary file: contido/analisis_arquitectura.aux
+Reallocating 'name_of_file' (item size: 1) to 28 items.
+A level-1 auxiliary file: contido/diseno_datamart.aux
+Reallocating 'name_of_file' (item size: 1) to 27 items.
+A level-1 auxiliary file: contido/desarrollo_etl.aux
+Reallocating 'name_of_file' (item size: 1) to 33 items.
+A level-1 auxiliary file: contido/desarrollo_dashboard.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: contido/conclusions.aux
+Reallocating 'name_of_file' (item size: 1) to 21 items.
+A level-1 auxiliary file: anexos/adicional.aux
+Reallocating 'name_of_file' (item size: 1) to 10 items.
+The style file: IEEEtranN.bst
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: bibliografia/bibconf-es.bib
+Database file #2: bibliografia/bibliografia.bib
+-- IEEEtranN.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+** Natbib version - not for normal IEEE work.
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
+** IEEEtran BST control entry "IEEEexample:BSTcontrol" detected.
+
+Done.
+You've used 10 entries,
+            4855 wiz_defined-function locations,
+            1010 strings with 9798 characters,
+and the built_in function-call counts, 5059 in all, are:
+= -- 476
+> -- 76
+< -- 12
++ -- 39
+- -- 20
+* -- 244
+:= -- 916
+add.period$ -- 18
+call.type$ -- 10
+change.case$ -- 26
+chr.to.int$ -- 18
+cite$ -- 10
+duplicate$ -- 360
+empty$ -- 407
+format.name$ -- 32
+if$ -- 1068
+int.to.chr$ -- 1
+int.to.str$ -- 11
+missing$ -- 71
+newline$ -- 67
+num.names$ -- 27
+pop$ -- 233
+preamble$ -- 1
+purify$ -- 9
+quote$ -- 4
+skip$ -- 375
+stack$ -- 0
+substring$ -- 53
+swap$ -- 182
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 7
+type$ -- 131
+warning$ -- 0
+while$ -- 19
+width$ -- 0
+write$ -- 136

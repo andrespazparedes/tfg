@@ -1,0 +1,25 @@
+\chapter{Metodología y Planificación}
+\label{chap:metodologia}
+
+\lettrine{E}{l} desarrollo de un proyecto de software de la envergadura de un Trabajo de Fin de Grado requiere una organización rigurosa para garantizar el cumplimiento de los plazos y la calidad de los entregables. 
+
+\section{Metodología de Desarrollo}
+Debido a la naturaleza investigadora y de desarrollo individual de este proyecto, no se ha adoptado una metodología ágil estricta (como Scrum), que está más orientada a equipos de desarrollo con roles definidos. 
+
+En su lugar, se ha optado por un enfoque \textit{iterativo e incremental}. Este enfoque permite dividir el ciclo de vida del proyecto en ciclos más cortos y manejables (iteraciones), en cada uno de los cuales se añade funcionalidad o se refinan las características existentes.
+
+Las fases iterativas de este proyecto han sido las siguientes:
+\begin{enumerate}
+    \item \textbf{Análisis e investigación teórica:} Definición de los factores de riesgo de abandono escolar y estudio de la viabilidad de extracción de datos.
+    \item \textbf{Diseño de la Arquitectura:} Elección de la pila tecnológica y diseño del ecosistema de contenedores Docker.
+    \item \textbf{Modelado de Datos:} Diseño del esquema en estrella y mapeo origen-destino.
+    \item \textbf{Desarrollo ETL:} Implementación iterativa de los pipelines (extracción de tablas transaccionales, transformación y carga dimensional).
+    \item \textbf{Desarrollo Backend y Frontend:} Exposición de los datos mediante una API RESTful y creación de los \textit{dashboards} visuales, ajustando los umbrales de alerta en base a los resultados observados.
+\end{enumerate}
+
+Esta estrategia ha dotado al desarrollo de la flexibilidad necesaria para ajustar las reglas de negocio, como las puntuaciones de riesgo por necesidades educativas especiales o los umbrales socioeconómicos, a medida que se profundizaba en la casuística de los datos reales.
+
+\section{Gestión y Control de Versiones}
+Para el correcto seguimiento de la evolución del proyecto, se ha empleado \textbf{Git} como sistema de control de versiones descentralizado. El repositorio central se ha alojado en GitHub, lo que ha facilitado mantener un histórico organizado de los cambios estructurales.
+
+Siguiendo las mejores prácticas de la industria, el repositorio se estructuró monorepo separando claramente los dominios funcionales en directorios independientes (\textit{api}, \textit{dwh}, \textit{hop}, \textit{frontend}), lo que permitió aplicar la metodología iterativa sobre componentes aislados sin interferir con el resto del ecosistema.

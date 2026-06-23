@@ -1,4 +1,4 @@
-\chapter{Contido demostrativo}
+﻿\chapter{Contido demostrativo}
 \label{chap:demo}
 
 \lettrine{E}{ntre} a introdución e as conclusións, o documento conterá
@@ -26,7 +26,7 @@ etc.).
 \end{figure}
 
 Recoméndase almacenar os ficheiros gráficos no directorio
-\texttt{imaxes}.
+\lstinline{imaxes}.
 
 \subsection{Inclusión de varias sub-imaxes}
 
@@ -86,7 +86,7 @@ etc.).
 \subsection{Inclusión de táboas longas}
 
 Para táboas longas que ocupan varias páxinas, como é o caso da \ref{tab:longa}
-(páxina~\pageref{tab:longa}), recoméndase o uso do paquete \texttt{lontable},
+(páxina~\pageref{tab:longa}), recoméndase o uso do paquete \lstinline{lontable},
 incluído xa entre os paquetes recomendados no ficheiro raíz do proxecto
 (\verb+memoria_tfg.tex+).
 
@@ -117,7 +117,7 @@ a través de varias columnas, como ocorre na táboa~\ref{tab:exemplocolumnas}
 
 Tamén pode resultar necesario facer o propio mais en varias filas da mesma columna,
 como ocorre na táboa~\ref{tab:exemplofilas} (páxina~\pageref{tab:exemplofilas}).
-Para isto é preciso o paquete \texttt{multirow}, incluído entre os recomendados no
+Para isto é preciso o paquete \lstinline{multirow}, incluído entre os recomendados no
 ficheiro raíz do proxecto (\verb+memoria_tfg.tex+).
 
 O uso de celas multifila requerirá do xuste da coloración das filas, a fin de manter
@@ -195,20 +195,26 @@ int main()
 }
 \end{lstlisting}
 
+Para usar o estilo anterior en palabras ou expresións curtas insertadas nun
+parágrafo, recoméndase facelo co comando \lstinline{lstinline}.
+Nel úsase un tamaño de letra máis coherente co do resto do texto
+(\lstinline{small}), frente ao tamaño de letra usado no \lstinline{lstlisting}
+({\tt \footnotesize footnotesize}).
+
 \section{Uso da relación de acrónimos e do glosario}
 
-Os acrónimos edítanse no ficheiro \texttt{bibliografia/acronimos.tex}
-e úsanse empregando a orde \texttt{acrlong} para obter o termo
-completo (deste xeito: \acrlong{erlang}), a orde \texttt{acrshort}
+Os acrónimos edítanse no ficheiro \lstinline{bibliografia/acronimos.tex}
+e úsanse empregando a orde \lstinline{acrlong} para obter o termo
+completo (deste xeito: \acrlong{erlang}), a orde \lstinline{acrshort}
 para obter o acrónimo (deste xeito: \acrshort{erlang}). A primeira vez
 que usamos un termo con acrónimo no documento é recomendable usar orde
-\texttt{acrfull} (que produce ambas versións á vez:
+\lstinline{acrfull} (que produce ambas versións á vez:
 \acrfull{erlang}). Os acrónimos que non se usan no documento, non
 aparecen na relación que se xerar na versión PDF.
 
-Pola súa banda, os termos do glosario edítanse no ficheiro
-\texttt{bibliografia/glo\-sa\-rio.tex} e úsanse empregando a orde
-\texttt{gls} (deste xeito, \gls{bytecode}) ou \texttt{Gls} (deste
+Pola súa banda, os termos do glosario edítanse en
+\lstinline{bibliografia/glosario.tex} e úsanse empregando a orde
+\lstinline{gls} (deste xeito, \gls{bytecode}) ou \lstinline{Gls} (deste
 xeito, \Gls{bytecode}). Ao igual que os acrónimos, os termos que non
 se usan no documento, non aparecen na relación que se xera na versión
 PDF.

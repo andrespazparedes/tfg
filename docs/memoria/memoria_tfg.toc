@@ -1,0 +1,54 @@
+\xpg@aux {}{spanish}
+\xpg@aux {}{spanish}
+\xpg@aux {}{spanish}
+\xpg@aux {}{english}
+\xpg@aux {}{spanish}
+\contentsline {chapter}{\numberline {1}Introducción}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Objetivos}{1}{section.1.1}%
+\contentsline {chapter}{\numberline {2}Estado del Arte y Marco Teórico}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Inteligencia de Negocios y Data Warehousing}{3}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Metodología de Ralph Kimball}{3}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Procesos ETL y Apache Hop}{4}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Elección de Apache Hop}{5}{subsection.2.2.1}%
+\contentsline {chapter}{\numberline {3}Metodología y Planificación}{6}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Metodología de Desarrollo}{6}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Gestión y Control de Versiones}{7}{section.3.2}%
+\contentsline {chapter}{\numberline {4}Análisis y Arquitectura}{8}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Requisitos del Sistema}{8}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Análisis del Sistema Transaccional Origen}{9}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Arquitectura Tecnológica basada en Docker}{9}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Justificación del Paradigma de Contenedores}{12}{subsection.4.3.1}%
+\contentsline {chapter}{\numberline {5}Diseño del Datamart Analítico}{14}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Modelo Dimensional en Estrella}{14}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Tablas de Dimensiones en Detalle}{14}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Tablas de Hechos}{15}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Reglas de Negocio y Cálculo de Riesgos}{15}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Riesgo Socioeconómico}{15}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Riesgo de Abandono del Alumno}{16}{subsection.5.2.2}%
+\contentsline {chapter}{\numberline {6}Capa ETL con Apache Hop}{18}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Configuración del Entorno y Conexiones}{18}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Análisis de Pipelines}{18}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Volcado a Staging}{19}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Dimensión de Demograía Familiar}{19}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Dimensión de Estudiante}{21}{subsection.6.2.3}%
+\contentsline {subsection}{\numberline {6.2.4}Dimensión de Tiempo}{23}{subsection.6.2.4}%
+\contentsline {subsection}{\numberline {6.2.5}Dimensión de Asignatura}{24}{subsection.6.2.5}%
+\contentsline {subsection}{\numberline {6.2.6}Dimensión de Curso}{25}{subsection.6.2.6}%
+\contentsline {subsection}{\numberline {6.2.7}Dimensión de Adaptación}{28}{subsection.6.2.7}%
+\contentsline {subsection}{\numberline {6.2.8}Dimensión de Centro}{28}{subsection.6.2.8}%
+\contentsline {subsection}{\numberline {6.2.9}Tabla de Hechos de Calificaciones}{29}{subsection.6.2.9}%
+\contentsline {subsection}{\numberline {6.2.10}Tabla de Hechos de rendimiento por Evaluación}{32}{subsection.6.2.10}%
+\contentsline {section}{\numberline {6.3}Orquestación y Workflows}{33}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Manejo de Errores Multinivel (\textit {Error Handling})}{36}{subsection.6.3.1}%
+\contentsline {chapter}{\numberline {7}Dashboard Analítico}{38}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Servidor Backend RESTful (FastAPI)}{38}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Mapeo Objeto-Relacional (SQLAlchemy)}{38}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Estructura de Endpoints y Seguridad}{39}{subsection.7.1.2}%
+\contentsline {section}{\numberline {7.2}Interfaz Visual e Interacción (React y Vite)}{39}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Sistema de Diseño: \textit {Glassmorphism} y Temas Dinámicos}{39}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Visualización de Datos Analíticos}{40}{subsection.7.2.2}%
+\contentsline {section}{\numberline {7.3}Despliegue y Enrutamiento Web (Nginx)}{40}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Arquitectura de Interceptación de Tráfico}{40}{subsection.7.3.1}%
+\contentsline {chapter}{\numberline {8}Conclusións}{41}{chapter.8}%
+\contentsline {chapter}{\numberline {A}Material adicional}{44}{appendix.A}%
+\contentsline {chapter}{Bibliografía}{46}{appendix*.24}%

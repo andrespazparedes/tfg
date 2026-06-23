@@ -5,24 +5,24 @@
 \documentclass[11pt,a4paper,titlepage,oneside]{report}
 
 %%% RELACIÓN DE VARIABLES A PERSONALIZAR %%%
-\def\lingua{gal}
-%\def\lingua{esp} % descomenta esta liña se redactarás a memoria en español
+%\def\lingua{gal}
+\def\lingua{esp} % descomenta esta liña se redactarás a memoria en español
 %\def\lingua{eng} % descomenta esta liña se redactarás a memoria en inglés
-\def\nome{Nome Completo}                             % substitúe aquí o teu nome
-\def\nomedirectorA{Outro Nome Completo}              % substitúe aquí o nome de quen dirixe
+\def\nome{Andrés Paz Paredes}                             % substitúe aquí o teu nome
+\def\nomedirectorA{José Ramón Paramá Gabía}              % substitúe aquí o nome de quen dirixe
 %\def\nomedirectorB{Outro Nome Completo}             % duplica esta liña máis veces se o precisas, cambiando
                                                      % a letra final (A, B, C, D...): úsanse na portada.tex
-\def\titulo{Título completo do traballo fin de grao} % substitúe aquí o título do teu TFG
+\def\titulo{Diseño y Desarrollo de un Datamart Analítico para la Prevención del Abandono y Fracaso Escolar} % substitúe aquí o título do teu TFG
 %\def\titulacion{gced}                               % descomenta esta liña e comenta a seguinte se es estudante do GCED
 \def\titulacion{gei}
 %\def\titulacion{gia}                                % comenta a liña anterior e descomenta esta se es estudante do GIA
 %\def\mencion{COMPUTACIÓN}                           % descomenta a mención que che corresponda se es estudante do GEI
-\def\mencion{ENXEÑARÍA DO SOFTWARE}
+%\def\mencion{ENXEÑARÍA DO SOFTWARE}
 %\def\mencion{ENXEÑARÍA DE COMPUTADORES}
 %\def\mencion{SISTEMAS DE INFORMACIÓN}
-%\def\mencion{TECNOLOXÍAS DA INFORMACIÓN}
+\def\mencion{TECNOLOXÍAS DA INFORMACIÓN}
 
-%\def\renomearcadros{si} % descomenta esta liña se redactas a memoria en español e prefires que
+\def\renomearcadros{si} % descomenta esta liña se redactas a memoria en español e prefires que
                          % os "cuadros" e o "índice de cuadros" se renomeen
                          % a "tablas" e "índice de tablas" respectivamente
 
@@ -57,7 +57,7 @@
 
  \include{portada/portada}
  \dedicatoria{Dedicatoria} % escribe neste comando o teu texto de dedicatoria
- \paxinaenbranco
+ \blindtext
  \begin{agradecementos}
  \blindtext                % substitúe este comando polo teu texto de agradecementos
  \end{agradecementos}
@@ -80,8 +80,12 @@
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
  \include{contido/introducion}
- \include{contido/demo}
-%\include{contido/...}
+ \include{contido/estado_arte}
+ \include{contido/metodologia}
+ \include{contido/analisis_arquitectura}
+ \include{contido/diseno_datamart}
+ \include{contido/desarrollo_etl}
+ \include{contido/desarrollo_dashboard}
  \include{contido/conclusions}
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -93,8 +97,8 @@
  \include{anexos/adicional}
 %\include{anexos/...}
 
- \printglossary[type=\acronymtype,title=\nomeglosarioacronimos]
- \printglossary[title=\nomeglosariotermos]
+ %\printglossary[type=\acronymtype,title=\nomeglosarioacronimos]
+ %\printglossary[title=\nomeglosariotermos]
 
  \bibliographystyle{IEEEtranN}
  \bibliography{\bibconfig,bibliografia/bibliografia}

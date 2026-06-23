@@ -1,18 +1,25 @@
-\chapter{Introdución}
-\label{chap:introducion}
+﻿\chapter{Introducción}
+\label{chap:introduccion}
 
-\lettrine{P}{rimer} capítulo da memoria, onde xeralmente se exporán as
-liñas mestras do traballo, os obxectivos, etc. Incluimos un par de
-exemplos de citas~\cite{ErlangBook,ErlangWebBook} e de referencias
-internas (sección \ref{sec:mostra}, páxina \pageref{sec:mostra}).
+\lettrine{E}{l} sistema educativo actual se enfrenta a retos constantes, siendo uno de los más críticos el abandono y fracaso escolar temprano. Detectar a tiempo a aquellos estudiantes que se encuentran en riesgo de no superar los objetivos académicos o de abandonar sus estudios es fundamental para que los equipos de orientación y dirección de los centros educativos puedan aplicar medidas correctoras.
 
-\Blindtext
+A este reto se le suma la brecha digital, un factor de riesgo socioeconómico que ha tomado gran relevancia y que impacta directamente en las oportunidades de aprendizaje del alumnado. Identificar qué estudiantes carecen de acceso a internet o a equipos informáticos adecuados en sus hogares es una pieza clave del puzle.
 
-\section{Sección de mostra}
-\label{sec:mostra}
+Ante esta situación, el presente Trabajo de Fin de Grado propone el diseño y desarrollo de un \textit{Datamart Analítico} orientado a la prevención del abandono escolar. La motivación principal de este proyecto es proporcionar a los centros educativos una herramienta tecnológica avanzada, capaz de unificar y procesar los datos transaccionales brutos, transformándolos en información visual, interactiva y accionable.
 
-\Blindtext
+\section{Objetivos}
+\label{sec:objetivos}
 
-\subsection{Subsección de mostra}
+El objetivo general del proyecto es la creación de un cuadro de mando integral o \textit{Dashboard} que centralice el análisis del rendimiento escolar y de los factores de riesgo del alumnado, facilitando una intervención proactiva. 
 
-\Blindtext
+Para alcanzar este objetivo general, se han definido los siguientes objetivos específicos:
+
+\begin{itemize}
+    \item Diseñar un repositorio de datos (Datamart) utilizando un modelo dimensional en estrella para almacenar históricamente la información de rendimiento y perfiles del alumnado.
+    \item Desarrollar un flujo automático de Extracción, Transformación y Carga (ETL) capaz de nutrir el Datamart con datos procedentes de los sistemas de gestión transaccionales del centro.
+    \item Establecer un conjunto de reglas de negocio objetivas para el cálculo automatizado de umbrales de riesgo escolar (académico, socioeconómico y adaptativo).
+    \item Diseñar e implementar una API moderna que exponga estos indicadores de forma eficiente y segura.
+    \item Crear una interfaz de usuario en forma de \textit{Dashboard} interactivo, con un diseño atractivo, para la exploración y visualización de la información.
+\end{itemize}
+
+El desarrollo se enfoca en toda la cadena de valor del dato, desde el diseño de la arquitectura y la ingeniería de datos, hasta la capa de \textit{frontend}.
