@@ -165,6 +165,39 @@
     </GUI>
   </transform>
   <transform>
+    <name>Calculator</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <calculation>
+      <calc_type>ADD3</calc_type>
+      <conversion_mask/>
+      <currency_symbol/>
+      <decimal_symbol/>
+      <field_a>riesgo_academico</field_a>
+      <field_b>riesgo_adaptacion</field_b>
+      <field_c>pts_riesgo_socioeconomico</field_c>
+      <field_name>riesgo_abandono</field_name>
+      <grouping_symbol/>
+      <remove>N</remove>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <value_type>Integer</value_type>
+    </calculation>
+    <failIfNoFile>Y</failIfNoFile>
+    <attributes/>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>928</yloc>
+    </GUI>
+  </transform>
+  <transform>
     <name>Formula Riesgos</name>
     <type>Formula</type>
     <description/>
@@ -223,103 +256,86 @@
         <length>-2</length>
         <name>id_estudiante</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_tiempo</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_centro</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_curso</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_demografia_familiar</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_adaptacion</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>desfase_edad</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>renta_unidades_consumo</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>num_cursadas</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>num_aprobadas</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>num_suspensas</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>is_repetidor</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>tasa_aprobado</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>riesgo_socioeconomico</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>riesgo_adaptacion</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>riesgo_academico</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>riesgo_abandono</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -431,7 +447,7 @@
     <tablename_field/>
     <tablename_in_field>N</tablename_in_field>
     <tablename_in_table>Y</tablename_in_table>
-    <truncate>N</truncate>
+    <truncate>Y</truncate>
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
@@ -1292,39 +1308,6 @@ FROM dwh.fact_calificaciones
     <GUI>
       <xloc>400</xloc>
       <yloc>736</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Calculator</name>
-    <type>Calculator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <calculation>
-      <calc_type>ADD3</calc_type>
-      <conversion_mask/>
-      <currency_symbol/>
-      <decimal_symbol/>
-      <field_a>riesgo_academico</field_a>
-      <field_b>riesgo_adaptacion</field_b>
-      <field_c>pts_riesgo_socioeconomico</field_c>
-      <field_name>riesgo_abandono</field_name>
-      <grouping_symbol/>
-      <remove>N</remove>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <value_type>Integer</value_type>
-    </calculation>
-    <failIfNoFile>Y</failIfNoFile>
-    <attributes/>
-    <GUI>
-      <xloc>240</xloc>
-      <yloc>928</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
