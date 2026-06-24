@@ -291,9 +291,9 @@ INSERT INTO ASIGNATURA (cod_asignatura, nombre, tipo, num_horas, num_curso, cod_
 INSERT INTO CENTRO (cod_centro, nombre, email, tipo, direccion, telefono, naturaleza) VALUES
 -- 5.1. CEIPs Públicos (Educación Infantil y Primaria)
 ('C001', 'CEIP Emilia Pardo Bazán', 'ceip.emilia.pardobazan@edu.xunta.gal', 'Público', 'Rúa de la Torre 55, CP 15002, A Coruña', '981001111', 'CEIP'),
-('C002', 'CEIP María Pita', 'ceip.mariapita@edu.xunta.gal', 'Público', 'Rúa de la Sardiñeira s/n, CP 15007, A Coruña', '981001112', 'CEIP'),
-('C003', 'CEIP Salgado Torres', 'ceip.salgadotorres@edu.xunta.gal', 'Público', 'Rúa Xeneral Salgado Torres s/n, CP 15008, A Coruña', '981001113', 'CEIP'),
-('C004', 'CEIP Alborada', 'ceip.alborada@edu.xunta.gal', 'Público', 'Rúa de la Alborada s/n, CP 15008, A Coruña', '981001114', 'CEIP'),
+('C002', 'CEIP María Pita', 'ceip.mariapita@edu.xunta.gal', 'Público', 'Rúa de la Sardiñeira 28, CP 15007, A Coruña', '981001112', 'CEIP'),
+('C003', 'CEIP Salgado Torres', 'ceip.salgadotorres@edu.xunta.gal', 'Público', 'Rúa Xeneral Salgado Torres 16, CP 15008, A Coruña', '981001113', 'CEIP'),
+('C004', 'CEIP Alborada', 'ceip.alborada@edu.xunta.gal', 'Público', 'Rúa de la Alborada 15, CP 15008, A Coruña', '981001114', 'CEIP'),
 ('C005', 'CEIP Ramón de la Sagra', 'ceip.ramondesagra@edu.xunta.gal', 'Público', 'Rúa Ramón de la Sagra 8, CP 15005, A Coruña', '981001115', 'CEIP'),
 ('C006', 'CEIP Cidade Vella', 'ceip.cidadevella@edu.xunta.gal', 'Público', 'Rúa Herrerías 2, CP 15001, A Coruña', '981001116', 'CEIP'),
 
@@ -308,7 +308,7 @@ INSERT INTO CENTRO (cod_centro, nombre, email, tipo, direccion, telefono, natura
 -- 5.3. IES Públicos (Educación Secundaria Obligatoria y FP Básica)
 ('I001', 'IES Eusebio da Guarda', 'ies.eusebio.daguarda@edu.xunta.gal', 'Público', 'Praza de Pontevedra 4, CP 15004, A Coruña', '981003333', 'IES'),
 ('I002', 'IES Fernando Wirtz Suárez', 'ies.fernando.wirtz@edu.xunta.gal', 'Público', 'Rúa Caballeros 3, CP 15009, A Coruña', '981004444', 'IES'),
-('I003', 'IES Agra do Orzán', 'ies.agradoorzan@edu.xunta.gal', 'Público', 'Rúa de la Educación s/n, CP 15010, A Coruña', '981003334', 'IES'),
+('I003', 'IES Agra do Orzán', 'ies.agradoorzan@edu.xunta.gal', 'Público', 'Rúa de la Educación 2, CP 15010, A Coruña', '981003334', 'IES'),
 ('I004', 'IES de Monelos', 'ies.monelos@edu.xunta.gal', 'Público', 'Rúa de la Educación 1, CP 15010, A Coruña', '981003335', 'IES'),
-('I005', 'IES Adormideras', 'ies.adormideras@edu.xunta.gal', 'Público', 'Rúa de la Dársena s/n, CP 15002, A Coruña', '981003336', 'IES'),
+('I005', 'IES Adormideras', 'ies.adormideras@edu.xunta.gal', 'Público', 'Rúa de la Dársena 4, CP 15002, A Coruña', '981003336', 'IES'),
 ('I006', 'IES Ramón Menéndez Pidal (Zalaeta)', 'ies.zalaeta@edu.xunta.gal', 'Público', 'Rúa Colegio 2, CP 15002, A Coruña', '981003337', 'IES');
