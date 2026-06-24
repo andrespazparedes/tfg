@@ -12,7 +12,7 @@ def seed_db() -> None:
     logger.info("Iniciando proceso de seeding...")
     with Session(engine) as db:
         admin_email = settings.DEFAULT_ADMIN_EMAIL
-        user = db.query(User).filter(User.email == admin_email).first()
+        user = db.query(User).filter(User.id == 1).first()
         if not user:
             logger.info(f"Creando usuario administrador por defecto ({admin_email})...")
             new_user = User(
@@ -20,11 +20,13 @@ def seed_db() -> None:
                 hashed_password=hash_password(settings.DEFAULT_ADMIN_PASSWORD),
                 role="admin"
             )
+            # Aseguramos que tenga el ID 1
+            new_user.id = 1
             db.add(new_user)
             db.commit()
             logger.info(f"Usuario administrador creado: {admin_email}")
         else:
-            logger.info("El usuario administrador ya existe. Saltando seed.")
+            logger.info("El usuario administrador (ID=1) ya existe. Saltando seed.")
 
 if __name__ == "__main__":
     seed_db()

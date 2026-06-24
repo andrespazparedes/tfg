@@ -55,3 +55,15 @@ def login(
     access_token = create_access_token(data={"sub": user.email, "role": user.role})
 
     return TokenResponse(access_token=access_token)
+
+from app.schemas.user import UserResponse
+from app.routers.dependencies import get_current_user
+
+@router.get(
+    "/me",
+    response_model=UserResponse,
+    summary="Obtener perfil actual",
+    description="Devuelve los datos del usuario autenticado actualmente."
+)
+def get_me(current_user: User = Depends(get_current_user)) -> UserResponse:
+    return current_user

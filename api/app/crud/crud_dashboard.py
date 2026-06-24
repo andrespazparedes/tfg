@@ -689,6 +689,29 @@ def get_dynamic_filters(db: Session) -> Dict[str, Any]:
 # =====================================================================
 import statistics
 
+# Cache persistente de geocodificación (a nivel de módulo, se rellena una vez)
+_GEO_CACHE: dict = {}
+
+def _geocode_by_cp_ciudad(cp: str, ciudad: str) -> tuple:
+    """Geocodifica usando CP y ciudad limpios del datamart."""
+    cache_key = f"{cp}|{ciudad}"
+    if cache_key in _GEO_CACHE:
+        return _GEO_CACHE[cache_key]
+    try:
+        from geopy.geocoders import Nominatim
+        import time
+        geolocator = Nominatim(user_agent="dashboard-educativo-tfg")
+        query = f"{cp}, {ciudad}, España"
+        location = geolocator.geocode(query, timeout=5, country_codes='es')
+        time.sleep(1)
+        result = (float(location.latitude), float(location.longitude)) if location else (None, None)
+    except Exception:
+        result = (None, None)
+    
+    if result != (None, None):
+        _GEO_CACHE[cache_key] = result
+    return result
+
 def get_centros_ranking(
     db: Session,
     curso_academico: Optional[List[str]] = None,
@@ -740,6 +763,7 @@ def get_centros_ranking(
         DimCentro.cod_centro,
         DimCentro.nombre.label("nombre_centro"),
         DimCentro.ciudad.label("localidad"),
+        DimCentro.cp.label("cod_postal"),
         DimCentro.tipo.label("tipo_centro"),
         DimCentro.naturaleza,
         func.count(distinct(FactRendimientoAnual.id_estudiante)).label("num_estudiantes"),
@@ -754,8 +778,8 @@ def get_centros_ranking(
         func.count(distinct(case((cond_brecha_digital, FactRendimientoAnual.id_estudiante)))).label("brecha_digital"),
         func.count(distinct(case((cond_bajo_estudios, FactRendimientoAnual.id_estudiante)))).label("bajo_nivel_estudios_padres"),
     ).group_by(
-        DimTiempo.curso_academico, DimCentro.id_centro, DimCentro.cod_centro, DimCentro.nombre, 
-        DimCentro.ciudad, DimCentro.tipo, DimCentro.naturaleza
+        DimTiempo.curso_academico, DimCentro.id_centro, DimCentro.cod_centro, DimCentro.nombre,
+        DimCentro.ciudad, DimCentro.cp, DimCentro.tipo, DimCentro.naturaleza
     ).all()
 
     if not rows:
@@ -769,14 +793,23 @@ def get_centros_ranking(
 
     centros_t0 = {}
     centros_t1 = {}
-    
+
     for r in rows:
         num_est = r.num_estudiantes or 1
+
+        # Geocodificar por CP + ciudad (ambos limpios en el datamart)
+        lat, lon = None, None
+        cp_str = str(r.cod_postal).zfill(5) if r.cod_postal else None
+        if cp_str and r.localidad:
+            lat, lon = _geocode_by_cp_ciudad(cp_str, r.localidad)
         c_dict = {
             "id_centro": r.id_centro,
             "cod_centro": r.cod_centro,
             "nombre_centro": r.nombre_centro,
             "localidad": r.localidad,
+            "cod_postal": cp_str,
+            "lat": lat,
+            "lon": lon,
             "tipo_centro": r.tipo_centro,
             "naturaleza": r.naturaleza,
             "num_estudiantes": r.num_estudiantes,
@@ -937,3 +970,95 @@ def get_correlation_income_failures(
     ).limit(3000).all() # Limit to prevent payload bloat, 3000 is generous for a single school.
 
     return [{"renta": float(r.renta_unidades_consumo), "suspensos": float(r.num_suspensas)} for r in rows]
+
+# =====================================================================
+# 8. MACRO DASHBOARD: KPIs y Gráficas
+# =====================================================================
+
+def get_macro_kpis(
+    db: Session,
+    curso_academico: Optional[List[str]] = None,
+    cod_ciclo: Optional[List[str]] = None,
+    tipo_centro: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    # Reusamos get_centros_ranking para obtener las métricas por centro
+    ranking = get_centros_ranking(
+        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro,
+        page=1, page_size=1000
+    )
+    
+    centros = ranking["data"]
+    num_centros = len(centros)
+    
+    if num_centros == 0:
+        return {
+            "num_centros": 0,
+            "riesgo_abandono_alto": 0, "is_repetidor": 0, "repetidores_1_2_pri": 0,
+            "suspensos_1_2_pri": 0, "adaptacion_curricular": 0, "riesgo_socio_alto": 0,
+            "suspensos": 0, "desfase_edad": 0, "brecha_digital": 0, "bajo_nivel_estudios_padres": 0
+        }
+    
+    metrics = [
+        "riesgo_abandono_alto", "is_repetidor", "repetidores_1_2_pri", "suspensos_1_2_pri", 
+        "adaptacion_curricular", "riesgo_socioeconomico_alto", "suspensos", "desfase_edad", 
+        "brecha_digital", "bajo_nivel_estudios_padres"
+    ]
+    
+    means = {}
+    for m in metrics:
+        total = sum(c[m] / c["num_estudiantes"] if c["num_estudiantes"] > 0 else 0 for c in centros)
+        means[m] = total / num_centros
+
+    counts = { "num_centros": num_centros }
+    for m in metrics:
+        count = sum(1 for c in centros if (c[m] / c["num_estudiantes"] if c["num_estudiantes"] > 0 else 0) > means[m])
+        key = "riesgo_socio_alto" if m == "riesgo_socioeconomico_alto" else m
+        counts[key] = count
+        
+    return counts
+
+def get_macro_trend(
+    db: Session,
+    cod_ciclo: Optional[List[str]] = None,
+    tipo_centro: Optional[List[str]] = None,
+) -> List[Dict[str, Any]]:
+    query = _base_query(db)
+    query = _apply_filters(query, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
+    
+    rows = query.with_entities(
+        DimTiempo.curso_academico,
+        func.avg(FactRendimientoAnual.riesgo_abandono).label("indice_riesgo_medio"),
+        func.count(distinct(DimCentro.id_centro)).label("num_centros")
+    ).group_by(DimTiempo.curso_academico).order_by(DimTiempo.curso_academico.asc()).all()
+    
+    return [
+        {
+            "curso_academico": r.curso_academico,
+            "indice_riesgo_medio": float(r.indice_riesgo_medio or 0),
+            "num_centros": r.num_centros
+        }
+        for r in rows
+    ]
+
+def get_macro_risk_by_type(
+    db: Session,
+    curso_academico: Optional[List[str]] = None,
+    cod_ciclo: Optional[List[str]] = None,
+) -> List[Dict[str, Any]]:
+    query = _base_query(db)
+    query = _apply_filters(query, curso_academico=curso_academico, cod_ciclo=cod_ciclo)
+    
+    rows = query.with_entities(
+        DimCentro.tipo.label("tipo_centro"),
+        func.avg(FactRendimientoAnual.riesgo_abandono).label("indice_riesgo_medio"),
+        func.count(distinct(DimCentro.id_centro)).label("num_centros")
+    ).group_by(DimCentro.tipo).all()
+    
+    return [
+        {
+            "tipo_centro": r.tipo_centro or "Desconocido",
+            "indice_riesgo_medio": float(r.indice_riesgo_medio or 0),
+            "num_centros": r.num_centros
+        }
+        for r in rows
+    ]

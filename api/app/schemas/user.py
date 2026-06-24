@@ -32,10 +32,17 @@ class LoginRequest(BaseModel):
 class UserCreate(BaseModel):
     """Payload para crear un usuario (uso interno / seeding)."""
 
-    email: str = Field(..., min_length=5, max_length=255)
+    email: EmailStr = Field(..., min_length=5, max_length=255)
     password: str = Field(..., min_length=8, max_length=128)
     role: str = Field(default="viewer", pattern=r"^(admin|viewer)$")
 
+
+class UserUpdate(BaseModel):
+    """Payload para actualizar un usuario."""
+
+    email: EmailStr | None = Field(None, min_length=5, max_length=255)
+    password: str | None = Field(None, min_length=8, max_length=128)
+    role: str | None = Field(None, pattern=r"^(admin|viewer)$")
 
 # ── Response schemas ──────────────────────────────────────────────────
 

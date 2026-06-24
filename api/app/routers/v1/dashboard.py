@@ -25,13 +25,13 @@ from app.schemas.dashboard import (
     TrendResponse,
     FailedSubjectsDistributionResponse,
     IncomeDistributionMicroResponse,
-    RepeatersByCourseResponse,
-    AdaptationPerformanceResponse,
     CorrelationIncomeFailuresResponse,
-    SocioeconomicKPIsResponse,
     DigitalGapResponse,
     ParentEducationResponse,
     IncomeRiskResponse,
+    TrendMacroResponse,
+    RiskByTypeResponse,
+    MacroKPIsResponse,
 )
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard Analítico"])
@@ -320,6 +320,60 @@ def get_students(
     )
     return StudentListResponse(**data)
 
+# =====================================================================
+# 6. MACRO DASHBOARD
+# =====================================================================
+
+@router.get(
+    "/macro/kpis",
+    response_model=MacroKPIsResponse,
+    summary="KPIs agregados para el MacroDashboard",
+)
+def get_macro_kpis(
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    data = crud_dashboard.get_macro_kpis(
+        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro
+    )
+    return data
+
+
+@router.get(
+    "/macro/charts/trend",
+    response_model=TrendMacroResponse,
+    summary="Evolución histórica de riesgo a nivel autonómico",
+)
+def get_macro_trend(
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    data = crud_dashboard.get_macro_trend(
+        db, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro
+    )
+    return {"data": data}
+
+
+@router.get(
+    "/macro/charts/risk-by-type",
+    response_model=RiskByTypeResponse,
+    summary="Media de riesgo por tipo de centro",
+)
+def get_macro_risk_by_type(
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    data = crud_dashboard.get_macro_risk_by_type(
+        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo
+    )
+    return {"data": data}
 
 @router.get(
     "/filters",

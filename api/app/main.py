@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.v1 import auth as auth_router
 from app.routers.v1 import dashboard as dashboard_router
+from app.routers.v1 import users as users_router
 from app.core.config import settings
 
 # ── Instancia de la aplicación ────────────────────────────────────────
@@ -46,7 +47,11 @@ app.include_router(
     dashboard_router.router,
     prefix=settings.API_V1_STR,
 )
-
+app.include_router(
+    users_router.router,
+    prefix=f"{settings.API_V1_STR}/users",
+    tags=["Usuarios"]
+)
 
 # ── Health Check ──────────────────────────────────────────────────────
 @app.get("/health", tags=["Sistema"])

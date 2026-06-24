@@ -214,6 +214,9 @@ class CentroListItem(BaseModel):
     cod_centro: Optional[str] = None
     nombre_centro: Optional[str] = None
     localidad: Optional[str] = None
+    cod_postal: Optional[str] = None
+    lat: Optional[float] = None
+    lon: Optional[float] = None
     tipo_centro: Optional[str] = None
     naturaleza: Optional[str] = None
     
@@ -270,3 +273,39 @@ class FiltersResponse(BaseModel):
     tipos_centro: List[str] = Field(
         ..., description="Tipos de centros educativos disponibles (CEIP, IES...)"
     )
+
+# =====================================================================
+# 6. MACRO DASHBOARD — GET /api/v1/dashboard/macro/*
+# =====================================================================
+
+class TrendMacroItem(BaseModel):
+    curso_academico: str
+    indice_riesgo_medio: float
+    num_centros: int
+
+class TrendMacroResponse(BaseModel):
+    data: List[TrendMacroItem]
+
+
+class RiskByTypeItem(BaseModel):
+    tipo_centro: str
+    indice_riesgo_medio: float
+    num_centros: int
+
+class RiskByTypeResponse(BaseModel):
+    data: List[RiskByTypeItem]
+
+
+class MacroKPIsResponse(BaseModel):
+    num_centros: int
+    riesgo_abandono_alto: int
+    is_repetidor: int
+    repetidores_1_2_pri: int
+    suspensos_1_2_pri: int
+    adaptacion_curricular: int
+    riesgo_socio_alto: int
+    suspensos: int
+    desfase_edad: int
+    brecha_digital: int
+    bajo_nivel_estudios_padres: int
+
