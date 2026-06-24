@@ -176,15 +176,19 @@
   padding: 20px;
   border-top: 1px solid var(--border-light);
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sidebar.closed .sidebar-footer {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 20px 0;
 }
 
-.theme-toggle {
+.theme-toggle, .logout-btn {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -199,11 +203,12 @@
   transition: background-color 0.2s;
 }
 
-.sidebar.closed .theme-toggle {
+.sidebar.closed .theme-toggle,
+.sidebar.closed .logout-btn {
   width: auto;
   border: none;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover, .logout-btn:hover {
   background-color: var(--border-light);
 }

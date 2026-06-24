@@ -18,7 +18,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      navigate('/dashboard');
+      navigate('/macro');
     } catch (err) {
       if (err.response && err.response.status === 401) {
         setError('Credenciales incorrectas. Inténtalo de nuevo.');

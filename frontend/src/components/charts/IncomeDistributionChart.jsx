@@ -13,7 +13,7 @@ import { api } from '../../services/api';
 const COLORS = {
   'Muy Baja': 'var(--color-danger)',
   'Baja': 'var(--color-warning)',
-  'Media/Alta': 'var(--color-primary)',
+  'Media/Alta': 'var(--color-success)',
   'Desconocida': 'var(--text-secondary)'
 };
 
@@ -53,7 +53,17 @@ export const IncomeDistributionChart = () => {
         });
 
         const response = await api.get('/dashboard/overview/charts/income-distribution', { params });
-        setData(response.data.data);
+        
+        const formattedData = response.data.data.map(d => {
+          const rawName = (d.name || 'Desconocida').toLowerCase();
+          let displayName = 'Desconocida';
+          if (rawName.includes('muy baja')) displayName = 'Muy Baja';
+          else if (rawName.includes('baja')) displayName = 'Baja';
+          else if (rawName.includes('media/alta') || rawName.includes('media') || rawName.includes('alta')) displayName = 'Media/Alta';
+          
+          return { name: displayName, value: d.value };
+        });
+        setData(formattedData);
       } catch (error) {
         console.error("Error cargando IncomeDistributionChart:", error);
       } finally {
@@ -73,17 +83,18 @@ export const IncomeDistributionChart = () => {
   }
 
   return (
-    <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
+    <div style={{ width: '100%', height: 280 }}>
+      <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}
             cx="50%"
-            cy="45%"
-            innerRadius={60}
-            outerRadius={90}
-            paddingAngle={5}
+            cy="50%"
+            innerRadius={70}
+            outerRadius={100}
+            paddingAngle={3}
             dataKey="value"
+            stroke="none"
             animationDuration={1000}
           >
             {data.map((entry, index) => (
@@ -91,7 +102,12 @@ export const IncomeDistributionChart = () => {
             ))}
           </Pie>
           <Tooltip content={<CustomTooltip />} />
-          <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: 'var(--text-secondary)' }} />
+          <Legend 
+            verticalAlign="bottom" 
+            height={36} 
+            iconType="circle" 
+            formatter={(value) => <span style={{ color: 'var(--text-primary)' }}>{value}</span>}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

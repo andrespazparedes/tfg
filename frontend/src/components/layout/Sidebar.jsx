@@ -8,15 +8,18 @@ import {
   Moon, 
   ChevronLeft,
   Menu,
-  RefreshCcw
+  RefreshCcw,
+  LogOut
 } from 'lucide-react';
 import { useDashboardContext } from '../../context/DashboardContext';
+import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { MultiSelect } from '../ui/MultiSelect';
 import './Sidebar.css';
 
 export const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { theme, toggleTheme, filters, updateFilter, resetFilters } = useDashboardContext();
+  const { logout } = useAuth();
   const [filterOptions, setFilterOptions] = useState({ centros: [], ciclos: [], cursos_academicos: [], tipos_centro: [] });
 
   useEffect(() => {
@@ -142,6 +145,10 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
         <button onClick={toggleTheme} className="theme-toggle" title="Cambiar tema">
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           {isOpen && <span>Modo {theme === 'dark' ? 'Claro' : 'Oscuro'}</span>}
+        </button>
+        <button onClick={logout} className="logout-btn" title="Cerrar sesión" style={{ color: 'var(--color-danger)' }}>
+          <LogOut size={20} />
+          {isOpen && <span>Cerrar sesión</span>}
         </button>
       </div>
     </aside>

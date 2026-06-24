@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  ScatterChart, 
+  ComposedChart,
   Scatter, 
+  Line,
   XAxis, 
   YAxis, 
   CartesianGrid, 
@@ -51,7 +52,31 @@ export const IncomeFailuresScatterChart = () => {
         });
 
         const response = await api.get('/dashboard/overview/charts/correlation-income-failures', { params });
-        setData(response.data.data);
+        let fetchedData = response.data.data || [];
+        // Ordenamos por renta para que la línea de tendencia se dibuje de izquierda a derecha
+        fetchedData.sort((a, b) => a.renta - b.renta);
+
+        // Calcular regresión lineal (línea de tendencia)
+        const n = fetchedData.length;
+        if (n > 1) {
+          let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+          fetchedData.forEach(d => {
+            sumX += d.renta;
+            sumY += d.suspensos;
+            sumXY += (d.renta * d.suspensos);
+            sumXX += (d.renta * d.renta);
+          });
+          
+          const m = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+          const b = (sumY - m * sumX) / n;
+          
+          fetchedData = fetchedData.map(d => ({
+            ...d,
+            trend: m * d.renta + b
+          }));
+        }
+
+        setData(fetchedData);
       } catch (error) {
         console.error("Error cargando IncomeFailuresScatterChart:", error);
       } finally {
@@ -73,7 +98,7 @@ export const IncomeFailuresScatterChart = () => {
   return (
     <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer>
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
+        <ComposedChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }} data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-light)" />
           <XAxis 
             type="number" 
@@ -97,8 +122,17 @@ export const IncomeFailuresScatterChart = () => {
           />
           <ZAxis type="number" range={[20, 20]} />
           <Tooltip cursor={{ strokeDasharray: '3 3', stroke: 'var(--text-secondary)' }} content={<CustomTooltip />} />
-          <Scatter name="Alumnos" data={data} fill="var(--color-primary)" opacity={0.6} animationDuration={1500} />
-        </ScatterChart>
+          <Scatter name="Alumnos" dataKey="suspensos" fill="var(--color-primary)" opacity={0.6} animationDuration={1500} />
+          <Line 
+            type="linear" 
+            dataKey="trend" 
+            stroke="var(--color-danger)" 
+            strokeWidth={2} 
+            dot={false} 
+            activeDot={false} 
+            name="Tendencia"
+          />
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );

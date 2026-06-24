@@ -3,26 +3,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Premium radial background */
-  background: 
-    radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.1), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.08), transparent 25%),
-    var(--bg-page);
+  /* El fondo general y los gradientes (Ambient Glow) ya los pone el body en index.css */
+  background: transparent;
   padding: 20px;
+  position: relative;
+  z-index: 10;
 }
 
 .login-card {
   width: 100%;
   max-width: 420px;
   padding: 48px 40px;
-  /* Glassmorphism effect */
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  animation: fadeUp 0.6s ease-out forwards;
+  
+  /* Sistema Glassmorphism unificado */
+  background: var(--bg-sidebar);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow);
+  border: var(--glass-border);
+  
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transform: translateY(20px);
   opacity: 0;
 }
@@ -35,12 +36,12 @@
 }
 
 .login-title {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 8px 0;
   text-align: center;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
 }
 
 .login-subtitle {
@@ -57,75 +58,77 @@
 .form-label {
   display: block;
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
+  font-weight: 600;
+  color: var(--text-secondary);
   margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
   font-size: 15px;
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--bg-card); /* Integrado con el tema Oscuro/Claro */
   transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
 }
 
 .form-input::placeholder {
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .form-input:focus {
-  border-color: var(--accent);
-  background: #ffffff;
+  border-color: var(--color-primary);
+  background: var(--bg-sidebar);
   outline: none;
-  box-shadow: 0 0 0 4px var(--accent-light);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15); /* Azul Apple con transparencia */
 }
 
 .login-btn {
   width: 100%;
   padding: 14px;
-  background: var(--accent);
+  background: var(--color-primary);
   color: #ffffff;
   font-weight: 600;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 8px;
-  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.1);
+  margin-top: 12px;
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
 }
 
 .login-btn:hover {
-  background: var(--accent-hover);
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3), 0 4px 6px -2px rgba(79, 70, 229, 0.15);
-  transform: translateY(-1px);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(10, 132, 255, 0.4);
 }
 
 .login-btn:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px -1px rgba(79, 70, 229, 0.2);
+  filter: brightness(0.9);
 }
 
 .login-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
 .login-error {
-  background-color: var(--color-danger-bg);
+  background-color: rgba(255, 59, 48, 0.1);
   color: var(--color-danger);
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  margin: 0 0 20px 0;
-  padding: 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  margin: 0 0 24px 0;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 59, 48, 0.2);
 }

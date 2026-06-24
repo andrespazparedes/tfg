@@ -2,33 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { DashboardProvider } from './context/DashboardContext';
 import { AppLayout } from './components/layout/AppLayout';
-import { mockLogin } from './services/api';
+import { useAuth } from './context/AuthContext';
+import LoginPage from './pages/LoginPage';
 
 import { MicroDashboard } from './pages/MicroDashboard';
 import { MacroDashboard } from './pages/MacroDashboard';
 import { Socioeconomic } from './pages/Socioeconomic';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const initAuth = async () => {
-      const token = await mockLogin();
-      if (token) {
-        setIsAuthenticated(true);
-      }
-    };
-    initAuth();
-  }, []);
-
-  if (!isAuthenticated) {
-    return <div style={{ padding: '50px', textAlign: 'center' }}>Iniciando sesión segura...</div>;
-  }
+  const { isAuthenticated } = useAuth();
 
   return (
     <DashboardProvider>
       <Routes>
-        <Route path="/" element={<AppLayout />}>
+        <Route 
+          path="/login" 
+          element={isAuthenticated ? <Navigate to="/macro" replace /> : <LoginPage />} 
+        />
+        
+        <Route 
+          path="/" 
+          element={isAuthenticated ? <AppLayout /> : <Navigate to="/login" replace />}
+        >
           <Route index element={<Navigate to="/macro" replace />} />
           <Route path="macro" element={<MacroDashboard />} />
           <Route path="micro" element={<MicroDashboard />} />
