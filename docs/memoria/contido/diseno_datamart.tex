@@ -1,15 +1,15 @@
-﻿\chapter{Diseño del Datamart Analítico}
+\chapter{Diseño del datamart analítico}
 \label{chap:diseno_datamart}
 
 \lettrine{E}{l} diseño del Datamart constituye el núcleo lógico de este proyecto. Se ha optado por un modelo dimensional en estrella (Star Schema) basado en la metodología de Ralph Kimball, pero introduciendo optimizaciones específicas para tratar variables demográficas de alta cardinalidad e historificación de expedientes.
 
-\section{Modelo Dimensional en Estrella}
+\section{Modelo dimensional en estrella}
 
 A diferencia de las bases de datos transaccionales, que están altamente normalizadas, el esquema del Data Warehouse se ha desnormalizado en dos tipos de tablas: \textbf{Tablas de Hechos} (que almacenan métricas y claves foráneas) y \textbf{Tablas de Dimensiones} (que contienen descriptores textuales para filtrar y agrupar). 
 
 En nuestro diseño final se han establecido dos tablas de hechos de diferente granularidad para responder a distintas necesidades analíticas, rodeadas por un total de siete dimensiones.
 
-\subsection{Tablas de Dimensiones en Detalle}
+\subsection{Tablas de dimensiones en detalle}
 
 Las dimensiones contextualizan los datos numéricos. Para este proyecto se han diseñado las siguientes:
 
@@ -23,7 +23,7 @@ Las dimensiones contextualizan los datos numéricos. Para este proyecto se han d
     \item \textbf{\textit{dim\_adaptacion}:} Registra si el alumno cuenta con adaptaciones curriculares, categorizándolas por discapacidad médica o compensación sociopedagógica.
 \end{itemize}
 
-\subsection{Tablas de Hechos}
+\subsection{Tablas de hechos}
 
 El modelo implementa dos niveles de análisis a través de dos tablas de hechos:
 
@@ -32,11 +32,11 @@ El modelo implementa dos niveles de análisis a través de dos tablas de hechos:
     \item \textbf{\textit{fact\_rendimiento\_anual} (Granularidad Agregada):} Cada fila representa el resumen académico total de un alumno en un curso completo. Consolida el número de asignaturas matriculadas, aprobadas, la tasa de éxito, las asignaturas arrastradas de años anteriores y si el alumno ha repetido. Es en esta tabla donde se calculan de manera definitiva los KPIs críticos y el índice de Riesgo de Abandono Escolar Temprano.
 \end{itemize}
 
-\section{Reglas de Negocio y Cálculo de Riesgos}
+\section{Reglas de negocio y cálculo de riesgos}
 
-Para que el Dashboard ofrezca alertas tempranas reales, se han parametrizado dos indicadores de riesgo fundamentales mediante sistemas de puntuación acumulativa, integrados en la lógica del Datamart.
+Para que el Dashboard ofrezca métricas accionables a nivel autonómico, se han parametrizado dos indicadores de riesgo fundamentales mediante sistemas de puntuación acumulativa, integrados en la lógica del Datamart.
 
-\subsection{Riesgo Socioeconómico}
+\subsection{Riesgo socioeconómico}
 Este riesgo evalúa el contexto familiar de exclusión y brecha digital. Los puntos se calculan sumando los siguientes factores:
 
 \begin{itemize}
@@ -52,7 +52,7 @@ Este riesgo evalúa el contexto familiar de exclusión y brecha digital. Los pun
 \end{itemize}
 \textit{Nota:} Si la suma del riesgo socioeconómico supera los 16 puntos, la familia se considera en situación de alta vulnerabilidad.
 
-\subsection{Riesgo de Abandono del Alumno}
+\subsection{Riesgo de abandono del alumno}
 Combina factores académicos, de apoyo y de arrastre socioeconómico para emitir una alerta crítica global:
 
 \begin{itemize}
@@ -62,4 +62,4 @@ Combina factores académicos, de apoyo y de arrastre socioeconómico para emitir
     \item \textbf{Necesidades de Apoyo y Adaptación:} Adaptación por motivos de discapacidad (10 pts). Adaptación por otros motivos o compensatoria (5 pts).
 \end{itemize}
 
-Estos valores numéricos quedan consolidados en \textit{fact\_rendimiento\_anual}, lo que permite al Backend (FastAPI) entregar al Dashboard de forma instantánea el listado de alumnos en riesgo inminente de abandono.
+Estos valores numéricos quedan consolidados en \textit{fact\_rendimiento\_anual}, lo que permite al Backend (FastAPI) entregar al Dashboard de forma instantánea el listado de centros con mayor concentración de alumnado en riesgo inminente de abandono.

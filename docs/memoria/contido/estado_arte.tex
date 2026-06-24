@@ -1,12 +1,12 @@
-\chapter{Estado del Arte y Marco Teórico}
+\chapter{Estado del arte y marco teórico}
 \label{chap:estado_arte}
 
 \lettrine{P}{ara} comprender adecuadamente las decisiones arquitectónicas y técnicas tomadas en este proyecto, es fundamental contextualizar los conceptos teóricos subyacentes. Este capítulo describe los fundamentos de la Inteligencia de Negocios y las herramientas ETL que sustentan el Datamart desarrollado.
 
-\section{Inteligencia de Negocios y Data Warehousing}
+\section{Inteligencia de negocios y data warehousing}
 La Inteligencia de Negocios (\textit{Business Intelligence} o BI) comprende el conjunto de metodologías, aplicaciones y tecnologías que permiten reunir, depurar y transformar datos de sistemas transaccionales en información estructurada, para su explotación directa o para su análisis y conversión en conocimiento.
 
-En el ámbito educativo, el BI permite a los centros pasar de un modelo reactivo a uno proactivo, identificando patrones y tendencias en el rendimiento de los alumnos antes de que se consolide el fracaso escolar.
+En el ámbito de la gestión educativa pública, la aplicación de la Inteligencia de Negocios trasciende el mero análisis de expedientes individuales para convertirse en una herramienta estratégica de gobernanza. La explotación masiva de datos a nivel autonómico o gubernamental permite a las administraciones abandonar los modelos de reparto de recursos basados en la inercia institucional o informes fragmentados. Al aplicar técnicas de BI sobre bases de datos demográficas, económicas y académicas consolidadas, los gestores públicos pueden identificar patrones de vulnerabilidad sistémica, comparar objetivamente las necesidades entre distintos centros y diseñar políticas educativas proactivas fundamentadas en evidencias empíricas (\textit{Data-Driven Policy Making}).
 
 \subsection{Metodología de Ralph Kimball}
 Para el diseño del repositorio de datos se ha optado por la metodología ascendente o \textit{Bottom-Up} propuesta por Ralph Kimball \cite{Kimball_DWH}. A diferencia de enfoques transaccionales clásicos, Kimball propone construir el almacén de datos (Data Warehouse) a partir de la integración de diferentes \textit{Datamarts} temáticos.
@@ -25,6 +25,9 @@ Un Datamart es un subconjunto orientado a una área específica (en este caso, l
     \label{fig:star_schema_concept}
 \end{figure}
 
+\subsection{Visualización de datos y cuadros de mando}
+El objetivo final de cualquier arquitectura de Inteligencia de Negocios es la correcta comunicación de los hallazgos a los responsables de la toma de decisiones. Teóricamente, un \textit{Dashboard} o Cuadro de Mando Integral es una interfaz visual que proporciona un resumen centralizado de los Indicadores Clave de Rendimiento (KPIs). El estado del arte en el diseño de estas interfaces aboga por principios de "carga cognitiva reducida", priorizando la legibilidad, el uso de jerarquías de información y el empleo estratégico del color para señalar desviaciones críticas. Además, es fundamental la capacidad de \textit{drill-down} (profundización analítica), que permite al gestor público navegar de forma fluida desde una visión macroscópica a nivel de toda la comunidad o municipio, hasta diseccionar el estado de vulnerabilidad de un centro educativo específico.
+
 \section{Procesos ETL y Apache Hop}
 Los procesos ETL (Extracción, Transformación y Carga) son el motor de cualquier sistema BI. Son los encargados de extraer los datos de las fuentes originales, aplicarles reglas de limpieza, filtrado y transformación, y finalmente cargarlos en el Datamart dimensional.
 
@@ -39,3 +42,13 @@ La elección de Apache Hop frente a otras herramientas del mercado se fundamenta
     \caption{Interfaz de usuario de Apache Hop.}
     \label{fig:apache_hop_ui}
 \end{figure}
+
+\section{Arquitecturas web: cliente-servidor y APIs REST}
+El diseño de aplicaciones analíticas modernas ha abandonado los modelos donde el servidor generaba directamente las vistas que el usuario consumía. El marco teórico actual se fundamenta en el paradigma \textbf{Cliente-Servidor desacoplado}. En este modelo, el \textit{Frontend} (interfaz de usuario) y el \textit{Backend} (lógica de negocio y base de datos) operan como aplicaciones completamente independientes.
+
+Para lograr la comunicación entre ambas capas, el estándar universal son las \textbf{APIs RESTful} (\textit{Representational State Transfer}). Una API REST es una interfaz que utiliza el protocolo HTTP para solicitar y enviar datos. Bajo este enfoque, el servidor expone \textit{endpoints} a los que el cliente realiza peticiones para obtener la información analítica. Las respuestas se estructuran habitualmente en formato JSON (\textit{JavaScript Object Notation}), un estándar ligero que permite al \textit{Frontend} procesar ágilmente los datos y renderizarlos en gráficos interactivos. Este desacoplamiento es esencial para asegurar la escalabilidad del sistema.
+
+\section{Evolución de las arquitecturas: contenedores}
+El estado del arte en el despliegue de infraestructuras de datos ha sufrido un cambio de paradigma radical en los últimos años. Tradicionalmente, proyectos complejos que involucraban múltiples bases de datos, flujos ETL y servidores web se desplegaban como arquitecturas monolíticas o empleaban máquinas virtuales que consumían ingentes recursos del sistema operativo anfitrión.
+
+La introducción de la \textbf{contenedorización}, abanderada por plataformas como Docker, representa el estándar actual de la industria. Teóricamente, un contenedor encapsula un microservicio individual junto con todas sus librerías y archivos de configuración, aislándolo completamente. Esta filosofía de "aislamiento de procesos ligeros" garantiza la inmutabilidad del software (eliminando el clásico problema de diferencias entre entornos de desarrollo y producción). Para un ecosistema educativo, donde la infraestructura tecnológica de los colegios puede ser muy limitada y heterogénea, apoyarse en este marco teórico es indispensable para asegurar un despliegue reproducible, ágil e independiente del hardware subyacente.

@@ -1,25 +1,37 @@
-﻿\chapter{Introducción}
+\chapter{Introducción}
 \label{chap:introduccion}
 
-\lettrine{E}{l} sistema educativo actual se enfrenta a retos constantes, siendo uno de los más críticos el abandono y fracaso escolar temprano. Detectar a tiempo a aquellos estudiantes que se encuentran en riesgo de no superar los objetivos académicos o de abandonar sus estudios es fundamental para que los equipos de orientación y dirección de los centros educativos puedan aplicar medidas correctoras.
+\lettrine{E}{l} abandono temprano de la educación tiene importantes implicaciones sociales en términos de calidad de vida, salud, marginalidad social, delincuencia o empleabilidad. Dado el importante coste socioeconómico que este fenómeno conlleva a largo plazo, todas las administraciones públicas y organismos gubernamentales tratan de reducir en lo posible la tasa de abandono temprano y fracaso escolar mediante políticas de intervención y apoyo proactivo \cite{OCDE_Educacion}.
 
-A este reto se le suma la brecha digital, un factor de riesgo socioeconómico que ha tomado gran relevancia y que impacta directamente en las oportunidades de aprendizaje del alumnado. Identificar qué estudiantes carecen de acceso a internet o a equipos informáticos adecuados en sus hogares es una pieza clave del puzle.
+\section{Contexto}
 
-Ante esta situación, el presente Trabajo de Fin de Grado propone el diseño y desarrollo de un \textit{Datamart Analítico} orientado a la prevención del abandono escolar. La motivación principal de este proyecto es proporcionar a los centros educativos una herramienta tecnológica avanzada, capaz de unificar y procesar los datos transaccionales brutos, transformándolos en información visual, interactiva y accionable.
+La administración pública, habitualmente a nivel de comunidad autónoma, es la entidad encargada de la gestión de la educación y debe enfrentarse al complejo desafío de realizar un reparto equitativo de los escasos recursos materiales y personales entre su extensa red de centros educativos. 
+
+La casuística de cada institución es única, y algunos centros necesitan un volumen de apoyo significativamente mayor que otros debido a múltiples factores sistémicos y estructurales. Estar ubicados en zonas económicamente deprimidas, contar con un alto porcentaje de alumnado proveniente de clases desfavorecidas o enfrentarse a severas barreras de brecha digital son elementos que lastran el rendimiento global de un centro. Esto se alinea con la realidad del indicador AROPE en España, que evidencia cómo un porcentaje significativo de las familias conviven en situaciones de vulnerabilidad o pobreza relativa \cite{INE_Pobreza_PDF, AyudaEnAccion_Pobreza}. Abordar estas carencias desde el prisma de la "pobreza multidimensional" \cite{BBVA_Pobreza_Multidimensional, Observatorio_Pobreza} es fundamental para que la administración actúe como un equilibrador social efectivo.
+
+Sin embargo, históricamente la información ha estado dispersa en bases de datos heterogéneas a nivel gubernamental. Para hacer un reparto verdaderamente objetivo y eficiente, la administración no puede depender de intuiciones o reportes fragmentados; debe disponer de una "fotografía" exacta del estado de cada centro, construida sobre medidas estandarizadas, comparables y objetivas a nivel autonómico.
+
+\section{Motivación}
+
+Ante este escenario de gran volumen y dispersión de datos, surge la necesidad imperativa de aplicar técnicas de Inteligencia de Negocios (\textit{Business Intelligence} o BI) a la gestión pública. Dado el inmenso número de centros educativos que suelen estar bajo la tutela de las administraciones, la toma de decisiones manual y aislada resulta inabarcable.
+
+La motivación fundamental de este Trabajo de Fin de Grado es el diseño y desarrollo de un ecosistema analítico que culmine en la creación de un cuadro de mando. Dicho cuadro de mando estará compuesto por una serie de Indicadores Clave de Desempeño (KPIs, por sus siglas en inglés) que sinteticen y crucen de forma inteligente el rendimiento académico con el contexto sociodemográfico de los centros a escala global. 
+
+El propósito final es que la tecnología se ponga al servicio de los gestores públicos, sirviendo como una herramienta centralizada y accionable para guiar la difícil tarea de asignación de recursos, distribución de presupuestos y dotación de personal de apoyo entre los distintos centros educativos de forma totalmente empírica y justificada.
 
 \section{Objetivos}
 \label{sec:objetivos}
 
-El objetivo general del proyecto es la creación de un cuadro de mando integral o \textit{Dashboard} que centralice el análisis del rendimiento escolar y de los factores de riesgo del alumnado, facilitando una intervención proactiva. 
+El objetivo principal de este proyecto es crear un almacén de datos (Data Warehouse) que extraiga su información a partir de diversas fuentes institucionales, y el desarrollo de un cuadro de mando que muestre distintos KPIs de interés estratégico para los gestores públicos.
 
-Para alcanzar este objetivo general, se han definido los siguientes objetivos específicos:
+Para alcanzar este propósito, garantizando además que todo el sistema se diseñe utilizando exclusivamente herramientas libres de licencias de pago, el trabajo se ha desglosado en los siguientes objetivos específicos:
 
-\begin{itemize}
-    \item Diseñar un repositorio de datos (Datamart) utilizando un modelo dimensional en estrella para almacenar históricamente la información de rendimiento y perfiles del alumnado.
-    \item Desarrollar un flujo automático de Extracción, Transformación y Carga (ETL) capaz de nutrir el Datamart con datos procedentes de los sistemas de gestión transaccionales del centro.
-    \item Establecer un conjunto de reglas de negocio objetivas para el cálculo automatizado de umbrales de riesgo escolar (académico, socioeconómico y adaptativo).
-    \item Diseñar e implementar una API moderna que exponga estos indicadores de forma eficiente y segura.
-    \item Crear una interfaz de usuario en forma de \textit{Dashboard} interactivo, con un diseño atractivo, para la exploración y visualización de la información.
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Simulación de fuentes de datos:} Crear tres bases de datos de origen que representen el entorno autonómico: una con expedientes académicos de alumnos, una con adaptaciones curriculares y una tercera con los resultados de encuestas socioeconómicas familiares.
+    \item \textbf{Diseño del almacén de datos:} Modelar un repositorio centralizado bajo un enfoque dimensional (Datamart) que aglutine e integre la información de las tres fuentes mencionadas para ser el origen analítico de los KPIs.
+    \item \textbf{Diseño de procesos ETL:} Diseñar e implementar los flujos de Extracción, Transformación y Carga (ETL) que pueblen los datos de las fuentes de origen hacia el almacén de datos.
+    \item \textbf{Desarrollo de la lógica de negocio (Backend):} Desplegar una API robusta y segura que sirva como capa de servicio estandarizada entre el almacén de datos y la interfaz gráfica.
+    \item \textbf{Creación de la aplicación web (Dashboard):} Implementar el cuadro de mando interactivo destinado a los gestores, diseñado para mostrar y explorar visualmente los KPIs desglosados por centro, localidad y período de tiempo.
+\end{enumerate}
 
-El desarrollo se enfoca en toda la cadena de valor del dato, desde el diseño de la arquitectura y la ingeniería de datos, hasta la capa de \textit{frontend}.
+De este modo, el proyecto abarca de manera secuencial e iterativa la totalidad del ciclo de vida de un proyecto de Inteligencia de Negocios aplicado a la administración pública.

@@ -1,21 +1,21 @@
-\chapter{Análisis y Arquitectura}
+\chapter{Análisis y arquitectura}
 \label{chap:analisis_arquitectura}
 
 \lettrine{E}{n} este capítulo se detallan los requisitos del sistema y la arquitectura tecnológica seleccionada para la implementación del Datamart y el cuadro de mando. Es importante destacar que todo el proyecto se ha diseñado y desarrollado utilizando exclusivamente tecnologías \textbf{Open Source} (código abierto). Esta decisión estratégica garantiza que cualquier centro educativo, sea público o privado, pueda adoptar y desplegar esta solución sin incurrir en costes de licenciamiento de software comercial.
 
-\section{Requisitos del Sistema}
+\section{Requisitos del sistema}
 
 Para lograr el objetivo de detectar de forma temprana el riesgo de abandono escolar y la brecha digital, el sistema debe cumplir con los siguientes requisitos funcionales y no funcionales:
 
 \begin{itemize}
-    \item \textbf{RF1 - Extracción y Transformación:} El sistema debe ser capaz de extraer datos en bruto del sistema transaccional del centro (PostgreSQL), limpiarlos y aplicar reglas de negocio para calcular índices de riesgo socioeconómico y académico.
+    \item \textbf{RF1 - Extracción y Transformación:} El sistema debe ser capaz de extraer datos en bruto del sistema transaccional (PostgreSQL), limpiarlos y aplicar reglas de negocio para calcular índices de riesgo socioeconómico y académico.
     \item \textbf{RF2 - Modelo Dimensional:} Los datos deben estructurarse en un Data Warehouse bajo un modelo de estrella para facilitar consultas analíticas ultrarrápidas y cruces demográficos.
-    \item \textbf{RF3 - Visualización y Alertas:} Se debe proveer una interfaz web (Dashboard) que muestre de forma intuitiva qué alumnos o cohortes presentan un riesgo alto de fracaso escolar.
+    \item \textbf{RF3 - Visualización y Alertas:} Se debe proveer una interfaz web (Dashboard) que muestre de forma intuitiva qué centros educativos o cohortes geográficas presentan un riesgo alto de vulnerabilidad sistémica y fracaso escolar.
     \item \textbf{RNF1 - Modularidad y Escalabilidad:} La arquitectura debe estar dividida en microservicios independientes, facilitando su despliegue y mantenimiento.
     \item \textbf{RNF2 - Tecnologías Libres:} Obligatoriedad de utilizar herramientas Open Source en todas las capas del proyecto.
 \end{itemize}
 
-\section{Análisis del Sistema Transaccional Origen}
+\section{Análisis del sistema transaccional origen}
 
 Para comprender la necesidad de construir un Data Warehouse y diseñar los flujos ETL, es fundamental analizar previamente la estructura de la base de datos origen. En este proyecto se ha simulado una base de datos transaccional (OLTP) en PostgreSQL que replica el sistema de gestión académica y administrativa estándar de los centros educativos.
 
@@ -48,7 +48,7 @@ Dada la alta fragmentación de la información (por ejemplo, para relacionar las
     \label{fig:modelo_relacional_origen}
 \end{figure}
 
-\section{Arquitectura Tecnológica basada en Docker}
+\section{Arquitectura tecnológica basada en Docker}
 
 Para cumplir con el requisito de modularidad, la arquitectura del proyecto se ha construido bajo el paradigma de contenedores utilizando \textbf{Docker} \cite{Docker_Docs}. Esto permite aislar cada componente del sistema en su propio entorno, asegurando que funcionen de manera predecible independientemente del servidor donde se desplieguen.
 
@@ -59,13 +59,13 @@ El ecosistema está compuesto por seis contenedores principales orquestados medi
     \item \textbf{Data Warehouse Analítico (PostgreSQL)}: Actúa como el repositorio central de BI (\textit{dwh}). Almacena los datos estructurados en un modelo dimensional (esquema en estrella) optimizado para lectura y agregación, conteniendo el historial acumulado.
     \item \textbf{Orquestador ETL (Apache Hop Web)}: Contenedor que ejecuta los flujos de transformación (\textit{pipelines}). Se encarga de conectarse al Origen de Datos, extraer la información, calcular las métricas de riesgo (socioeconómico y de abandono) y cargar el resultado en el Data Warehouse.
     \item \textbf{Servidor Backend RESTful (FastAPI)} \cite{FastAPI_Docs}: Construido en Python, este contenedor expone una API segura que se conecta al Data Warehouse, realiza las consultas analíticas pesadas mediante \textit{SQLAlchemy} y sirve los resultados en formato JSON al cliente.
-    \item \textbf{Aplicación Cliente Dashboard (React/Vite)} \cite{React_Docs}: Interfaz gráfica web moderna donde los orientadores y directores visualizan los datos. Utiliza \textit{Recharts} para los gráficos y sigue una estética visual basada en \textit{Glassmorphism}.
+    \item \textbf{Aplicación Cliente Dashboard (React/Vite)} \cite{React_Docs}: Interfaz gráfica web moderna donde los gestores de la administración visualizan los datos. Utiliza \textit{Recharts} para los gráficos y sigue una estética visual basada en \textit{Glassmorphism}.
     \item \textbf{Servidor Web y Proxy Inverso (Nginx)}: Se encarga de servir la aplicación React compilada y de enrutar las peticiones de red hacia la API del Backend, asegurando un único punto de entrada seguro para la aplicación.
 \end{enumerate}
 
 Esta separación clara entre la base de datos transaccional (OLTP) y el almacén analítico (OLAP) garantiza que las complejas consultas del Dashboard no penalicen el rendimiento de las operaciones diarias del colegio.
 
-\subsection{Justificación del Paradigma de Contenedores}
+\subsection{Justificación del paradigma de contenedores}
 
 Aunque el diseño de una arquitectura distribuida conlleva una mayor carga de razonamiento inicial respecto a una solución monolítica, esta decisión aporta un enorme valor añadido al proyecto por tres motivos fundamentales:
 

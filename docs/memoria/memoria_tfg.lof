@@ -1,29 +1,32 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Esquema conceptual de un modelo en estrella.}}{4}{figure.caption.4}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Interfaz de usuario de Apache Hop.}}{5}{figure.caption.5}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Esquema conceptual de un modelo en estrella.}}{5}{figure.caption.4}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Interfaz de usuario de Apache Hop.}}{7}{figure.caption.5}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Diagrama de Gantt de la planificación del proyecto.}}{9}{figure.caption.6}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Modelo Entidad-Relación (ER) de la base de datos transaccional origen.}}{12}{figure.caption.7}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Esquema Relacional de origen.}}{13}{figure.caption.8}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Modelo Entidad-Relación (ER) de la base de datos transaccional origen.}}{10}{figure.caption.6}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Esquema Relacional de origen.}}{11}{figure.caption.7}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Configuración de la conexión \textit {postgres-dwh}.}}{19}{figure.caption.8}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {extract\_all\_to\_staging.hpl}.}}{20}{figure.caption.9}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_demografia\_familiar.hpl}.}}{22}{figure.caption.10}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_estudiante.hpl}.}}{23}{figure.caption.11}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_tiempo.hpl}.}}{25}{figure.caption.12}%
-\contentsline {figure}{\numberline {6.6}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_asignatura.hpl}.}}{26}{figure.caption.13}%
-\contentsline {figure}{\numberline {6.7}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_curso.hpl}.}}{27}{figure.caption.14}%
-\contentsline {figure}{\numberline {6.8}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_adaptacion.hpl}.}}{28}{figure.caption.15}%
-\contentsline {figure}{\numberline {6.9}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_centro.hpl}.}}{29}{figure.caption.16}%
-\contentsline {figure}{\numberline {6.10}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_calificaciones.hpl} (Parte 1).}}{31}{figure.caption.17}%
-\contentsline {figure}{\numberline {6.11}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_calificaciones.hpl} (Parte 2).}}{32}{figure.caption.18}%
-\contentsline {figure}{\numberline {6.12}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_rendimiento\_anual.hpl} (Parte 1).}}{34}{figure.caption.19}%
-\contentsline {figure}{\numberline {6.13}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_rendimiento\_anual.hpl} (Parte 2).}}{35}{figure.caption.20}%
-\contentsline {figure}{\numberline {6.14}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Workflow principal (\textit {main.hwf}) y su delegación jerárquica en sub-flujos.}}{36}{figure.caption.21}%
-\contentsline {figure}{\numberline {6.15}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Sub-flujo de dimensiones (\textit {dimensions.hwf}) ejecutado en paralelo.}}{37}{figure.caption.22}%
-\contentsline {figure}{\numberline {6.16}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Sub-flujo de hechos (\textit {facts.hwf}) ejecutado de forma secuencial.}}{37}{figure.caption.23}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Configuración de la conexión \textit {postgres-dwh}.}}{21}{figure.caption.9}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {extract\_all\_to\_staging.hpl}.}}{22}{figure.caption.10}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_demografia\_familiar.hpl}.}}{24}{figure.caption.11}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_estudiante.hpl}.}}{25}{figure.caption.12}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_tiempo.hpl}.}}{27}{figure.caption.13}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_asignatura.hpl}.}}{28}{figure.caption.14}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_curso.hpl}.}}{29}{figure.caption.15}%
+\contentsline {figure}{\numberline {6.8}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_adaptacion.hpl}.}}{30}{figure.caption.16}%
+\contentsline {figure}{\numberline {6.9}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {dim\_centro.hpl}.}}{31}{figure.caption.17}%
+\contentsline {figure}{\numberline {6.10}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_calificaciones.hpl} (Parte 1).}}{33}{figure.caption.18}%
+\contentsline {figure}{\numberline {6.11}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_calificaciones.hpl} (Parte 2).}}{34}{figure.caption.19}%
+\contentsline {figure}{\numberline {6.12}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_rendimiento\_anual\_full.hpl} (Parte 1).}}{37}{figure.caption.22}%
+\contentsline {figure}{\numberline {6.13}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo del pipeline \textit {fact\_rendimiento\_anual\_full.hpl} (Parte 2).}}{38}{figure.caption.23}%
+\contentsline {figure}{\numberline {6.14}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Flujo completo del pipeline \textit {fact\_rendimiento\_anual\_incremental.hpl}.}}{39}{figure.caption.24}%
+\contentsline {figure}{\numberline {6.15}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Nodo \textit {Database Join} en \textit {fact\_rendimiento\_anual\_incremental.hpl}.}}{40}{figure.caption.25}%
+\contentsline {figure}{\numberline {6.16}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Workflow principal (\textit {main.hwf}) y su delegación jerárquica en sub-flujos.}}{42}{figure.caption.26}%
+\contentsline {figure}{\numberline {6.17}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Sub-flujo de dimensiones (\textit {dimensions.hwf}) ejecutado en paralelo.}}{42}{figure.caption.27}%
+\contentsline {figure}{\numberline {6.18}{\ignorespaces \xpg@aux {}{spanish}\ignorespaces Sub-flujo de hechos (\textit {facts.hwf}) ejecutado de forma secuencial.}}{43}{figure.caption.28}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

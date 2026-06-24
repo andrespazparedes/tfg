@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.6.22)  23 JUN 2026 15:20
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.6.22)  24 JUN 2026 13:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2076,12 +2076,12 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
-(Font)              scaled to size 14.4pt on input line 10.
+(Font)              scaled to size 14.4pt on input line 6.
 [1
 
 
 
-]) [2]
+] [2]) [3]
 \openout2 = `contido/estado_arte.aux'.
 
  (contido/estado_arte.tex
@@ -2090,7 +2090,7 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.52257pt (P);
 (lettrine.sty)             reported on input line 4.
-[3
+[4
 
 
 
@@ -2098,10 +2098,10 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 ]
 File: imaxes/star_schema.png Graphic file (type bmp)
 <imaxes/star_schema.png>
- [4]
+ [5]
 File: imaxes/apache_hop_ui.png Graphic file (type bmp)
 <imaxes/apache_hop_ui.png>
-) [5]
+ [6]) [7]
 \openout2 = `contido/metodologia.aux'.
 
  (contido/metodologia.tex
@@ -2110,12 +2110,15 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-[6
+[8
 
 
 
 
-]) [7]
+]
+File: imaxes/planificacion_gantt.png Graphic file (type bmp)
+<imaxes/planificacion_gantt.png>
+) [9]
 \openout2 = `contido/analisis_arquitectura.aux'.
 
  (contido/analisis_arquitectura.tex
@@ -2124,7 +2127,7 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-[8
+[10
 
 
 
@@ -2140,10 +2143,10 @@ File: imaxes/modelo_er_source.pdf Graphic file (type pdf)
 <use imaxes/modelo_er_source.pdf>
 File: imaxes/relacional_source.pdf Graphic file (type pdf)
 <use imaxes/relacional_source.pdf>
-[9] [10] [11] [12]
+[11] [12] [13] [14]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
 (Font)              scaled to size 10.95pt on input line 74.
-) [13]
+) [15]
 \openout2 = `contido/diseno_datamart.aux'.
 
  (contido/diseno_datamart.tex
@@ -2152,12 +2155,12 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-[14
+[16
 
 
 
 
-] [15] [16]) [17]
+] [17] [18]) [19]
 \openout2 = `contido/desarrollo_etl.aux'.
 
  (contido/desarrollo_etl.tex
@@ -2168,7 +2171,7 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             reported on input line 4.
 File: imaxes/postgres-dwh_hop_conn.png Graphic file (type bmp)
 <imaxes/postgres-dwh_hop_conn.png>
-[18
+[20
 
 
 
@@ -2176,7 +2179,7 @@ File: imaxes/postgres-dwh_hop_conn.png Graphic file (type bmp)
 ]
 File: imaxes/extract_all_to_staging.png Graphic file (type bmp)
 <imaxes/extract_all_to_staging.png>
- [19] [20]
+ [21] [22]
 Overfull \hbox (8.4397pt too wide) in paragraph at lines 64--65
 \TU/LinLibertine(0)/m/n/10.95 dos los factores: [pts_disponibilidad_ordenadores
 ] + [pts_internet] + [pts_nivel_estudios]
@@ -2184,26 +2187,25 @@ Overfull \hbox (8.4397pt too wide) in paragraph at lines 64--65
 
 File: imaxes/dim_demografia_familiar.png Graphic file (type bmp)
 <imaxes/dim_demografia_familiar.png>
-[21]
+[23]
 Overfull \hbox (0.16708pt too wide) in paragraph at lines 83--84
 \TU/LinLibertine(0)/m/n/10.95 es este nodo nativo de Hop, configurado para rast
 rear el ciclo de vida del \TU/LinLibertine(0)/m/it/10.95 num_expediente
  []
 
-[22]
+[24]
 File: imaxes/dim_estudiante.png Graphic file (type bmp)
 <imaxes/dim_estudiante.png>
- [23]
-LaTeX Font Info:    Font shape `TU/LinLibertine(5)/m/n' will be
-(Font)              scaled to size 10.95pt on input line 105.
+ [25]
 File: imaxes/dim_tiempo.png Graphic file (type bmp)
 <imaxes/dim_tiempo.png>
- [24]
+ [26]
 File: imaxes/dim_asignatura.png Graphic file (type bmp)
 <imaxes/dim_asignatura.png>
+ [27] [28]
 File: imaxes/dim_curso.png Graphic file (type bmp)
 <imaxes/dim_curso.png>
- [25] [26] [27]
+ [29]
 Overfull \hbox (3.59154pt too wide) in paragraph at lines 158--159
 []\TU/LinLibertine(0)/b/it/10.95 is_compensatoria\TU/LinLibertine(0)/b/n/10.95 
 : \TU/LinLibertine(0)/m/n/10.95 Rastrea que inclya (Absentismo, Ludopatía, Acog
@@ -2218,47 +2220,48 @@ cial, Inestabilidad, Inmersión, Lin-
 
 File: imaxes/dim_adaptacion.png Graphic file (type bmp)
 <imaxes/dim_adaptacion.png>
-[28]
 File: imaxes/dim_centro.png Graphic file (type bmp)
 <imaxes/dim_centro.png>
- [29]
+[30] [31]
 File: imaxes/fact_calificaciones_p1.png Graphic file (type bmp)
 <imaxes/fact_calificaciones_p1.png>
 File: imaxes/fact_calificaciones_p2.png Graphic file (type bmp)
 <imaxes/fact_calificaciones_p2.png>
- [30] [31] [32]
-Overfull \hbox (22.98677pt too wide) in paragraph at lines 219--220
-\TU/LinLibertine(0)/m/n/10.95 matorio simple (\TU/LinLibertine(5)/m/n/10.95 ADD
-3\TU/LinLibertine(0)/m/n/10.95 ) consolida matemáticamente el \TU/LinLibertine(
-0)/m/it/10.95 riesgo_academico\TU/LinLibertine(0)/m/n/10.95 , el \TU/LinLiberti
-ne(0)/m/it/10.95 riesgo_adaptacion
+ [32] [33] [34]
+Overfull \hbox (22.0341pt too wide) in paragraph at lines 223--224
+\TU/LinLibertine(0)/m/n/10.95 matorio simple (\TU/LinLibertine(0)/m/it/10.95 AD
+D3\TU/LinLibertine(0)/m/n/10.95 ) consolida matemáticamente el \TU/LinLibertine
+(0)/m/it/10.95 riesgo_academico\TU/LinLibertine(0)/m/n/10.95 , el \TU/LinLibert
+ine(0)/m/it/10.95 riesgo_adaptacion
  []
 
-File: imaxes/fact_rendimiento_anual_p1.png Graphic file (type bmp)
-<imaxes/fact_rendimiento_anual_p1.png>
-File: imaxes/fact_rendimiento_anual_p2.png Graphic file (type bmp)
-<imaxes/fact_rendimiento_anual_p2.png>
 
-LaTeX Warning: Float too large for page by 54.18013pt on input line 234.
+Overfull \hbox (12.1025pt too wide) in paragraph at lines 228--229
+\TU/LinLibertine(0)/m/n/10.95 solver esta ineficiencia matemática, se diseñó la
+ variante \TU/LinLibertine(0)/m/it/10.95 fact_rendimiento_anual_incremental.hpl
 
-[33]
-Overfull \hbox (3.71388pt too wide) in paragraph at lines 244--245
-[]\TU/LinLibertine(0)/b/it/10.95 facts.hwf\TU/LinLibertine(0)/b/n/10.95 : \TU/L
-inLibertine(0)/m/n/10.95 Tras asegurar las dimensiones, \TU/LinLibertine(0)/m/i
-t/10.95 main.hwf \TU/LinLibertine(0)/m/n/10.95 dispara este segundo sub-workflo
-w
  []
 
+[35]
+File: imaxes/fact_rendimiento_anual_full_p1.png Graphic file (type bmp)
+<imaxes/fact_rendimiento_anual_full_p1.png>
+File: imaxes/fact_rendimiento_anual_full_p2.png Graphic file (type bmp)
+<imaxes/fact_rendimiento_anual_full_p2.png>
+File: imaxes/fact_rendimiento_anual_incremental.png Graphic file (type bmp)
+<imaxes/fact_rendimiento_anual_incremental.png>
+File: imaxes/fact_rendimiento_anual_incremental_join.png Graphic file (type bmp
+)
+<imaxes/fact_rendimiento_anual_incremental_join.png>
+ [36] [37] [38] [39] [40]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
-(Font)              scaled to size 12.0pt on input line 247.
-[34] [35]
+(Font)              scaled to size 12.0pt on input line 290.
 File: imaxes/main_workflow.png Graphic file (type bmp)
 <imaxes/main_workflow.png>
 File: imaxes/dimensions_workflow.png Graphic file (type bmp)
 <imaxes/dimensions_workflow.png>
 File: imaxes/facts_workflow.png Graphic file (type bmp)
 <imaxes/facts_workflow.png>
-) [36] [37]
+) [41] [42] [43]
 \openout2 = `contido/desarrollo_dashboard.aux'.
 
  (contido/desarrollo_dashboard.tex
@@ -2267,12 +2270,12 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.55557pt (T);
 (lettrine.sty)             reported on input line 4.
-[38
+[44
 
 
 
 
-] [39]) [40]
+] [45]) [46]
 \openout2 = `contido/conclusions.aux'.
 
  (contido/conclusions.tex
@@ -2281,15 +2284,15 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.35751pt (D);
 (lettrine.sty)             reported on input line 4.
-) [41
+) [47
 
 
 
 
-] [42]
+] [48]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
 (Font)              scaled to size 24.88pt on input line 96.
- [43
+ [49
 
 
 
@@ -2302,14 +2305,14 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-) [44
+) [50
 
 
-] [45] (memoria_tfg.bbl) [46
+] [51] (memoria_tfg.bbl [52
 
 
 
-]
+]) [53]
 
 Package glossaries Warning: No \printglossary or \printglossaries found. 
 (Remove \makeglossaries if you don't want any glossaries.) 
@@ -2325,15 +2328,15 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `memoria_tfg.out' has not changed.
-(rerunfilecheck)             Checksum: B47E3728A411EF83C1685438877C2C01;8181.
+(rerunfilecheck)             Checksum: 6DBF6849F238CA2E5C1234C76DB20DBF;9462.
  ) 
 Here is how much of TeX's memory you used:
- 38070 strings out of 402987
- 796321 string characters out of 5447489
+ 38114 strings out of 402987
+ 798127 string characters out of 5447489
  1232486 words of memory out of 5000000
- 66217 multiletter control sequences out of 15000+600000
- 637664 words of font info for 124 fonts, out of 8000000 for 9000
+ 66259 multiletter control sequences out of 15000+600000
+ 637656 words of font info for 123 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  102i,12n,145p,2497b,621s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on memoria_tfg.xdv (53 pages, 826140 bytes).
+Output written on memoria_tfg.xdv (60 pages, 982160 bytes).

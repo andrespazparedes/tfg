@@ -1,49 +1,49 @@
-﻿\chapter{Dashboard Analítico}
+\chapter{Dashboard analítico}
 \label{chap:desarrollo_dashboard}
 
-\lettrine{T}{ras} la consolidación de los datos en el Data Warehouse, la capa final del proyecto consiste en la creación de una aplicación web interactiva que permita a los equipos directivos y orientadores escolares consumir esta información en tiempo real para tomar decisiones estratégicas.
+\lettrine{T}{ras} la consolidación de los datos en el Data Warehouse, la capa final del proyecto consiste en la creación de una aplicación web interactiva que permita a los gestores de la administración pública consumir esta información en tiempo real para tomar decisiones estratégicas.
 
 Para cumplir con los requisitos de modularidad y escalabilidad (aislamiento de procesos), esta fase de presentación y acceso se ha dividido en tres contenedores independientes: el servidor de lógica de negocio (Backend), la interfaz visual (Frontend) y el servidor de enrutamiento web (Proxy Inverso).
 
-\section{Servidor Backend RESTful (FastAPI)}
+\section{Servidor backend RESTful (FastAPI)}
 
 El núcleo de la lógica de negocio se ha programado en Python utilizando el framework \textbf{FastAPI}. La elección de FastAPI frente a alternativas como Django o Flask se fundamenta en su alto rendimiento nativo (basado en \textit{Starlette}), su soporte asíncrono y la generación automática de documentación interactiva mediante Swagger UI, lo que acelera enormemente la fase de integración frontend-backend.
 
-\subsection{Mapeo Objeto-Relacional (SQLAlchemy)}
+\subsection{Mapeo objeto-relacional (SQLAlchemy)}
 
 Dado que el Data Warehouse (DWH) es de solo lectura para el backend —su escritura es competencia exclusiva de la ETL de Apache Hop—, se ha creado una clase declarativa independiente (\textit{DWHBase}) explícitamente configurada en el esquema \textit{dwh}. Utilizando la librería \textbf{SQLAlchemy}, se han mapeado las tablas dimensionales y de hechos como objetos de Python (\textit{Object-Relational Mapping}). 
 
 Esta abstracción permite construir consultas analíticas dinámicas (por ejemplo, cruces entre calificaciones históricas, demografía familiar y perfiles académicos del alumnado) de forma programática, garantizando la seguridad frente a inyecciones SQL sin acoplar fuertemente el código a la estructura del motor de base de datos.
 
-\subsection{Estructura de Endpoints y Seguridad}
+\subsection{Estructura de endpoints y seguridad}
 
 La arquitectura de la API (\textit{Routing}) se ha dividido lógicamente por dominios de negocio. El enrutador principal (\textit{dashboard.py}) expone servicios protegidos que retornan información altamente agregada (KPIs), agrupaciones para series temporales (Charts) y paginación masiva de estudiantes en formato estandarizado JSON.
 
 Para asegurar la máxima privacidad de los datos académicos y cumplir con las normativas de protección de datos infantiles, todos los \textit{endpoints} requieren autenticación obligatoria. Se ha implementado un sistema robusto de tokens basado en el estándar \textbf{JWT} (JSON Web Tokens), inyectado en el ciclo de vida de las peticiones mediante el mecanismo de dependencias nativo de FastAPI (\textit{Depends(get\_current\_user)}).
 
-\section{Interfaz Visual e Interacción (React y Vite)}
+\section{Interfaz visual e interacción (React y Vite)}
 
 La capa visual de cara al usuario ha sido desarrollada como una aplicación de página única (\textit{Single Page Application} o SPA) utilizando la librería \textbf{React}. La construcción y empaquetado del proyecto se ha orquestado bajo el moderno motor \textbf{Vite}, lo que optimiza radicalmente los tiempos de compilación y carga frente a alternativas monolíticas tradicionales como Webpack.
 
-\subsection{Sistema de Diseño: \textit{Glassmorphism} y Temas Dinámicos}
+\subsection{Sistema de diseño: \textit{Glassmorphism} y temas dinámicos}
 
 Para ofrecer una experiencia de usuario (UX) inmersiva y de calidad \textit{Enterprise}, se ha prescindido de librerías de estilos genéricas (como Bootstrap), implementando en su lugar un sistema de diseño propietario desarrollado desde cero con CSS puro. La estética visual se inspira en la técnica \textbf{Glassmorphism}, popularizada en los ecosistemas operativos modernos como macOS y Windows 11.
 
 Técnicamente, este efecto se logra aplicando propiedades avanzadas de desenfoque de fondo (\textit{backdrop-filter: blur()}) combinadas con tarjetas semitransparentes. Esta composición genera una ilusión óptica de jerarquía y profundidad sobre un tapiz de colores vivos subyacentes. 
 
-Asimismo, el sistema implementa soporte nativo para el \textbf{Modo Oscuro} (\textit{Dark Mode}). Mediante el uso de variables CSS dinámicas inyectadas como atributos de datos HTML (`[data-theme="dark"]`), el sistema recalcula toda la paleta de colores y sombreados instantáneamente, garantizando el confort visual durante su uso prolongado en los despachos de orientación.
+Asimismo, el sistema implementa soporte nativo para el \textbf{Modo Oscuro} (\textit{Dark Mode}). Mediante el uso de variables CSS dinámicas inyectadas como atributos de datos HTML (`[data-theme="dark"]`), el sistema recalcula toda la paleta de colores y sombreados instantáneamente, garantizando el confort visual durante su uso prolongado en los despachos de la administración pública.
 
-\subsection{Visualización de Datos Analíticos}
+\subsection{Visualización de datos analíticos}
 
 La complejidad real del frontend radica en la asimilación del volumen de datos del backend. Para la renderización de métricas y proyecciones, se ha integrado la potente librería de gráficos declarativos \textbf{Recharts}. Los datos masivos procedentes de la API —como la distribución del riesgo por ciclos formativos o la pirámide de impacto del nivel educativo parental— se inyectan en componentes dinámicos encapsulados bajo el componente propietario \textit{GlassCard}, asegurando una presentación limpia y libre de ruidos visuales.
 
-\section{Despliegue y Enrutamiento Web (Nginx)}
+\section{Despliegue y enrutamiento web (Nginx)}
 
 El punto de entrada único de toda la arquitectura técnica frente al exterior se gestiona mediante un contenedor con \textbf{Nginx}, que actúa simultáneamente como servidor web de alto rendimiento y como \textit{Proxy Inverso}.
 
-\subsection{Arquitectura de Interceptación de Tráfico}
+\subsection{Arquitectura de interceptación de tráfico}
 
-El contenedor Nginx es la única pieza del ecosistema que expone sus puertos directamente a la red de los colegios (típicamente los puertos HTTP 80 y HTTPS 443). Cuando un usuario accede al sistema desde su navegador, el comportamiento de enrutamiento se bifurca según la ruta (\textit{path}) solicitada:
+El contenedor Nginx es la única pieza del ecosistema que expone sus puertos directamente a la red de la administración (típicamente los puertos HTTP 80 y HTTPS 443). Cuando un usuario accede al sistema desde su navegador, el comportamiento de enrutamiento se bifurca según la ruta (\textit{path}) solicitada:
 
 \begin{itemize}
     \item \textbf{Tráfico Estático (Ruta \textit{/}):} Si la ruta solicitada corresponde a la carga inicial de la aplicación, Nginx intercepta la petición y sirve directamente de su memoria los ficheros compilados de producción (HTML, CSS y JS minimizados) generados por el contenedor de React, maximizando la velocidad de acceso.
