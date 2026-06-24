@@ -74,8 +74,6 @@ services:
       dockerfile: Dockerfile
     container_name: fastapi-backend
     restart: unless-stopped
-    ports:
-      - "8000:8000"
     volumes:
       - ./api:/app
     environment:
@@ -102,14 +100,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: dev
+      target: prod
     container_name: react-frontend
     restart: unless-stopped
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "5173:80"
     networks:
       - tfg-network
     depends_on:
