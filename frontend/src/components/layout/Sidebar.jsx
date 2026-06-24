@@ -71,10 +71,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
           <LayoutDashboard size={22} />
           {isOpen && <span>Análisis de Centro</span>}
         </NavLink>
-        <NavLink to="/socioeconomic" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} title="Contexto Familiar">
-          <Users size={22} />
-          {isOpen && <span>Contexto Familiar</span>}
-        </NavLink>
+
       </nav>
 
       {isOpen && (

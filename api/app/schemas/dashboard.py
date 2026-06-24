@@ -118,20 +118,6 @@ class IncomeDistributionMicroItem(BaseModel):
 class IncomeDistributionMicroResponse(BaseModel):
     data: List[IncomeDistributionMicroItem]
 
-class RepeatersByCourseItem(BaseModel):
-    name: str
-    repetidores: int
-
-class RepeatersByCourseResponse(BaseModel):
-    data: List[RepeatersByCourseItem]
-
-class AdaptationPerformanceItem(BaseModel):
-    name: str
-    tasa_aprobado: float
-    suspensos: float
-
-class AdaptationPerformanceResponse(BaseModel):
-    data: List[AdaptationPerformanceItem]
 
 class CorrelationIncomeFailuresItem(BaseModel):
     renta: float
@@ -144,15 +130,7 @@ class CorrelationIncomeFailuresResponse(BaseModel):
 # 3. SECCIÓN 2: CONTEXTO SOCIOECONÓMICO
 # =====================================================================
 
-class SocioeconomicKPIsResponse(BaseModel):
-    num_estudiantes: int
-    num_estudiantes_a1: Optional[int] = None
-    nivel_renta_baja: int
-    nivel_renta_baja_a1: Optional[int] = None
-    brecha_digital_extrema: int
-    brecha_digital_extrema_a1: Optional[int] = None
-    sin_estudios_secundarios: int
-    sin_estudios_secundarios_a1: Optional[int] = None
+
 
 class DigitalGapItem(BaseModel):
     ordenadores_suficientes: bool

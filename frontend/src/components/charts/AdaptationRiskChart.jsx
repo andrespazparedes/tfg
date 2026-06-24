@@ -70,7 +70,7 @@ export const AdaptationRiskChart = () => {
             dx={-10}
           />
           <Tooltip 
-            cursor={{ fill: 'var(--bg-hover)' }}
+            cursor={{ fill: 'var(--border-light)', opacity: 0.3 }}
             contentStyle={{ backgroundColor: 'var(--bg-sidebar)', borderColor: 'var(--border-light)', borderRadius: '8px' }}
             itemStyle={{ fontWeight: 'bold' }}
           />

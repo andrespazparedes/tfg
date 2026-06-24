@@ -11,9 +11,9 @@ import { RiskDistributionChart } from '../components/charts/RiskDistributionChar
 import { RiskByCycleChart } from '../components/charts/RiskByCycleChart';
 import { FailedSubjectsChart } from '../components/charts/FailedSubjectsChart';
 import { IncomeDistributionChart } from '../components/charts/IncomeDistributionChart';
-import { RepeatersByCourseChart } from '../components/charts/RepeatersByCourseChart';
-import { AdaptationPerformanceChart } from '../components/charts/AdaptationPerformanceChart';
 import { IncomeFailuresScatterChart } from '../components/charts/IncomeFailuresScatterChart';
+import { DigitalGapChart } from '../components/charts/DigitalGapChart';
+import { ParentEducationChart } from '../components/charts/ParentEducationChart';
 import { StudentTable } from '../components/ui/StudentTable';
 import './MicroDashboard.css';
 
@@ -196,17 +196,20 @@ export const MicroDashboard = () => {
           <h3>Distribución del Nivel de Renta</h3>
           <IncomeDistributionChart />
         </Card>
-        <Card className="chart-container">
-          <h3>Repetidores por Curso</h3>
-          <RepeatersByCourseChart />
-        </Card>
-        <Card className="chart-container">
-          <h3>Adaptación Curricular vs Rendimiento</h3>
-          <AdaptationPerformanceChart />
-        </Card>
+
         <Card className="chart-container">
           <h3>Renta vs Suspensos (Correlación)</h3>
           <IncomeFailuresScatterChart />
+        </Card>
+        
+        {/* GRÁFICOS MOVIDOS DESDE CONTEXTO SOCIOECONÓMICO */}
+        <Card className="chart-container">
+          <h3>Brecha Digital vs Aprobados</h3>
+          <DigitalGapChart />
+        </Card>
+        <Card className="chart-container">
+          <h3>Nivel Educativo Familiar</h3>
+          <ParentEducationChart />
         </Card>
       </section>
 

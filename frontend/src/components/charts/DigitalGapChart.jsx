@@ -25,11 +25,12 @@ const CustomTooltip = ({ active, payload, label }) => {
         <p style={{ margin: '0 0 8px 0', fontWeight: 'bold', color: 'var(--text-primary)' }}>
           {label}
         </p>
-        {payload.map((entry, index) => (
-          <p key={index} style={{ margin: '4px 0', color: entry.color, fontSize: '0.9rem' }}>
-            {entry.name}: <strong>{entry.value}</strong>
-          </p>
-        ))}
+        <p style={{ margin: '4px 0', color: 'var(--color-primary)', fontSize: '0.9rem' }}>
+          Tasa Aprobados: <strong>{payload[0].payload["Tasa Aprobados"]}%</strong>
+        </p>
+        <p style={{ margin: '4px 0', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+          Total Alumnos: {payload[0].payload["Total Alumnos"]}
+        </p>
       </div>
     );
   }
@@ -82,7 +83,21 @@ export const DigitalGapChart = () => {
           return acc;
         }, {});
 
-        setData(Object.values(groupedMap));
+        const finalData = Object.values(groupedMap).map(item => ({
+          ...item,
+          "Tasa Aprobados": item["Total Alumnos"] > 0 
+            ? Math.round((item["Aprobados"] / item["Total Alumnos"]) * 100) 
+            : 0
+        }));
+
+        const order = ['Conectados', 'Sin Equipo Suficiente', 'Sin Internet', 'Sin Acceso Ni Equipo'];
+        finalData.sort((a, b) => {
+          const indexA = order.indexOf(a.category);
+          const indexB = order.indexOf(b.category);
+          return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
+        });
+
+        setData(finalData);
       } catch (error) {
         console.error("Error cargando DigitalGapChart:", error);
       } finally {
@@ -108,6 +123,8 @@ export const DigitalGapChart = () => {
             tickLine={false}
           />
           <YAxis 
+            domain={[0, 100]}
+            tickFormatter={(tick) => `${tick}%`}
             tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
             axisLine={false}
             tickLine={false}
@@ -115,8 +132,7 @@ export const DigitalGapChart = () => {
           <Tooltip cursor={{ fill: 'var(--border-light)', opacity: 0.3 }} content={<CustomTooltip />} />
           <Legend wrapperStyle={{ paddingTop: '20px' }} />
           
-          <Bar dataKey="Aprobados" stackId="a" fill="var(--color-success)" radius={[0, 0, 4, 4]} />
-          <Bar dataKey="Suspensos" stackId="a" fill="var(--color-danger)" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Tasa Aprobados" name="Tasa de Aprobados" fill="var(--color-primary)" radius={[4, 4, 0, 0]} animationDuration={1500} barSize={45} />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -174,37 +174,7 @@ def get_income_distribution_micro(
     data = crud_dashboard.get_income_distribution_micro(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
     return IncomeDistributionMicroResponse(data=data)
 
-@router.get(
-    "/overview/charts/repeaters-by-course",
-    response_model=RepeatersByCourseResponse,
-    summary="Mapa térmico de repetidores por curso",
-)
-def get_repeaters_by_course(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> RepeatersByCourseResponse:
-    data = crud_dashboard.get_repeaters_by_course(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
-    return RepeatersByCourseResponse(data=data)
 
-@router.get(
-    "/overview/charts/adaptation-vs-performance",
-    response_model=AdaptationPerformanceResponse,
-    summary="Adaptación Curricular vs Rendimiento",
-)
-def get_adaptation_vs_performance(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> AdaptationPerformanceResponse:
-    data = crud_dashboard.get_adaptation_vs_performance(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
-    return AdaptationPerformanceResponse(data=data)
 
 @router.get(
     "/overview/charts/correlation-income-failures",
@@ -227,27 +197,10 @@ def get_correlation_income_failures(
 # =====================================================================
 
 from app.schemas.dashboard import (
-    SocioeconomicKPIsResponse,
     DigitalGapResponse,
     ParentEducationResponse,
     IncomeRiskResponse,
 )
-
-@router.get(
-    "/socioeconomic/kpis",
-    response_model=SocioeconomicKPIsResponse,
-    summary="KPIs socioeconómicos absolutos (T0 y T-1 aplanados)",
-)
-def get_socioeconomic_kpis(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> SocioeconomicKPIsResponse:
-    data = crud_dashboard.get_socioeconomic_kpis(db, cod_centro, curso_academico, cod_ciclo, tipo_centro)
-    return SocioeconomicKPIsResponse(**data)
 
 
 @router.get(

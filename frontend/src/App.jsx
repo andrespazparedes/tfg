@@ -7,7 +7,6 @@ import LoginPage from './pages/LoginPage';
 
 import { MicroDashboard } from './pages/MicroDashboard';
 import { MacroDashboard } from './pages/MacroDashboard';
-import { Socioeconomic } from './pages/Socioeconomic';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -27,7 +26,6 @@ function App() {
           <Route index element={<Navigate to="/macro" replace />} />
           <Route path="macro" element={<MacroDashboard />} />
           <Route path="micro" element={<MicroDashboard />} />
-          <Route path="socioeconomic" element={<Socioeconomic />} />
         </Route>
       </Routes>
     </DashboardProvider>
