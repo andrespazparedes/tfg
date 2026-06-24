@@ -60,6 +60,9 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    # ── Admin Inicial ─────────────────────────────────────────────────
+    DEFAULT_ADMIN_EMAIL: str = "admin@tfg.com"
+    DEFAULT_ADMIN_PASSWORD: str = "admin123"
 
     # ── Pydantic-settings config ──────────────────────────────────────
     model_config = SettingsConfigDict(

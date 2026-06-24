@@ -972,7 +972,7 @@ def get_adaptation_vs_performance(
         case((cond_adapt, "Con Adaptación"), else_="Sin Adaptación").label("grupo"),
         func.avg(FactRendimientoAnual.tasa_aprobado).label("tasa_aprobado"),
         func.avg(FactRendimientoAnual.num_suspensas).label("suspensos")
-    ).group_by("grupo").all()
+    ).group_by(case((cond_adapt, "Con Adaptación"), else_="Sin Adaptación")).all()
 
     return [
         {
