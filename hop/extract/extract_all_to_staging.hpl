@@ -7,7 +7,13 @@
     <extended_description/>
     <pipeline_version/>
     <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
     <parameters>
+      <parameter>
+        <name>CURSO_ACTUAL</name>
+        <default_value/>
+        <description>Filtro de Carga Incremental. Deja en BLANCO para extraer todo el histórico (Full Load) o escribe un año (ej. '2025/2026') para extraer solo ese curso.</description>
+      </parameter>
     </parameters>
     <capture_transform_performance>N</capture_transform_performance>
     <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
@@ -18,28 +24,6 @@
     <modified_date>2026/05/30 14:20:00.000</modified_date>
   </info>
   <notepads>
-    <notepad>
-      <backgroundcolorblue>251</backgroundcolorblue>
-      <backgroundcolorgreen>232</backgroundcolorgreen>
-      <backgroundcolorred>201</backgroundcolorred>
-      <bordercolorblue>90</bordercolorblue>
-      <bordercolorgreen>58</bordercolorgreen>
-      <bordercolorred>14</bordercolorred>
-      <fontbold>N</fontbold>
-      <fontcolorblue>90</fontcolorblue>
-      <fontcolorgreen>58</fontcolorgreen>
-      <fontcolorred>14</fontcolorred>
-      <fontitalic>N</fontitalic>
-      <fontname>Verdana, "Lucida Sans", Arial, Helvetica, sans-serif</fontname>
-      <fontsize>12</fontsize>
-      <height>20</height>
-      <xloc>224</xloc>
-      <yloc>32</yloc>
-      <note>**Capa RAW: Clonación de Tablas Origen**
-Realiza una extracción completa (Full Load) vaciando las tablas del esquema 'raw' y volcando los datos frescos del origen en bloque.
-Las tablas raw no tienen foreign keys para maximizar la velocidad de inserción en paralelo.</note>
-      <width>20</width>
-    </notepad>
   </notepads>
   <order>
     <hop>
@@ -135,8 +119,8 @@ FROM "public".adaptacion_asignatura
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>128</yloc>
+      <xloc>128</xloc>
+      <yloc>64</yloc>
     </GUI>
   </transform>
   <transform>
@@ -182,8 +166,8 @@ FROM "public".adaptacion_asignatura
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>128</yloc>
+      <xloc>336</xloc>
+      <yloc>64</yloc>
     </GUI>
   </transform>
   <transform>
@@ -211,8 +195,8 @@ FROM "public".adaptacion_curricular
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>208</yloc>
+      <xloc>128</xloc>
+      <yloc>144</yloc>
     </GUI>
   </transform>
   <transform>
@@ -270,8 +254,8 @@ FROM "public".adaptacion_curricular
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>208</yloc>
+      <xloc>336</xloc>
+      <yloc>144</yloc>
     </GUI>
   </transform>
   <transform>
@@ -299,8 +283,8 @@ FROM "public".admision
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>288</yloc>
+      <xloc>128</xloc>
+      <yloc>224</yloc>
     </GUI>
   </transform>
   <transform>
@@ -358,8 +342,8 @@ FROM "public".admision
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>288</yloc>
+      <xloc>336</xloc>
+      <yloc>224</yloc>
     </GUI>
   </transform>
   <transform>
@@ -388,8 +372,8 @@ FROM "public".asignatura
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>368</yloc>
+      <xloc>128</xloc>
+      <yloc>304</yloc>
     </GUI>
   </transform>
   <transform>
@@ -451,8 +435,8 @@ FROM "public".asignatura
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>368</yloc>
+      <xloc>336</xloc>
+      <yloc>304</yloc>
     </GUI>
   </transform>
   <transform>
@@ -474,12 +458,16 @@ FROM "public".asignatura
 , cod_matricula
 , suspenso_curso_anterior
 FROM "public".asignatura_matricula
-</sql>
-    <variables_active>N</variables_active>
+WHERE cod_matricula IN (
+    SELECT cod_matricula 
+    FROM "public".matricula 
+    WHERE curso_academico = '${CURSO_ACTUAL}' OR '${CURSO_ACTUAL}' = ''
+)</sql>
+    <variables_active>Y</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>448</yloc>
+      <xloc>128</xloc>
+      <yloc>384</yloc>
     </GUI>
   </transform>
   <transform>
@@ -529,8 +517,8 @@ FROM "public".asignatura_matricula
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>448</yloc>
+      <xloc>336</xloc>
+      <yloc>384</yloc>
     </GUI>
   </transform>
   <transform>
@@ -596,8 +584,8 @@ FROM "public".asignatura_matricula
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>528</yloc>
+      <xloc>336</xloc>
+      <yloc>464</yloc>
     </GUI>
   </transform>
   <transform>
@@ -627,8 +615,8 @@ FROM "public".centro
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>528</yloc>
+      <xloc>128</xloc>
+      <yloc>464</yloc>
     </GUI>
   </transform>
   <transform>
@@ -655,8 +643,8 @@ FROM "public".ciclo_educativo
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>608</yloc>
+      <xloc>128</xloc>
+      <yloc>544</yloc>
     </GUI>
   </transform>
   <transform>
@@ -710,8 +698,8 @@ FROM "public".ciclo_educativo
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>608</yloc>
+      <xloc>336</xloc>
+      <yloc>544</yloc>
     </GUI>
   </transform>
   <transform>
@@ -737,8 +725,8 @@ FROM "public".curso
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>128</yloc>
+      <xloc>576</xloc>
+      <yloc>64</yloc>
     </GUI>
   </transform>
   <transform>
@@ -788,8 +776,8 @@ FROM "public".curso
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>128</yloc>
+      <xloc>784</xloc>
+      <yloc>64</yloc>
     </GUI>
   </transform>
   <transform>
@@ -820,8 +808,8 @@ FROM "public".encuesta
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>208</yloc>
+      <xloc>576</xloc>
+      <yloc>144</yloc>
     </GUI>
   </transform>
   <transform>
@@ -891,8 +879,8 @@ FROM "public".encuesta
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>208</yloc>
+      <xloc>784</xloc>
+      <yloc>144</yloc>
     </GUI>
   </transform>
   <transform>
@@ -918,8 +906,8 @@ FROM "public".especialidad
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>288</yloc>
+      <xloc>576</xloc>
+      <yloc>224</yloc>
     </GUI>
   </transform>
   <transform>
@@ -969,8 +957,8 @@ FROM "public".especialidad
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>288</yloc>
+      <xloc>784</xloc>
+      <yloc>224</yloc>
     </GUI>
   </transform>
   <transform>
@@ -999,8 +987,8 @@ FROM "public".estudiante
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>368</yloc>
+      <xloc>576</xloc>
+      <yloc>304</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1062,8 +1050,8 @@ FROM "public".estudiante
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>368</yloc>
+      <xloc>784</xloc>
+      <yloc>304</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1086,12 +1074,16 @@ FROM "public".estudiante
 , evaluacion
 , nota
 FROM "public".linea_expediente
-</sql>
-    <variables_active>N</variables_active>
+WHERE cod_matricula IN (
+    SELECT cod_matricula 
+    FROM "public".matricula 
+    WHERE curso_academico = '${CURSO_ACTUAL}' OR '${CURSO_ACTUAL}' = ''
+)</sql>
+    <variables_active>Y</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>448</yloc>
+      <xloc>576</xloc>
+      <yloc>384</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1145,8 +1137,8 @@ FROM "public".linea_expediente
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>448</yloc>
+      <xloc>784</xloc>
+      <yloc>384</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1172,12 +1164,13 @@ FROM "public".linea_expediente
 , num_curso
 , cod_especialidad
 FROM "public".matricula
+WHERE curso_academico = '${CURSO_ACTUAL}' OR '${CURSO_ACTUAL}' = ''
 </sql>
-    <variables_active>N</variables_active>
+    <variables_active>Y</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>528</yloc>
+      <xloc>576</xloc>
+      <yloc>464</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1243,8 +1236,8 @@ FROM "public".matricula
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>528</yloc>
+      <xloc>784</xloc>
+      <yloc>464</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1318,8 +1311,8 @@ FROM "public".matricula
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>608</yloc>
+      <xloc>784</xloc>
+      <yloc>544</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1351,8 +1344,8 @@ FROM "public".responsable_legal
     <variables_active>N</variables_active>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>608</yloc>
+      <xloc>576</xloc>
+      <yloc>544</yloc>
     </GUI>
   </transform>
   <transform_error_handling>

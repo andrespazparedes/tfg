@@ -5,12 +5,18 @@
   <description/>
   <extended_description/>
   <workflow_version/>
+  <workflow_status>0</workflow_status>
   <created_user>-</created_user>
   <created_date>2026/06/18 19:09:08.126</created_date>
   <modified_user>-</modified_user>
   <modified_date>2026/06/18 19:09:08.126</modified_date>
   <parameters>
-    </parameters>
+    <parameter>
+      <name>CURSO_ACTUAL</name>
+      <default_value/>
+      <description>Filtro de Carga Incremental. Deja en BLANCO para extraer todo el histórico (Full Load) o escribe un año (ej. '2025/2026') para extraer solo ese curso.</description>
+    </parameter>
+  </parameters>
   <actions>
     <action>
       <name>Start</name>
@@ -43,8 +49,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_tiempo.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -71,8 +75,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_estudiante.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -99,8 +101,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_demografia_familiar.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -127,8 +127,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_curso.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -155,8 +153,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_centro.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -183,8 +179,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_asignatura.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -211,8 +205,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/dimensions/dim_adaptacion.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -253,6 +245,11 @@
       <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
+        <parameter>
+          <name>CURSO_ACTUAL</name>
+          <stream_name/>
+          <value/>
+        </parameter>
         <pass_all_parameters>Y</pass_all_parameters>
       </parameters>
       <params_from_previous>N</params_from_previous>

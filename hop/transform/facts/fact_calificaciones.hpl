@@ -181,11 +181,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>dim_demografia_familiar</from>
-      <to>Table output</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>linea_expediente sorf</from>
       <to>matricula lookup</to>
       <enabled>Y</enabled>
@@ -200,7 +195,104 @@
       <to>dim_ centro lookup</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>dim_demografia_familiar</from>
+      <to>Insert / update</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <transform>
+    <name>Insert / update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <commit>100</commit>
+    <connection>postgres-dwh</connection>
+    <lookup>
+      <key>
+        <condition>=</condition>
+        <field>id_estudiante</field>
+        <name>id_estudiante</name>
+        <name2/>
+      </key>
+      <key>
+        <condition>=</condition>
+        <field>id_asignatura</field>
+        <name>id_asignatura</name>
+        <name2/>
+      </key>
+      <key>
+        <condition>=</condition>
+        <field>id_tiempo</field>
+        <name>id_tiempo</name>
+        <name2/>
+      </key>
+      <schema>dwh</schema>
+      <table>fact_calificaciones</table>
+      <value>
+        <name>id_estudiante</name>
+        <rename>id_estudiante</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>id_asignatura</name>
+        <rename>id_asignatura</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>id_tiempo</name>
+        <rename>id_tiempo</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>id_centro</name>
+        <rename>id_centro</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>id_curso</name>
+        <rename>id_curso</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>id_adaptacion</name>
+        <rename>id_adaptacion</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>id_demografia_familiar</name>
+        <rename>id_demografia_familiar</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>nota</name>
+        <rename>nota</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>desfase_edad</name>
+        <rename>desfase_edad</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>renta_unidades_consumo</name>
+        <rename>renta_unidades_consumo</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <update_bypassed>N</update_bypassed>
+    <attributes/>
+    <GUI>
+      <xloc>608</xloc>
+      <yloc>1872</yloc>
+    </GUI>
+  </transform>
   <transform>
     <name>Stream lookup</name>
     <type>StreamLookup</type>
@@ -237,88 +329,6 @@
     <GUI>
       <xloc>608</xloc>
       <yloc>736</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Table output</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <add_columns>N</add_columns>
-    <always_drop_and_recreate>N</always_drop_and_recreate>
-    <auto_update_table_structure>N</auto_update_table_structure>
-    <change_column_types>N</change_column_types>
-    <commit>1000</commit>
-    <connection>postgres-dwh</connection>
-    <drop_columns>N</drop_columns>
-    <fields>
-      <field>
-        <column_name>id_estudiante</column_name>
-        <stream_name>id_estudiante</stream_name>
-      </field>
-      <field>
-        <column_name>id_centro</column_name>
-        <stream_name>id_centro</stream_name>
-      </field>
-      <field>
-        <column_name>id_curso</column_name>
-        <stream_name>id_curso</stream_name>
-      </field>
-      <field>
-        <column_name>id_asignatura</column_name>
-        <stream_name>id_asignatura</stream_name>
-      </field>
-      <field>
-        <column_name>id_tiempo</column_name>
-        <stream_name>id_tiempo</stream_name>
-      </field>
-      <field>
-        <column_name>id_adaptacion</column_name>
-        <stream_name>id_adaptacion</stream_name>
-      </field>
-      <field>
-        <column_name>id_demografia_familiar</column_name>
-        <stream_name>id_demografia_familiar</stream_name>
-      </field>
-      <field>
-        <column_name>nota</column_name>
-        <stream_name>nota</stream_name>
-      </field>
-      <field>
-        <column_name>desfase_edad</column_name>
-        <stream_name>desfase_edad</stream_name>
-      </field>
-      <field>
-        <column_name>renta_unidades_consumo</column_name>
-        <stream_name>renta_unidades_consumo</stream_name>
-      </field>
-    </fields>
-    <ignore_errors>N</ignore_errors>
-    <only_when_have_rows>N</only_when_have_rows>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <return_field/>
-    <return_keys>N</return_keys>
-    <schema>dwh</schema>
-    <specify_fields>Y</specify_fields>
-    <table>fact_calificaciones</table>
-    <tablename_field/>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_in_table>Y</tablename_in_table>
-    <truncate>Y</truncate>
-    <use_batch>Y</use_batch>
-    <attributes/>
-    <GUI>
-      <xloc>608</xloc>
-      <yloc>1840</yloc>
     </GUI>
   </transform>
   <transform>
@@ -482,137 +492,109 @@ FROM raw.adaptacion_curricular
         <length>-2</length>
         <name>cod_asignatura</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>cod_matricula</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>evaluacion</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>nota</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>fecha</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>curso_academico</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>num_expediente</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>cod_centro</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>num_curso</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>cod_especialidad</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_asignatura</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_centro</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_curso</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>edad_ideal</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_tiempo</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>tipo_adaptacion</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_adaptacion</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>id_estudiante</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>fecha_nacimiento</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>cod_responsable</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <field>
         <length>-2</length>
         <name>año_curso</name>
         <precision>-2</precision>
-        <rename/>
       </field>
       <meta>
-        <conversion_mask/>
-        <currency_symbol/>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <decimal_symbol/>
-        <encoding/>
-        <grouping_symbol/>
         <length>4</length>
         <lenient_string_to_number>N</lenient_string_to_number>
         <name>año_curso</name>
@@ -759,6 +741,44 @@ FROM raw.adaptacion_curricular
     <GUI>
       <xloc>608</xloc>
       <yloc>944</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>dim_asignatura lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <connection>postgres-dwh</connection>
+    <lookup>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <fail_on_multiple>N</fail_on_multiple>
+      <key>
+        <condition>=</condition>
+        <field>cod_asignatura</field>
+        <name>cod_asignatura</name>
+      </key>
+      <schema>dwh</schema>
+      <table>dim_asignatura</table>
+      <value>
+        <name>id_asignatura</name>
+        <rename>id_asignatura</rename>
+        <trim_type>none</trim_type>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <GUI>
+      <xloc>464</xloc>
+      <yloc>320</yloc>
     </GUI>
   </transform>
   <transform>
@@ -1636,47 +1656,6 @@ FROM raw.linea_expediente
     <GUI>
       <xloc>608</xloc>
       <yloc>1360</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>dim_asignatura lookup</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <connection>postgres-dwh</connection>
-    <lookup>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <fail_on_multiple>N</fail_on_multiple>
-      <key>
-        <condition>=</condition>
-        <field>cod_asignatura</field>
-        <name>cod_asignatura</name>
-        <name2/>
-      </key>
-      <orderby/>
-      <schema>dwh</schema>
-      <table>dim_asignatura</table>
-      <value>
-        <default/>
-        <name>id_asignatura</name>
-        <rename>id_asignatura</rename>
-        <trim_type>none</trim_type>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <GUI>
-      <xloc>464</xloc>
-      <yloc>320</yloc>
     </GUI>
   </transform>
   <transform_error_handling>

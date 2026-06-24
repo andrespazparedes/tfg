@@ -5,12 +5,18 @@
   <description/>
   <extended_description/>
   <workflow_version/>
+  <workflow_status>0</workflow_status>
   <created_user>-</created_user>
   <created_date>2026/06/19 16:18:52.667</created_date>
   <modified_user>-</modified_user>
   <modified_date>2026/06/19 16:18:52.667</modified_date>
   <parameters>
-    </parameters>
+    <parameter>
+      <name>CURSO_ACTUAL</name>
+      <default_value/>
+      <description>Filtro de Carga Incremental. Deja en BLANCO para extraer todo el histórico (Full Load) o escribe un año (ej. '2025/2026') para extraer solo ese curso.</description>
+    </parameter>
+  </parameters>
   <actions>
     <action>
       <name>Start</name>
@@ -43,8 +49,6 @@
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
       <filename>${PROJECT_HOME}/transform/facts/fact_calificaciones.hpl</filename>
-      <logext/>
-      <logfile/>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -55,12 +59,12 @@
       <set_logfile>N</set_logfile>
       <wait_until_finished>Y</wait_until_finished>
       <parallel>N</parallel>
-      <xloc>320</xloc>
+      <xloc>304</xloc>
       <yloc>224</yloc>
       <attributes_hac/>
     </action>
     <action>
-      <name>fact_rendimiento_anual.hpl</name>
+      <name>fact_rendimiento_anual_full.hpl</name>
       <description/>
       <type>PIPELINE</type>
       <attributes/>
@@ -70,9 +74,7 @@
       <clear_rows>N</clear_rows>
       <create_parent_folder>N</create_parent_folder>
       <exec_per_row>N</exec_per_row>
-      <filename>${PROJECT_HOME}/transform/facts/fact_rendimiento_anual.hpl</filename>
-      <logext/>
-      <logfile/>
+      <filename>${PROJECT_HOME}/transform/facts/fact_rendimiento_anual_full.hpl</filename>
       <loglevel>Basic</loglevel>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
@@ -83,8 +85,8 @@
       <set_logfile>N</set_logfile>
       <wait_until_finished>Y</wait_until_finished>
       <parallel>N</parallel>
-      <xloc>480</xloc>
-      <yloc>224</yloc>
+      <xloc>592</xloc>
+      <yloc>320</yloc>
       <attributes_hac/>
     </action>
     <action>
@@ -96,8 +98,8 @@
       <logmessage>Uno de los pipelines de hechos del DWH ha fallado.</logmessage>
       <logsubject>facts pipeline</logsubject>
       <parallel>N</parallel>
-      <xloc>480</xloc>
-      <yloc>368</yloc>
+      <xloc>592</xloc>
+      <yloc>448</yloc>
       <attributes_hac/>
     </action>
     <action>
@@ -106,7 +108,7 @@
       <type>SUCCESS</type>
       <attributes/>
       <parallel>N</parallel>
-      <xloc>672</xloc>
+      <xloc>752</xloc>
       <yloc>224</yloc>
       <attributes_hac/>
     </action>
@@ -117,8 +119,63 @@
       <attributes/>
       <always_log_rows>N</always_log_rows>
       <parallel>N</parallel>
-      <xloc>672</xloc>
-      <yloc>368</yloc>
+      <xloc>752</xloc>
+      <yloc>448</yloc>
+      <attributes_hac/>
+    </action>
+    <action>
+      <name>Simple evaluation</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <comparevalue/>
+      <fieldname/>
+      <fieldtype>string</fieldtype>
+      <mask/>
+      <maxvalue/>
+      <minvalue/>
+      <successbooleancondition>true</successbooleancondition>
+      <successcondition>equal</successcondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <successwhenvarset>Y</successwhenvarset>
+      <valuetype>variable</valuetype>
+      <variablename>CURSO_ACTUAL</variablename>
+      <parallel>N</parallel>
+      <xloc>448</xloc>
+      <yloc>224</yloc>
+      <attributes_hac/>
+    </action>
+    <action>
+      <name>fact_rendimiento_anual_incremental.hpl</name>
+      <description/>
+      <type>PIPELINE</type>
+      <attributes/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <clear_files>N</clear_files>
+      <clear_rows>N</clear_rows>
+      <create_parent_folder>N</create_parent_folder>
+      <exec_per_row>N</exec_per_row>
+      <filename>${PROJECT_HOME}/transform/facts/fact_rendimiento_anual_incremental.hpl</filename>
+      <logext/>
+      <logfile/>
+      <loglevel>Basic</loglevel>
+      <parameters>
+        <parameter>
+          <name>CURSO_ACTUAL</name>
+          <stream_name/>
+          <value/>
+        </parameter>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <params_from_previous>N</params_from_previous>
+      <run_configuration>local</run_configuration>
+      <set_append_logfile>N</set_append_logfile>
+      <set_logfile>N</set_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <parallel>N</parallel>
+      <xloc>592</xloc>
+      <yloc>128</yloc>
       <attributes_hac/>
     </action>
   </actions>
@@ -131,14 +188,7 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>fact_calificaciones.hpl</from>
-      <to>fact_rendimiento_anual.hpl</to>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>fact_rendimiento_anual.hpl</from>
+      <from>fact_rendimiento_anual_full.hpl</from>
       <to>Success</to>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
@@ -152,7 +202,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>fact_rendimiento_anual.hpl</from>
+      <from>fact_rendimiento_anual_full.hpl</from>
       <to>Write to log</to>
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
@@ -164,6 +214,41 @@
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
       <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>fact_calificaciones.hpl</from>
+      <to>Simple evaluation</to>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Simple evaluation</from>
+      <to>fact_rendimiento_anual_full.hpl</to>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Simple evaluation</from>
+      <to>fact_rendimiento_anual_incremental.hpl</to>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>fact_rendimiento_anual_incremental.hpl</from>
+      <to>Success</to>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>fact_rendimiento_anual_incremental.hpl</from>
+      <to>Write to log</to>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
     </hop>
   </hops>
   <notepads>
