@@ -1,0 +1,27 @@
+.students-page {
+  padding: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.students-table-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 8px 0;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.students-error {
+  color: var(--color-danger);
+  font-size: 14px;
+  padding: 16px 24px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .students-table-card {
+    border-radius: var(--radius-md);
+  }
+}

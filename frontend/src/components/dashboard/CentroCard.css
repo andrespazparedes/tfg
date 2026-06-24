@@ -1,0 +1,160 @@
+.centro-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+.centro-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 12px;
+}
+
+.centro-icon {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.centro-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.centro-title h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.centro-tipo {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.centro-card-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.score-ring-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 80px;
+}
+
+.score-ring {
+  width: 100%;
+  height: auto;
+}
+
+.ring-bg {
+  fill: none;
+  stroke: var(--border-light);
+  stroke-width: 3.8;
+}
+
+.ring-progress {
+  fill: none;
+  stroke-width: 3.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.ring-text {
+  fill: var(--text-primary);
+  font-size: 10px;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
+.score-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.centro-metrics {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metric-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.metric-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trend-value {
+  font-size: 0.8rem;
+}
+
+.trend-up .trend-value {
+  color: var(--danger-color);
+}
+
+.trend-down .trend-value {
+  color: var(--success-color);
+}
+
+.trend-stable .trend-value {
+  color: var(--text-secondary);
+}
+
+.centro-card-footer {
+  margin-top: auto;
+}
+
+.btn-audit {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-audit:hover {
+  background: var(--primary-color);
+  color: #fff;
+}

@@ -1,0 +1,96 @@
+/* OverviewPage 2-Column Minimalist Layout */
+
+.overview-page {
+  padding: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.overview-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: start;
+}
+
+.overview-main {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.overview-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+/* Kpi Grid - Typography band layout */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 32px 0;
+}
+
+/* Charts Grid - full width inside the main area */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 64px;
+}
+
+/* Alerts Feed on the right */
+.alerts-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.alerts-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.alerts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Skeletons */
+.skeleton-card {
+  height: 120px;
+  background: var(--border-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.skeleton-chart {
+  height: 380px;
+  background: var(--border-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .overview-layout {
+    grid-template-columns: 1fr;
+  }
+  .overview-sidebar {
+    position: static;
+  }
+  .alerts-feed {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+}

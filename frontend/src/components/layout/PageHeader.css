@@ -1,0 +1,16 @@
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header-title {
+  font-size: 2rem;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.page-header-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+}

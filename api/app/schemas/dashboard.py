@@ -103,6 +103,43 @@ class TrendResponse(BaseModel):
     data: List[TrendItem]
 
 
+class FailedSubjectsDistributionItem(BaseModel):
+    name: str = Field(..., description="Número de asignaturas (0, 1, 2, 3, 4, 5+)")
+    alumnos: int = Field(..., description="Cantidad de alumnos")
+    porcentaje: float = Field(..., description="Porcentaje respecto al total")
+
+class FailedSubjectsDistributionResponse(BaseModel):
+    data: List[FailedSubjectsDistributionItem]
+
+class IncomeDistributionMicroItem(BaseModel):
+    name: str
+    value: int
+
+class IncomeDistributionMicroResponse(BaseModel):
+    data: List[IncomeDistributionMicroItem]
+
+class RepeatersByCourseItem(BaseModel):
+    name: str
+    repetidores: int
+
+class RepeatersByCourseResponse(BaseModel):
+    data: List[RepeatersByCourseItem]
+
+class AdaptationPerformanceItem(BaseModel):
+    name: str
+    tasa_aprobado: float
+    suspensos: float
+
+class AdaptationPerformanceResponse(BaseModel):
+    data: List[AdaptationPerformanceItem]
+
+class CorrelationIncomeFailuresItem(BaseModel):
+    renta: float
+    suspensos: float
+
+class CorrelationIncomeFailuresResponse(BaseModel):
+    data: List[CorrelationIncomeFailuresItem]
+
 # =====================================================================
 # 3. SECCIÓN 2: CONTEXTO SOCIOECONÓMICO
 # =====================================================================

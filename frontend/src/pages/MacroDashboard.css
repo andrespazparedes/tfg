@@ -1,0 +1,54 @@
+.macro-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* No need for top-metrics-grid, we use kpi-grid */
+
+.distribution-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card handles background and border */
+.chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+}
+
+.chart-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.centros-grid-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.centros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.no-data {
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  text-align: center;
+}

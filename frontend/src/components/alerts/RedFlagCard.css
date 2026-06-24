@@ -1,0 +1,53 @@
+.red-flag-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px 0;
+  background: transparent;
+  border-bottom: 1px solid var(--border-light);
+  border-left: 2px solid transparent;
+  padding-left: 16px;
+}
+
+.red-flag-card:last-child {
+  border-bottom: none;
+}
+
+.red-flag-card--danger {
+  border-left-color: var(--color-danger);
+}
+
+.red-flag-card--warning {
+  border-left-color: var(--color-warning);
+}
+
+.red-flag-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.red-flag-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.red-flag-description {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.red-flag-count-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  min-width: 32px;
+}

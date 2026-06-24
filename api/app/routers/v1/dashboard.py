@@ -18,12 +18,20 @@ from app.routers.dependencies import get_current_user, get_db
 from app.crud import crud_dashboard
 from app.models.user import User
 from app.schemas.dashboard import (
-    FiltersResponse,
     KPIsResponse,
-    RiskByCycleResponse,
     RiskDistributionResponse,
+    RiskByCycleResponse,
     StudentListResponse,
     TrendResponse,
+    FailedSubjectsDistributionResponse,
+    IncomeDistributionMicroResponse,
+    RepeatersByCourseResponse,
+    AdaptationPerformanceResponse,
+    CorrelationIncomeFailuresResponse,
+    SocioeconomicKPIsResponse,
+    DigitalGapResponse,
+    ParentEducationResponse,
+    IncomeRiskResponse,
 )
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard Analítico"])
@@ -113,6 +121,7 @@ def get_risk_by_cycle(
 )
 def get_trend(
     cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
     cod_ciclo: Optional[List[str]] = Query(None),
     tipo_centro: Optional[List[str]] = Query(None),
     db: Session = Depends(get_db),
@@ -121,10 +130,97 @@ def get_trend(
     data = crud_dashboard.get_trend(
         db, 
         cod_centro=cod_centro, 
+        curso_academico=curso_academico,
         cod_ciclo=cod_ciclo,
         tipo_centro=tipo_centro
     )
     return TrendResponse(data=data)
+
+@router.get(
+    "/overview/charts/failed-subjects",
+    response_model=FailedSubjectsDistributionResponse,
+    summary="Distribución de suspensos por alumno",
+)
+def get_failed_subjects_distribution(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> FailedSubjectsDistributionResponse:
+    data = crud_dashboard.get_failed_subjects_distribution(
+        db, 
+        cod_centro=cod_centro, 
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro
+    )
+    return FailedSubjectsDistributionResponse(data=data)
+
+@router.get(
+    "/overview/charts/income-distribution",
+    response_model=IncomeDistributionMicroResponse,
+    summary="Distribución del Nivel de Renta",
+)
+def get_income_distribution_micro(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> IncomeDistributionMicroResponse:
+    data = crud_dashboard.get_income_distribution_micro(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
+    return IncomeDistributionMicroResponse(data=data)
+
+@router.get(
+    "/overview/charts/repeaters-by-course",
+    response_model=RepeatersByCourseResponse,
+    summary="Mapa térmico de repetidores por curso",
+)
+def get_repeaters_by_course(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> RepeatersByCourseResponse:
+    data = crud_dashboard.get_repeaters_by_course(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
+    return RepeatersByCourseResponse(data=data)
+
+@router.get(
+    "/overview/charts/adaptation-vs-performance",
+    response_model=AdaptationPerformanceResponse,
+    summary="Adaptación Curricular vs Rendimiento",
+)
+def get_adaptation_vs_performance(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> AdaptationPerformanceResponse:
+    data = crud_dashboard.get_adaptation_vs_performance(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
+    return AdaptationPerformanceResponse(data=data)
+
+@router.get(
+    "/overview/charts/correlation-income-failures",
+    response_model=CorrelationIncomeFailuresResponse,
+    summary="Correlación entre Renta y Suspensos",
+)
+def get_correlation_income_failures(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> CorrelationIncomeFailuresResponse:
+    data = crud_dashboard.get_correlation_income_failures(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
+    return CorrelationIncomeFailuresResponse(data=data)
 
 # =====================================================================
 # 3. SECCIÓN 2: CONTEXTO SOCIOECONÓMICO
@@ -245,6 +341,12 @@ def get_students(
     alerta_brecha_digital: Optional[bool] = Query(None, description="Sin internet ni ordenadores"),
     alerta_renta_baja: Optional[bool] = Query(None, description="Renta baja/muy baja"),
     alerta_riesgo_alto: Optional[bool] = Query(None, description="Alumnos con riesgo alto"),
+    alerta_suspensos: Optional[bool] = Query(None, description="Alumnos con suspensos"),
+    alerta_desfase_edad: Optional[bool] = Query(None, description="Alumnos con desfase de edad"),
+    alerta_bajo_estudios: Optional[bool] = Query(None, description="Bajo nivel de estudios de padres"),
+    alerta_adaptacion: Optional[bool] = Query(None, description="Con adaptación curricular"),
+    alerta_repetidores_pri: Optional[bool] = Query(None, description="Repetidores 1/2 PRI"),
+    alerta_suspensos_pri: Optional[bool] = Query(None, description="Suspensos 1/2 PRI"),
     sort_by: str = Query("riesgo_abandono", description="Columna a ordenar"),
     sort_desc: bool = Query(True, description="Orden descendente"),
     page: int = Query(1, ge=1, description="Número de página (1-indexed)"),
@@ -255,7 +357,13 @@ def get_students(
     data = crud_dashboard.get_student_list(
         db, cod_centro, curso_academico, cod_ciclo, tipo_centro,
         riesgo_nivel, is_repetidor, alerta_brecha_digital, alerta_renta_baja, alerta_riesgo_alto,
-        sort_by, sort_desc, page, page_size
+        alerta_suspensos=alerta_suspensos,
+        alerta_desfase_edad=alerta_desfase_edad,
+        alerta_bajo_estudios=alerta_bajo_estudios,
+        alerta_adaptacion=alerta_adaptacion,
+        alerta_repetidores_pri=alerta_repetidores_pri,
+        alerta_suspensos_pri=alerta_suspensos_pri,
+        sort_by=sort_by, sort_desc=sort_desc, page=page, page_size=page_size
     )
     return StudentListResponse(**data)
 

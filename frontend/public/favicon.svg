@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Graduation cap icon -->
+  <polygon points="32,8 4,24 32,40 60,24" fill="#3b5bdb"/>
+  <polygon points="32,40 4,24 4,28 32,44 60,28 60,24" fill="#2b4bc8"/>
+  <rect x="50" y="24" width="3" height="20" rx="1.5" fill="#3b5bdb"/>
+  <path d="M48 44 C48 44 51.5 48 53 44" stroke="#3b5bdb" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M16 30 L16 42 C16 42 24 50 32 50 C40 50 48 42 48 42 L48 30" stroke="#3b5bdb" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ==========================================================================
+   SISTEMA DE DISEÑO APPLE (CSS VARIABLES)
+   ========================================================================== */
+
+/* TEMA CLARO (Por defecto) */
+:root {
+  /* Fondos */
+  --bg-app: #F2F2F7; /* Gris perla clásico de iOS */
+  --bg-sidebar: rgba(255, 255, 255, 0.65); /* Más translúcido */
+  --bg-card: rgba(255, 255, 255, 0.5); /* Más translúcido para cazar la luz de atrás */
+  
+  /* Textos */
+  --text-primary: #1C1C1E;
+  --text-secondary: #8E8E93;
+  
+  /* Bordes y Divisores */
+  --border-light: rgba(0, 0, 0, 0.05);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.6); /* Efecto de reflejo de cristal */
+  
+  /* Colores Semánticos (Acentos) */
+  --color-primary: #0A84FF; /* Azul Apple */
+  --color-danger: #FF3B30;  /* Rojo mate */
+  --color-success: #34C759; /* Verde mate */
+  --color-warning: #FF9500; /* Naranja mate */
+  --color-purple: #AF52DE;  /* Púrpura mate */
+  
+  /* Efectos Glassmorphism */
+  --glass-blur: blur(24px);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); /* Sombra el doble de oscura para separar del fondo claro */
+}
+
+/* TEMA OSCURO */
+[data-theme="dark"] {
+  /* Fondos */
+  --bg-app: #000000; /* Negro profundo OLED */
+  --bg-sidebar: rgba(28, 28, 30, 0.65);
+  --bg-card: rgba(28, 28, 30, 0.5); 
+  
+  /* Textos */
+  --text-primary: #FFFFFF;
+  --text-secondary: #EBEBF5; /* Blanco opaco 60% */
+  
+  /* Bordes y Divisores */
+  --border-light: rgba(255, 255, 255, 0.1);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.05); /* Reflejo sutil en oscuro */
+  
+  /* Colores Semánticos adaptados para Dark Mode (Ligeramente más brillantes) */
+  --color-primary: #0A84FF;
+  --color-danger: #FF453A; 
+  --color-success: #32D74B;
+  --color-warning: #FF9F0A;
+  --color-purple: #BF5AF2;
+  
+  /* Efectos Glassmorphism */
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   RESETEOS GLOBALES
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* Efecto Ambient Glow para que el Glassmorphism se note */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+body::before {
+  top: -10%;
+  left: -5%;
+  width: 50vw;
+  height: 50vw;
+  background: var(--color-primary);
+}
+
+body::after {
+  bottom: -10%;
+  right: -5%;
+  width: 40vw;
+  height: 40vw;
+  background: var(--color-purple);
+}
+
+/* Tipografía Base */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em; /* Estilo Apple */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Estilos de Scrollbar invisibles tipo macOS */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ========================================= */
+/* SHARED DASHBOARD LAYOUT & UI COMPONENTS   */
+/* ========================================= */
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  padding: 24px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
