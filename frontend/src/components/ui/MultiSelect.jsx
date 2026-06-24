@@ -108,7 +108,7 @@ export const MultiSelect = ({ label, options, selectedValues, onChange, placehol
                   </div>
                 )}
                 <span className="option-label" style={{ fontWeight: 600 }}>
-                  {singleSelect ? "Sin filtro (Todas las alertas)" : "Todos"}
+                  {singleSelect ? "Todos" : "Todos"}
                 </span>
               </div>
             )}
@@ -124,9 +124,11 @@ export const MultiSelect = ({ label, options, selectedValues, onChange, placehol
                     className={`multi-select-option ${isSelected ? 'selected' : ''}`}
                     onClick={(e) => { e.stopPropagation(); toggleOption(opt.value); }}
                   >
-                    <div className={`checkbox ${isSelected ? 'checked' : ''}`}>
-                      {isSelected && <Check size={12} />}
-                    </div>
+                    {!singleSelect && (
+                      <div className={`checkbox ${isSelected ? 'checked' : ''}`}>
+                        {isSelected && <Check size={12} />}
+                      </div>
+                    )}
                     <span className="option-label">{opt.label}</span>
                   </div>
                 );

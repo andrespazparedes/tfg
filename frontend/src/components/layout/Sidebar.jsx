@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
+  Building2,
   Users, 
   GraduationCap, 
   Sun, 
@@ -19,7 +20,7 @@ import './Sidebar.css';
 
 export const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { theme, toggleTheme, filters, updateFilter, resetFilters } = useDashboardContext();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [filterOptions, setFilterOptions] = useState({ centros: [], ciclos: [], cursos_academicos: [], tipos_centro: [] });
 
   useEffect(() => {
@@ -68,10 +69,15 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
           {isOpen && <span>Centro de Mando</span>}
         </NavLink>
         <NavLink to="/micro" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} title="Análisis de Centro">
-          <LayoutDashboard size={22} />
+          <Building2 size={22} />
           {isOpen && <span>Análisis de Centro</span>}
         </NavLink>
-
+        {user?.role === 'admin' && (
+          <NavLink to="/users" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} title="Gestión de Usuarios">
+            <Users size={22} />
+            {isOpen && <span>Gestión de Usuarios</span>}
+          </NavLink>
+        )}
       </nav>
 
       {isOpen && (

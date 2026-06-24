@@ -7,6 +7,9 @@ import LoginPage from './pages/LoginPage';
 
 import { MicroDashboard } from './pages/MicroDashboard';
 import { MacroDashboard } from './pages/MacroDashboard';
+import { UserManagement } from './pages/UserManagement';
+import { NotFound } from './pages/NotFound';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -21,12 +24,15 @@ function App() {
         
         <Route 
           path="/" 
-          element={isAuthenticated ? <AppLayout /> : <Navigate to="/login" replace />}
+          element={isAuthenticated ? <ErrorBoundary><AppLayout /></ErrorBoundary> : <Navigate to="/login" replace />}
         >
           <Route index element={<Navigate to="/macro" replace />} />
           <Route path="macro" element={<MacroDashboard />} />
           <Route path="micro" element={<MicroDashboard />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </DashboardProvider>
   );

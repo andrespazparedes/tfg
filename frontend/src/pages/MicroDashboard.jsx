@@ -55,8 +55,22 @@ export const MicroDashboard = () => {
     fetchKPIs();
   }, [filters]);
 
-  if (loading || !kpis) {
+  if (loading) {
     return <div className="loading-state">Calculando agregaciones...</div>;
+  }
+
+  if (!kpis || !kpis.num_estudiantes) {
+    return (
+      <div className="page-container fade-in">
+        <PageHeader 
+          title="Análisis de Centro" 
+          subtitle="Visión ejecutiva del rendimiento del alumnado"
+        />
+        <div className="loading-state" style={{ marginTop: '40px' }}>
+          No hay datos de alumnos disponibles para los filtros seleccionados.
+        </div>
+      </div>
+    );
   }
 
   return (

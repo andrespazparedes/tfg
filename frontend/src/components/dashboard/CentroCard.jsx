@@ -15,9 +15,9 @@ export const CentroCard = ({ centro }) => {
   };
 
   const getRiskColor = (score) => {
-    if (score >= 7) return 'var(--danger-color, #ef4444)';
-    if (score >= 4) return 'var(--warning-color, #f59e0b)';
-    return 'var(--success-color, #10b981)';
+    if (score >= 7) return 'var(--color-danger, #ef4444)';
+    if (score >= 4) return 'var(--color-warning, #f59e0b)';
+    return 'var(--color-success, #10b981)';
   };
 
   const riskColor = getRiskColor(centro.indice_riesgo_centro);
@@ -30,12 +30,12 @@ export const CentroCard = ({ centro }) => {
   if (centro.indice_riesgo_centro_a1 !== null) {
     const diff = centro.indice_riesgo_centro - centro.indice_riesgo_centro_a1;
     if (diff > 0) {
-      trendIcon = <TrendingUp size={16} color="var(--danger-color)" />;
-      trendText = `↑ +${diff} pts vs T-1`;
+      trendIcon = <TrendingUp size={16} color="var(--color-danger)" />;
+      trendText = `+${diff.toFixed(1)} pts`;
       trendClass = "trend-up";
     } else if (diff < 0) {
-      trendIcon = <TrendingDown size={16} color="var(--success-color)" />;
-      trendText = `↓ ${diff} pts vs T-1`;
+      trendIcon = <TrendingDown size={16} color="var(--color-success)" />;
+      trendText = `${diff.toFixed(1)} pts`;
       trendClass = "trend-down";
     }
   } else {
@@ -45,9 +45,7 @@ export const CentroCard = ({ centro }) => {
   return (
     <Card isHoverable={true} className="centro-card" onClick={handleAuditar}>
       <div className="centro-card-header">
-        <div className="centro-icon">
-          <Building2 size={20} />
-        </div>
+
         <div className="centro-title">
           <h3>{centro.nombre_centro}</h3>
           <span className="centro-tipo">{centro.tipo_centro || 'Desconocido'}</span>
@@ -71,9 +69,7 @@ export const CentroCard = ({ centro }) => {
               {centro.indice_riesgo_centro}/10
             </text>
           </svg>
-          <div className="score-label">Índice de Riesgo</div>
         </div>
-
         <div className="centro-metrics">
           <div className="metric-row">
             <span className="metric-label">Estudiantes</span>
@@ -88,11 +84,6 @@ export const CentroCard = ({ centro }) => {
         </div>
       </div>
 
-      <div className="centro-card-footer">
-        <button className="btn-audit" onClick={handleAuditar}>
-          Auditar Centro
-        </button>
-      </div>
     </Card>
   );
 };

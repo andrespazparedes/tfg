@@ -52,6 +52,7 @@
 .centro-card-body {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 
@@ -60,7 +61,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: 80px;
+  width: 100px;
 }
 
 .score-ring {
@@ -88,14 +89,8 @@
   text-anchor: middle;
 }
 
-.score-label {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  text-align: center;
-}
 
 .centro-metrics {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -105,6 +100,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  align-items: flex-end;
+  text-align: right;
 }
 
 .metric-label {
@@ -126,11 +123,11 @@
 }
 
 .trend-up .trend-value {
-  color: var(--danger-color);
+  color: var(--color-danger);
 }
 
 .trend-down .trend-value {
-  color: var(--success-color);
+  color: var(--color-success);
 }
 
 .trend-stable .trend-value {
