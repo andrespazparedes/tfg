@@ -469,7 +469,8 @@ FROM raw.encuesta
     <formulas>
       <formula>
         <field_name>max_peso_estudios</field_name>
-        <formula>MAX([peso_estudios_1], [peso_estudios_2])</formula>
+        <formula>MAX(IF(ISBLANK([peso_estudios_1]), -1, [peso_estudios_1]), IF(ISBLANK([peso_estudios_2]), -1, [peso_estudios_2]))</formula>
+        <replace_field/>
         <set_na>N</set_na>
         <value_length>-1</value_length>
         <value_precision>-1</value_precision>
