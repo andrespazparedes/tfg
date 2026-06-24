@@ -6,3 +6,30 @@
 .DS_Store
 Thumbs.db
 .vscode/
+
+# PYTHON CACHE (No subir a Git)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# FRONTEND / NODE (No subir a Git)
+node_modules/
+dist/
+.vite/
+
+# DOCUMENTACION LATEX (Archivos temporales)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.glo
+*.ist
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.xdv
+*.acn
