@@ -1,11 +1,11 @@
-import client from './client';
+import { api } from '../services/api';
 
 export async function login(email, password) {
-  const response = await client.post('/api/v1/auth/login', { email, password });
+  const response = await api.post('/auth/login', { email, password });
   return response.data;
 }
 
 export async function getMe() {
-  const response = await client.get('/api/v1/auth/me');
+  const response = await api.get('/auth/me');
   return response.data;
 }

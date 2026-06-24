@@ -1,4 +1,4 @@
-import client from './client';
+import { api } from '../services/api';
 
 function cleanParams(params) {
   if (!params) return {};
@@ -12,40 +12,40 @@ function cleanParams(params) {
 }
 
 export async function getFilters() {
-  const response = await client.get('/api/v1/dashboard/filters');
+  const response = await api.get('/dashboard/filters');
   return response.data;
 }
 
 export async function getKPIs(params) {
-  const response = await client.get('/api/v1/dashboard/kpis', {
+  const response = await api.get('/dashboard/kpis', {
     params: cleanParams(params),
   });
   return response.data;
 }
 
 export async function getRiskDistribution(params) {
-  const response = await client.get('/api/v1/dashboard/charts/risk-distribution', {
+  const response = await api.get('/dashboard/charts/risk-distribution', {
     params: cleanParams(params),
   });
   return response.data;
 }
 
 export async function getRiskByCycle(params) {
-  const response = await client.get('/api/v1/dashboard/charts/risk-by-cycle', {
+  const response = await api.get('/dashboard/charts/risk-by-cycle', {
     params: cleanParams(params),
   });
   return response.data;
 }
 
 export async function getRedFlags(params) {
-  const response = await client.get('/api/v1/dashboard/insights/red-flags', {
+  const response = await api.get('/dashboard/insights/red-flags', {
     params: cleanParams(params),
   });
   return response.data;
 }
 
 export async function getStudents(params) {
-  const response = await client.get('/api/v1/dashboard/students', {
+  const response = await api.get('/dashboard/students', {
     params: cleanParams(params),
   });
   return response.data;

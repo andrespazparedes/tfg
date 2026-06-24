@@ -1,11 +1,3 @@
-# Desarrollo
-FROM node:20-alpine AS dev
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-# No copiamos el código fuente aquí porque usaremos un volumen en docker-compose
-CMD ["npm", "run", "dev"]
-
 # Build
 FROM node:20-alpine AS build
 WORKDIR /app
@@ -14,8 +6,11 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Serve
-FROM nginx:alpine AS prod
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Production: Serve static files with simple HTTP server
+FROM node:20-alpine
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=build /app/dist ./dist
 EXPOSE 80
+CMD ["serve", "-s", "dist", "-l", "80"]
+
