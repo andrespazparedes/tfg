@@ -18,6 +18,9 @@ node_modules/
 dist/
 .vite/
 
+# DOCUMENTOS
+docs/
+
 # DOCUMENTACION LATEX (Archivos temporales)
 *.aux
 *.bbl
