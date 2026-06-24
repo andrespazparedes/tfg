@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
 
     # ── CORS ──────────────────────────────────────────────────────────
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+    CORS_ORIGINS: List[str] = []
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

@@ -2,8 +2,7 @@
 Esquemas Pydantic para los endpoints analíticos del dashboard.
 
 Cada esquema corresponde a la respuesta de un endpoint concreto de
-``app/api/v1/dashboard.py``. Se usa ``from_attributes = True`` donde
-los datos provienen directamente de filas SQLAlchemy.
+la carpeta de routers.
 """
 
 from __future__ import annotations
@@ -15,44 +14,57 @@ from pydantic import BaseModel, Field
 
 
 # =====================================================================
-# 1. KPIs GLOBALES — GET /api/v1/dashboard/kpis
+# 1. KPIs GLOBALES — GET /api/v1/dashboard/overview/kpis
 # =====================================================================
 
 
 class KPIsResponse(BaseModel):
-    """Indicadores clave para la pantalla Overview."""
+    """Indicadores clave absolutos para la pantalla Overview."""
 
-    total_alumnos: int = Field(..., description="Número total de alumnos únicos")
-    pct_riesgo_abandono: float = Field(
-        ...,
-        description="Porcentaje de alumnos con riesgo_abandono > 50",
-    )
-    pct_abandono_temprano: float = Field(
-        ...,
-        description=(
-            "Porcentaje de alumnos inferidos como abandono temprano: "
-            "edad > 18 y NO están en Bachillerato ni FP Superior"
-        ),
-    )
-    pct_fracaso_escolar: float = Field(
-        ...,
-        description=(
-            "Porcentaje de alumnos inferidos como fracaso escolar: "
-            "ciclo PRI y edad > 13"
-        ),
-    )
+    num_estudiantes: int = Field(..., description="Número total de alumnos únicos")
+    num_estudiantes_a1: Optional[int] = None
+    
+    riesgo_abandono_alto: int
+    riesgo_abandono_alto_a1: Optional[int] = None
+    
+    is_repetidor: int
+    is_repetidor_a1: Optional[int] = None
+    
+    repetidores_1_2_pri: int
+    repetidores_1_2_pri_a1: Optional[int] = None
+    
+    suspensos_1_2_pri: int
+    suspensos_1_2_pri_a1: Optional[int] = None
+    
+    adaptacion_curricular: int
+    adaptacion_curricular_a1: Optional[int] = None
+
+    riesgo_socio_alto: int
+    riesgo_socio_alto_a1: Optional[int] = None
+    
+    suspensos: int
+    suspensos_a1: Optional[int] = None
+    
+    desfase_edad: int
+    desfase_edad_a1: Optional[int] = None
+    
+    brecha_digital: int
+    brecha_digital_a1: Optional[int] = None
+    
+    bajo_nivel_estudios_padres: int
+    bajo_nivel_estudios_padres_a1: Optional[int] = None
 
 
 # =====================================================================
-# 2. GRÁFICOS — GET /api/v1/dashboard/charts/*
+# 2. GRÁFICOS OVERVIEW — GET /api/v1/dashboard/overview/charts/*
 # =====================================================================
 
 
 class RiskDistributionItem(BaseModel):
     """Un bucket de distribución de riesgo (Bajo / Medio / Alto)."""
 
-    nivel: str = Field(..., description="Nivel de riesgo: Bajo, Medio o Alto")
-    count: int = Field(..., description="Número de alumnos en este nivel")
+    nivel_riesgo: str = Field(..., description="Nivel de riesgo: Bajo, Medio o Alto")
+    num_estudiantes: int = Field(..., description="Número de alumnos en este nivel")
 
 
 class RiskDistributionResponse(BaseModel):
@@ -65,13 +77,8 @@ class RiskByCycleItem(BaseModel):
     """Media de riesgo de abandono para un ciclo educativo."""
 
     cod_ciclo: str = Field(..., description="Código del ciclo educativo")
-    nombre_ciclo: str = Field(..., description="Nombre legible del ciclo")
-    avg_riesgo: float = Field(
-        ..., description="Media del riesgo_abandono para este ciclo"
-    )
-    total_alumnos: int = Field(
-        ..., description="Total de alumnos en este ciclo"
-    )
+    riesgo_abandono_critico: int = Field(..., description="Número de alumnos con riesgo > 30")
+    num_estudiantes: int = Field(..., description="Total de alumnos en este ciclo")
 
 
 class RiskByCycleResponse(BaseModel):
@@ -80,64 +87,95 @@ class RiskByCycleResponse(BaseModel):
     data: List[RiskByCycleItem]
 
 
+class TrendItem(BaseModel):
+    """Punto de datos para la gráfica de línea histórica."""
+
+    curso_academico: str = Field(..., description="Año académico (ej. 2023-2024)")
+    num_estudiantes: int = Field(..., description="Total de alumnos matriculados en ese curso")
+    riesgo_alto: int = Field(..., description="Alumnos en Riesgo Alto")
+    riesgo_medio: int = Field(..., description="Alumnos en Riesgo Medio")
+    riesgo_bajo: int = Field(..., description="Alumnos en Riesgo Bajo")
+
+
+class TrendResponse(BaseModel):
+    """Evolución histórica en los últimos 5 años."""
+
+    data: List[TrendItem]
+
+
 # =====================================================================
-# 3. ALERTAS ROJAS — GET /api/v1/dashboard/insights/red-flags
+# 3. SECCIÓN 2: CONTEXTO SOCIOECONÓMICO
 # =====================================================================
 
+class SocioeconomicKPIsResponse(BaseModel):
+    num_estudiantes: int
+    num_estudiantes_a1: Optional[int] = None
+    nivel_renta_baja: int
+    nivel_renta_baja_a1: Optional[int] = None
+    brecha_digital_extrema: int
+    brecha_digital_extrema_a1: Optional[int] = None
+    sin_estudios_secundarios: int
+    sin_estudios_secundarios_a1: Optional[int] = None
 
-class RedFlagsResponse(BaseModel):
-    """Indicadores de alerta que requieren atención inmediata."""
+class DigitalGapItem(BaseModel):
+    ordenadores_suficientes: bool
+    conexion_internet: bool
+    num_estudiantes: int
+    num_aprobados: int
 
-    total_repetidores: int = Field(
-        ..., description="Total de alumnos repetidores"
-    )
-    repetidores_1_2_primaria: int = Field(
-        ...,
-        description="Repetidores en 1.º o 2.º de Primaria (señal temprana)",
-    )
-    suspensos_sin_repetir: int = Field(
-        ...,
-        description="Alumnos con tasa_aprobado < 0.5 que NO son repetidores",
-    )
-    riesgo_socioeconomico_alto: int = Field(
-        ...,
-        description="Alumnos con riesgo_socioeconomico >= 16",
-    )
-    con_adaptaciones_curriculares: int = Field(
-        ...,
-        description="Alumnos con alguna adaptación curricular registrada",
-    )
+class DigitalGapResponse(BaseModel):
+    data: List[DigitalGapItem]
 
+class ParentEducationItem(BaseModel):
+    max_nivel_estudios_padres: str
+    num_estudiantes: int
+    riesgo_abandono_critico: int
+
+class ParentEducationResponse(BaseModel):
+    data: List[ParentEducationItem]
+
+class IncomeRiskItem(BaseModel):
+    nivel_renta: str
+    num_estudiantes: int
+    num_suspensas: int
+    riesgo_abandono_critico: int
+
+class IncomeRiskResponse(BaseModel):
+    data: List[IncomeRiskItem]
 
 # =====================================================================
 # 4. LISTADO DE ALUMNOS — GET /api/v1/dashboard/students
 # =====================================================================
 
 
+class DesgloseRiesgo(BaseModel):
+    academico_pts: Optional[float] = None
+    socioeconomico_pts: Optional[float] = None
+    adaptacion_pts: Optional[float] = None
+    total_pts: Optional[float] = None
+    nivel_riesgo: Optional[str] = None
+
+class AlertasEstudiante(BaseModel):
+    brecha_digital: bool
+    renta_baja: bool
+    is_repetidor: bool
+
 class StudentListItem(BaseModel):
     """Fila individual del listado de alumnos en riesgo."""
 
     id_estudiante: int
     num_expediente: Optional[str] = None
-    nombre: Optional[str] = None
-    fecha_nacimiento: Optional[date] = None
 
     # Contexto académico
     nombre_centro: Optional[str] = None
     cod_ciclo: Optional[str] = None
     nombre_ciclo: Optional[str] = None
     num_curso: Optional[int] = None
-
-    # Métricas de rendimiento
     tasa_aprobado: Optional[float] = None
-    is_repetidor: Optional[bool] = None
     desfase_edad: Optional[float] = None
 
-    # Indicadores de riesgo
-    riesgo_academico: Optional[float] = None
-    riesgo_socioeconomico: Optional[float] = None
-    riesgo_adaptacion: Optional[float] = None
-    riesgo_abandono: Optional[float] = None
+    desglose_riesgo: DesgloseRiesgo
+    alertas: AlertasEstudiante
 
     model_config = {"from_attributes": True}
 
@@ -149,6 +187,45 @@ class StudentListResponse(BaseModel):
     page: int = Field(..., description="Página actual (1-indexed)")
     page_size: int = Field(..., description="Tamaño de página")
     data: List[StudentListItem]
+
+
+# =====================================================================
+# 4. LISTADO DE CENTROS — GET /api/v1/dashboard/centros
+# =====================================================================
+
+class CentroListItem(BaseModel):
+    """Fila individual del ranking de centros."""
+    id_centro: int
+    cod_centro: Optional[str] = None
+    nombre_centro: Optional[str] = None
+    localidad: Optional[str] = None
+    tipo_centro: Optional[str] = None
+    naturaleza: Optional[str] = None
+    
+    num_estudiantes: int
+    riesgo_abandono_alto: int
+    is_repetidor: int
+    repetidores_1_2_pri: int
+    suspensos_1_2_pri: int
+    adaptacion_curricular: int
+    riesgo_socioeconomico_alto: int
+    suspensos: int
+    desfase_edad: int
+    brecha_digital: int
+    bajo_nivel_estudios_padres: int
+    
+    indice_riesgo_centro: int
+    indice_riesgo_centro_a1: Optional[int] = None
+
+    model_config = {"from_attributes": True}
+
+
+class CentroListResponse(BaseModel):
+    """Respuesta paginada del ranking de centros."""
+    total: int
+    page: int
+    page_size: int
+    data: List[CentroListItem]
 
 
 # =====================================================================
@@ -174,4 +251,7 @@ class FiltersResponse(BaseModel):
     )
     ciclos: List[FilterOption] = Field(
         ..., description="Ciclos educativos disponibles"
+    )
+    tipos_centro: List[str] = Field(
+        ..., description="Tipos de centros educativos disponibles (CEIP, IES...)"
     )

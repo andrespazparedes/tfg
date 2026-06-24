@@ -7,7 +7,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import get_db
+from app.routers.dependencies import get_db
 from app.core.security import create_access_token, verify_password
 from app.models.user import User
 from app.schemas.user import LoginRequest, TokenResponse

@@ -250,13 +250,13 @@ class FactRendimientoAnual(DWHBase):
 
     # PK compuesta
     id_estudiante: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    id_tiempo: Mapped[float] = mapped_column(Double, primary_key=True)
+    id_tiempo: Mapped[int] = mapped_column(BigInteger, primary_key=True)
 
-    # FKs a dimensiones (DOUBLE PRECISION según DDL real)
-    id_centro: Mapped[float] = mapped_column(Double, nullable=False)
-    id_curso: Mapped[float] = mapped_column(Double, nullable=False)
-    id_demografia_familiar: Mapped[float] = mapped_column(Double, nullable=False)
-    id_adaptacion: Mapped[float] = mapped_column(Double, nullable=False)
+    # FKs a dimensiones
+    id_centro: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    id_curso: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    id_demografia_familiar: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    id_adaptacion: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
     # Métricas de rendimiento
     num_cursadas: Mapped[int] = mapped_column(BigInteger, nullable=False)
@@ -276,5 +276,5 @@ class FactRendimientoAnual(DWHBase):
     def __repr__(self) -> str:
         return (
             f"<FactRendimientoAnual est={self.id_estudiante} "
-            f"riesgo={self.riesgo_abandono:.1f}>"
+            f"riesgo_abandono={self.riesgo_abandono:.1f}>"
         )
