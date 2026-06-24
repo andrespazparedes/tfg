@@ -175,6 +175,132 @@
     </GUI>
   </transform>
   <transform>
+    <name>Generate rows</name>
+    <type>RowGenerator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <length>-1</length>
+        <name>id_demografia_familiar</name>
+        <nullif>0</nullif>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>Integer</type>
+      </field>
+      <field>
+        <length>-1</length>
+        <name>max_nivel_estudios</name>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>String</type>
+      </field>
+      <field>
+        <length>-1</length>
+        <name>internet</name>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>Boolean</type>
+      </field>
+      <field>
+        <length>-1</length>
+        <name>disponibilidad_ordenadores</name>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>String</type>
+      </field>
+      <field>
+        <length>-1</length>
+        <name>nivel_renta</name>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>String</type>
+      </field>
+      <field>
+        <length>-1</length>
+        <name>riesgo_socioeconomico</name>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>Integer</type>
+      </field>
+    </fields>
+    <interval_in_ms>5000</interval_in_ms>
+    <last_time_field>FiveSecondsAgo</last_time_field>
+    <limit>1</limit>
+    <never_ending>N</never_ending>
+    <row_time_field>now</row_time_field>
+    <attributes/>
+    <GUI>
+      <xloc>928</xloc>
+      <yloc>560</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Insert / update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <commit>100</commit>
+    <connection>postgres-dwh</connection>
+    <lookup>
+      <key>
+        <condition>=</condition>
+        <field>id_demografia_familiar</field>
+        <name>id_demografia_familiar</name>
+      </key>
+      <schema>dwh</schema>
+      <table>dim_demografia_familiar</table>
+      <value>
+        <name>id_demografia_familiar</name>
+        <rename>id_demografia_familiar</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>max_nivel_estudios</name>
+        <rename>max_nivel_estudios</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>internet</name>
+        <rename>internet</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>disponibilidad_ordenadores</name>
+        <rename>disponibilidad_ordenadores</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>nivel_renta</name>
+        <rename>nivel_renta</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>riesgo_socioeconomico</name>
+        <rename>riesgo_socioeconomico</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <update_bypassed>N</update_bypassed>
+    <attributes/>
+    <GUI>
+      <xloc>928</xloc>
+      <yloc>432</yloc>
+    </GUI>
+  </transform>
+  <transform>
     <name>Select values</name>
     <type>SelectValues</type>
     <description/>
@@ -315,7 +441,12 @@ FROM raw.encuesta
         <source_value>0</source_value>
         <target_value>Sin Estudios</target_value>
       </field>
+      <field>
+        <source_value>-1</source_value>
+        <target_value>Desconocido</target_value>
+      </field>
     </fields>
+    <non_match_default/>
     <target_field>max_nivel_estudios</target_field>
     <target_type>String</target_type>
     <attributes/>
@@ -381,7 +512,7 @@ FROM raw.encuesta
         <target_value>0</target_value>
       </field>
     </fields>
-    <non_match_default>0</non_match_default>
+    <non_match_default>-1</non_match_default>
     <target_field>peso_estudios_1</target_field>
     <target_type>Integer</target_type>
     <attributes/>
@@ -420,7 +551,7 @@ FROM raw.encuesta
         <target_value>0</target_value>
       </field>
     </fields>
-    <non_match_default>0</non_match_default>
+    <non_match_default>-1</non_match_default>
     <target_field>peso_estudios_2</target_field>
     <target_type>Integer</target_type>
     <attributes/>
@@ -517,6 +648,7 @@ FROM raw.encuesta
         <target_value>0</target_value>
       </field>
     </fields>
+    <non_match_default>0</non_match_default>
     <target_field>pts_disponibilidad_ordeenadores</target_field>
     <target_type>Integer</target_type>
     <attributes/>
@@ -547,6 +679,7 @@ FROM raw.encuesta
         <target_value>3</target_value>
       </field>
     </fields>
+    <non_match_default>0</non_match_default>
     <target_field>pts_internet</target_field>
     <target_type>Integer</target_type>
     <attributes/>
@@ -584,7 +717,12 @@ FROM raw.encuesta
         <source_value>Sin Estudios</source_value>
         <target_value>10</target_value>
       </field>
+      <field>
+        <source_value>Desconocido</source_value>
+        <target_value>0</target_value>
+      </field>
     </fields>
+    <non_match_default/>
     <target_field>pts_nivel_estudios</target_field>
     <target_type>Integer</target_type>
     <attributes/>
@@ -619,6 +757,7 @@ FROM raw.encuesta
         <target_value>0</target_value>
       </field>
     </fields>
+    <non_match_default>0</non_match_default>
     <target_field>pts_nivel_renta</target_field>
     <target_type>Integer</target_type>
     <attributes/>
@@ -829,162 +968,6 @@ FROM raw.encuesta
     <GUI>
       <xloc>80</xloc>
       <yloc>176</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Generate rows</name>
-    <type>RowGenerator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>id_demografia_familiar</name>
-        <nullif>0</nullif>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>Integer</type>
-      </field>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>max_nivel_estudios</name>
-        <nullif/>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>String</type>
-      </field>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>internet</name>
-        <nullif/>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>Boolean</type>
-      </field>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>disponibilidad_ordenadores</name>
-        <nullif/>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>String</type>
-      </field>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>nivel_renta</name>
-        <nullif/>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>String</type>
-      </field>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>riesgo_socioeconomico</name>
-        <nullif/>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>Integer</type>
-      </field>
-    </fields>
-    <interval_in_ms>5000</interval_in_ms>
-    <last_time_field>FiveSecondsAgo</last_time_field>
-    <limit>1</limit>
-    <never_ending>N</never_ending>
-    <row_time_field>now</row_time_field>
-    <attributes/>
-    <GUI>
-      <xloc>928</xloc>
-      <yloc>560</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Insert / update</name>
-    <type>InsertUpdate</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <commit>100</commit>
-    <connection>postgres-dwh</connection>
-    <lookup>
-      <key>
-        <condition>=</condition>
-        <field>id_demografia_familiar</field>
-        <name>id_demografia_familiar</name>
-        <name2/>
-      </key>
-      <schema>dwh</schema>
-      <table>dim_demografia_familiar</table>
-      <value>
-        <name>id_demografia_familiar</name>
-        <rename>id_demografia_familiar</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>max_nivel_estudios</name>
-        <rename>max_nivel_estudios</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>internet</name>
-        <rename>internet</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>disponibilidad_ordenadores</name>
-        <rename>disponibilidad_ordenadores</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>nivel_renta</name>
-        <rename>nivel_renta</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>riesgo_socioeconomico</name>
-        <rename>riesgo_socioeconomico</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-    <update_bypassed>N</update_bypassed>
-    <attributes/>
-    <GUI>
-      <xloc>928</xloc>
-      <yloc>432</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
