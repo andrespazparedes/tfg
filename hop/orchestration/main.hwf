@@ -4,99 +4,98 @@
   <name_sync_with_filename>Y</name_sync_with_filename>
   <description/>
   <extended_description/>
-  <workflow_version/>
-  <workflow_status>0</workflow_status>
   <created_user>-</created_user>
-  <created_date>2026/06/19 16:22:20.704</created_date>
   <modified_user>-</modified_user>
+  <created_date>2026/06/19 16:22:20.704</created_date>
   <modified_date>2026/06/19 16:22:20.704</modified_date>
+  <workflow_version/>
   <parameters>
     <parameter>
       <name>CURSO_ACTUAL</name>
-      <default_value/>
       <description>Filtro de Carga Incremental. Deja en BLANCO para extraer todo el histórico (Full Load) o escribe un año (ej. '2025/2026') para extraer solo ese curso.</description>
+      <default_value/>
     </parameter>
   </parameters>
   <actions>
     <action>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <DayOfMonth>1</DayOfMonth>
+      <weekDay>1</weekDay>
+      <minutes>0</minutes>
+      <hour>12</hour>
+      <doNotWaitOnFirstExecution>N</doNotWaitOnFirstExecution>
       <name>Start</name>
       <description/>
       <type>SPECIAL</type>
       <attributes/>
-      <DayOfMonth>1</DayOfMonth>
-      <doNotWaitOnFirstExecution>N</doNotWaitOnFirstExecution>
-      <hour>12</hour>
-      <intervalMinutes>60</intervalMinutes>
-      <intervalSeconds>0</intervalSeconds>
-      <minutes>0</minutes>
-      <repeat>N</repeat>
-      <schedulerType>0</schedulerType>
-      <weekDay>1</weekDay>
-      <parallel>N</parallel>
-      <xloc>80</xloc>
+      <xloc>32</xloc>
       <yloc>128</yloc>
+      <parallel>N</parallel>
       <attributes_hac/>
     </action>
     <action>
+      <filename>${PROJECT_HOME}/orchestration/dimensions.hwf</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <set_append_logfile>N</set_append_logfile>
+      <create_parent_folder>N</create_parent_folder>
+      <wait_until_finished>Y</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+        <parameter>
+          <name>CURSO_ACTUAL</name>
+          <value/>
+          <stream_name/>
+        </parameter>
+      </parameters>
+      <run_configuration>local</run_configuration>
       <name>dimensions.hwf</name>
       <description/>
       <type>WORKFLOW</type>
       <attributes/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <create_parent_folder>N</create_parent_folder>
-      <exec_per_row>N</exec_per_row>
-      <filename>${PROJECT_HOME}/orchestration/dimensions.hwf</filename>
-      <logext/>
-      <logfile/>
-      <loglevel>Nothing</loglevel>
-      <parameters>
-        <parameter>
-          <name>CURSO_ACTUAL</name>
-          <stream_name/>
-          <value/>
-        </parameter>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <params_from_previous>N</params_from_previous>
-      <run_configuration>local</run_configuration>
-      <set_append_logfile>N</set_append_logfile>
-      <set_logfile>N</set_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <parallel>N</parallel>
-      <xloc>240</xloc>
+      <xloc>256</xloc>
       <yloc>128</yloc>
+      <parallel>N</parallel>
       <attributes_hac/>
     </action>
     <action>
+      <filename>${PROJECT_HOME}/orchestration/facts.hwf</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <set_append_logfile>N</set_append_logfile>
+      <create_parent_folder>N</create_parent_folder>
+      <wait_until_finished>Y</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+        <parameter>
+          <name>CURSO_ACTUAL</name>
+          <value/>
+          <stream_name/>
+        </parameter>
+      </parameters>
+      <run_configuration>local</run_configuration>
       <name>facts.hwf</name>
       <description/>
       <type>WORKFLOW</type>
       <attributes/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <create_parent_folder>N</create_parent_folder>
-      <exec_per_row>N</exec_per_row>
-      <filename>${PROJECT_HOME}/orchestration/facts.hwf</filename>
-      <logext/>
-      <logfile/>
-      <loglevel>Nothing</loglevel>
-      <parameters>
-        <parameter>
-          <name>CURSO_ACTUAL</name>
-          <stream_name/>
-          <value/>
-        </parameter>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <params_from_previous>N</params_from_previous>
-      <run_configuration>local</run_configuration>
-      <set_append_logfile>N</set_append_logfile>
-      <set_logfile>N</set_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <parallel>N</parallel>
       <xloc>400</xloc>
       <yloc>128</yloc>
+      <parallel>N</parallel>
       <attributes_hac/>
     </action>
     <action>
@@ -104,81 +103,180 @@
       <description/>
       <type>SUCCESS</type>
       <attributes/>
-      <parallel>N</parallel>
       <xloc>560</xloc>
       <yloc>128</yloc>
+      <parallel>N</parallel>
       <attributes_hac/>
     </action>
     <action>
+      <loglevel>Error</loglevel>
+      <logsubject>Main Workflow</logsubject>
+      <logmessage>Uno de los flujos de carga del DWH ha fallado.</logmessage>
       <name>Write to log</name>
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <loglevel>Error</loglevel>
-      <logmessage>Uno de los flujos de carga del DWH ha fallado.</logmessage>
-      <logsubject>Main Workflow</logsubject>
-      <parallel>N</parallel>
       <xloc>400</xloc>
       <yloc>256</yloc>
+      <parallel>N</parallel>
       <attributes_hac/>
     </action>
     <action>
+      <always_log_rows>N</always_log_rows>
       <name>Abort workflow</name>
       <description/>
       <type>ABORT</type>
       <attributes/>
-      <always_log_rows>N</always_log_rows>
-      <parallel>N</parallel>
       <xloc>560</xloc>
       <yloc>256</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <valuetype>variable</valuetype>
+      <fieldtype>string</fieldtype>
+      <fieldname/>
+      <variablename>CURSO_ACTUAL</variablename>
+      <mask/>
+      <comparevalue/>
+      <minvalue/>
+      <maxvalue/>
+      <successcondition>equal</successcondition>
+      <successwhenvarset>Y</successwhenvarset>
+      <successbooleancondition>true</successbooleancondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <name>Simple evaluation</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <xloc>144</xloc>
+      <yloc>128</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <arg_from_previous>N</arg_from_previous>
+      <connection>postgres-dwh</connection>
+      <fields>
+        <field>
+          <name>dim_adaptacion</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>dim_asignatura</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>dim_centro</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>dim_curso</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>dim_demografia_familiar</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>dim_estudiante</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>dim_tiempo</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>fact_calificaciones</name>
+          <schemaname>dwh</schemaname>
+        </field>
+        <field>
+          <name>fact_rendimiento_anual</name>
+          <schemaname>dwh</schemaname>
+        </field>
+      </fields>
+      <name>Truncate tables</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <attributes/>
+      <xloc>144</xloc>
+      <yloc>256</yloc>
+      <parallel>N</parallel>
       <attributes_hac/>
     </action>
   </actions>
   <hops>
     <hop>
-      <from>Start</from>
-      <to>dimensions.hwf</to>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
       <from>dimensions.hwf</from>
       <to>facts.hwf</to>
-      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>facts.hwf</from>
       <to>Success</to>
-      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Write to log</from>
       <to>Abort workflow</to>
-      <enabled>Y</enabled>
       <evaluation>N</evaluation>
       <unconditional>Y</unconditional>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>facts.hwf</from>
       <to>Write to log</to>
-      <enabled>Y</enabled>
       <evaluation>N</evaluation>
       <unconditional>N</unconditional>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>dimensions.hwf</from>
       <to>Write to log</to>
-      <enabled>Y</enabled>
       <evaluation>N</evaluation>
       <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Start</from>
+      <to>Simple evaluation</to>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Simple evaluation</from>
+      <to>dimensions.hwf</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Simple evaluation</from>
+      <to>Truncate tables</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Truncate tables</from>
+      <to>dimensions.hwf</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Truncate tables</from>
+      <to>Write to log</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
     </hop>
   </hops>
-  <notepads>
-  </notepads>
+  <notepads/>
   <attributes/>
 </workflow>
