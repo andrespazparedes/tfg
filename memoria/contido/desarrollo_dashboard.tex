@@ -1,53 +1,337 @@
-\chapter{Dashboard analítico}
+\chapter{Desarrollo del dashboard analítico}
 \label{chap:desarrollo_dashboard}
 
-\lettrine{T}{ras} la consolidación de los datos en el Data Warehouse, la capa final del proyecto consiste en la creación de una aplicación web interactiva que permita a los gestores de la administración pública consumir esta información en tiempo real para tomar decisiones estratégicas.
+\lettrine{T}{ras} la consolidación de los datos en el Data Warehouse, la capa de presentación del proyecto consiste en una aplicación web que consume el Datamart de forma segura y devuelve agregaciones analíticas en tiempo de consulta. A diferencia de la capa ETL ---cuyo único escritor es Apache Hop---, el dashboard no modifica las tablas del esquema \textit{dwh}; su función es exclusivamente de lectura, agregación y exposición mediante una API REST.
 
-Para cumplir con los requisitos de modularidad y escalabilidad (aislamiento de procesos), esta fase de presentación y acceso se ha dividido en tres contenedores independientes: el servidor de lógica de negocio (Backend), la interfaz visual (Frontend) y el servidor de enrutamiento web (Proxy Inverso).
+Para cumplir con los requisitos de modularidad descritos en el Capítulo~\ref{chap:analisis_arquitectura}, la solución se ha desplegado en tres contenedores Docker independientes, interconectados por la red virtual \textit{tfg-network}:
 
-\section{Servidor backend RESTful (FastAPI)}
+\begin{enumerate}
+    \item \textbf{Backend (api):} Servidor FastAPI en Python~3.12 que ejecuta las consultas SQLAlchemy sobre PostgreSQL, gestiona la autenticación JWT y expone los endpoints bajo el prefijo /api/v1.
+    \item \textbf{Frontend (frontend):} Aplicación React~18 empaquetada con Vite~6 y servida en producción mediante el paquete \textit{serve} sobre el puerto interno~80.
+    \item \textbf{Proxy inverso (nginx):} Único punto de entrada hacia el exterior. Termina TLS, comprime respuestas y enruta el tráfico hacia los contenedores internos según la ruta solicitada.
+\end{enumerate}
 
-El núcleo de la lógica de negocio se ha programado en Python utilizando el framework \textbf{FastAPI}. La elección de FastAPI frente a alternativas como Django o Flask se fundamenta en su alto rendimiento nativo (basado en \textit{Starlette}), su soporte asíncrono y la generación automática de documentación interactiva mediante Swagger UI, lo que acelera enormemente la fase de integración frontend-backend.
+La Figura~\ref{fig:diagrama_nginx_deploy} ilustra la topología completa de despliegue, mostrando cómo el tráfico HTTPS procedente del navegador atraviesa el proxy inverso y se bifurca hacia los servicios internos según el prefijo de la ruta.
 
-\subsection{Mapeo objeto-relacional (SQLAlchemy)}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/diagrama_nginx.png}
+    \caption{Diagrama de despliegue y enrutamiento del proxy inverso Nginx: separación de tráfico estático (React) y tráfico de API (FastAPI) dentro de la red Docker \textit{tfg-network}.}
+    \label{fig:diagrama_nginx_deploy}
+\end{figure}
 
-Dado que el Data Warehouse (DWH) es de solo lectura para el backend —su escritura es competencia exclusiva de la ETL de Apache Hop—, se ha creado una clase declarativa independiente (\textit{DWHBase}) explícitamente configurada en el esquema \textit{dwh}. Utilizando la librería \textbf{SQLAlchemy}, se han mapeado las tablas dimensionales y de hechos como objetos de Python (\textit{Object-Relational Mapping}). 
+% =========================================================================
+\section{Backend RESTful (FastAPI)}
+% =========================================================================
 
-Esta abstracción permite construir consultas analíticas dinámicas (por ejemplo, cruces entre calificaciones históricas, demografía familiar y perfiles académicos del alumnado) de forma programática, garantizando la seguridad frente a inyecciones SQL sin acoplar fuertemente el código a la estructura del motor de base de datos.
+El núcleo de la lógica de negocio reside en el directorio /api del repositorio. Se ha implementado con \textbf{FastAPI}~\cite{FastAPI_Docs} sobre \textbf{Uvicorn}, la validación automática de tipos mediante Pydantic~v2 y la generación nativa de documentación OpenAPI accesible en /docs y /redoc.
 
-\subsection{Estructura de endpoints y seguridad}
+\subsection{Arranque y ciclo de vida del contenedor}
 
-La arquitectura de la API (\textit{Routing}) se ha dividido lógicamente por dominios de negocio. El enrutador principal (\textit{dashboard.py}) expone servicios protegidos que retornan información altamente agregada (KPIs), agrupaciones para series temporales (Charts) y paginación masiva de estudiantes en formato estandarizado JSON.
+El Dockerfile del backend construye una imagen a partir de python:3.12-slim, instala las dependencias de requirements.txt ---incluyendo libpq-dev para el driver PostgreSQL--- y define un comando de arranque en tres fases secuenciales:
 
-Para asegurar la máxima privacidad de los datos académicos y cumplir con las normativas de protección de datos infantiles, todos los \textit{endpoints} requieren autenticación obligatoria. Se ha implementado un sistema robusto de tokens basado en el estándar \textbf{JWT} (JSON Web Tokens), inyectado en el ciclo de vida de las peticiones mediante el mecanismo de dependencias nativo de FastAPI (\textit{Depends(get\_current\_user)}).
+\begin{enumerate}
+    \item \textbf{Migraciones Alembic:} alembic upgrade head crea o actualiza el esquema app en la base de datos postgres-dwh.
+    \item \textbf{Seeding:} python -m app.seed inserta el usuario administrador por defecto (ID fijo~1) si no existe.
+    \item \textbf{Servidor:} uvicorn app.main:app --host 0.0.0.0 --port 8000 expone la API dentro de la red Docker.
+\end{enumerate}
 
-\section{Interfaz visual e interacción (React y Vite)}
+El contenedor monta el directorio ./api como volumen (/app), lo que permite recargar el código en desarrollo sin reconstruir la imagen. A diferencia del proxy Nginx, el servicio api \textbf{no publica puertos al host}: solo es accesible desde la red interna \textit{tfg-network}, reforzando el aislamiento descrito en la arquitectura global.
 
-La capa visual de cara al usuario ha sido desarrollada como una aplicación de página única (\textit{Single Page Application} o SPA) utilizando la librería \textbf{React}. La construcción y empaquetado del proyecto se ha orquestado bajo el moderno motor \textbf{Vite}, lo que optimiza radicalmente los tiempos de compilación y carga frente a alternativas monolíticas tradicionales como Webpack.
+\subsection{Configuración centralizada (Pydantic Settings)}
 
-\subsection{Sistema de diseño: \textit{Glassmorphism} y temas dinámicos}
-
-Para ofrecer una experiencia de usuario (UX) inmersiva y de calidad \textit{Enterprise}, se ha prescindido de librerías de estilos genéricas (como Bootstrap), implementando en su lugar un sistema de diseño propietario desarrollado desde cero con CSS puro. La estética visual se inspira en la técnica \textbf{Glassmorphism}, popularizada en los ecosistemas operativos modernos como macOS y Windows 11.
-
-Técnicamente, este efecto se logra aplicando propiedades avanzadas de desenfoque de fondo (\textit{backdrop-filter: blur()}) combinadas con tarjetas semitransparentes. Esta composición genera una ilusión óptica de jerarquía y profundidad sobre un tapiz de colores vivos subyacentes. 
-
-Asimismo, el sistema implementa soporte nativo para el \textbf{Modo Oscuro} (\textit{Dark Mode}). Mediante el uso de variables CSS dinámicas inyectadas como atributos de datos HTML (`[data-theme="dark"]`), el sistema recalcula toda la paleta de colores y sombreados instantáneamente, garantizando el confort visual durante su uso prolongado en los despachos de la administración pública.
-
-\subsection{Visualización de datos analíticos}
-
-La complejidad real del frontend radica en la asimilación del volumen de datos del backend. Para la renderización de métricas y proyecciones, se ha integrado la potente librería de gráficos declarativos \textbf{Recharts}. Los datos masivos procedentes de la API —como la distribución del riesgo por ciclos formativos o la pirámide de impacto del nivel educativo parental— se inyectan en componentes dinámicos encapsulados bajo el componente propietario \textit{GlassCard}, asegurando una presentación limpia y libre de ruidos visuales.
-
-\section{Despliegue y enrutamiento web (Nginx)}
-
-El punto de entrada único de toda la arquitectura técnica frente al exterior se gestiona mediante un contenedor con \textbf{Nginx}, que actúa simultáneamente como servidor web de alto rendimiento y como \textit{Proxy Inverso}.
-
-\subsection{Arquitectura de interceptación de tráfico}
-
-El contenedor Nginx es la única pieza del ecosistema que expone sus puertos directamente a la red de la administración (típicamente los puertos HTTP 80 y HTTPS 443). Cuando un usuario accede al sistema desde su navegador, el comportamiento de enrutamiento se bifurca según la ruta (\textit{path}) solicitada:
+Toda la configuración sensible se externaliza mediante variables de entorno, leídas por la clase Settings en app/core/config.py con pydantic-settings. No existe ningún valor hardcodeado de credenciales, hosts ni claves secretas en el código fuente. Las variables relevantes son:
 
 \begin{itemize}
-    \item \textbf{Tráfico Estático (Ruta \textit{/}):} Si la ruta solicitada corresponde a la carga inicial de la aplicación, Nginx intercepta la petición y sirve directamente de su memoria los ficheros compilados de producción (HTML, CSS y JS minimizados) generados por el contenedor de React, maximizando la velocidad de acceso.
-    \item \textbf{Tráfico API (Ruta \textit{/api/*}):} Si la aplicación React realiza una solicitud asíncrona de datos, Nginx actúa como un túnel transparente de proxy inverso. Captura la petición web, la reescribe y la deriva al contenedor interno de FastAPI que yace escondido en la red de Docker. Posteriormente recoge el JSON de respuesta y se lo entrega al cliente original.
+    \item \textbf{Base de datos:} DB\_DWH\_HOST, DB\_DWH\_PORT, DB\_DWH\_DB, DB\_DWH\_USER, DB\_DWH\_PASS. Se ensamblan en la propiedad DATABASE\_URI con el dialecto postgresql+psycopg2.
+    \item \textbf{JWT:} JWT\_SECRET\_KEY, JWT\_ALGORITHM (por defecto HS256).
+    \item \textbf{CORS:} CORS\_ORIGINS, parseable como lista JSON o cadena separada por comas.
+    \item \textbf{Proyecto:} PROJECT\_NAME y API\_V1\_STR (valor por defecto /api/v1).
 \end{itemize}
 
-Esta arquitectura en capas no solo representa una práctica estandarizada de máxima eficiencia en la industria DevOps actual, sino que aísla el delicado servidor de lógica (FastAPI) y la base de datos de la red pública, blindando la aplicación contra ataques directos e intentos de explotación.
+\subsection{Persistencia dual: esquemas app y dwh}
+
+El backend se conecta a la misma instancia PostgreSQL (postgres-dwh) que alberga el Datamart, pero opera sobre \textbf{dos esquemas lógicamente separados} mediante un patrón de ORM dual:
+
+\begin{itemize}
+    \item \textbf{Esquema app (lectura/escritura):} Contiene la tabla users, gestionada por Alembic. La clase base en app/models/base.py fija metadata = MetaData(schema="app"). Es el único ámbito donde FastAPI realiza operaciones de inserción, actualización o borrado.
+    \item \textbf{Esquema dwh (solo lectura):} Mapea las siete dimensiones y dos tablas de hechos del Datamart. La clase declarativa independiente DWHBase en app/models/datamart.py fija \_\_table\_args\_\_ = \{"schema": "dwh"\} y no comparte metadata con base, de modo que Alembic no intente gestionar estas tablas.
+\end{itemize}
+
+\subsection{Motor de base de datos y pool de conexiones}
+
+La configuración en app/core/database.py utiliza SQLAlchemy~2.0 en \textbf{modo síncrono} con psycopg2-binary. El \textit{engine} se instancia con los siguientes parámetros de rendimiento:
+
+\begin{itemize}
+    \item pool\_size=10: conexiones persistentes en el pool.
+    \item max\_overflow=20: conexiones adicionales bajo picos de demanda.
+    \item pool\_pre\_ping=True: verificación de conexión antes de cada uso.
+    \item pool\_recycle=1800: reciclaje de conexiones cada 30 minutos.
+\end{itemize}
+
+La dependencia get\_db() genera una sesión SessionLocal por petición HTTP y garantiza su cierre en un bloque finally, evitando fugas de conexiones bajo carga concurrente.
+
+\subsection{Migraciones con Alembic}
+
+Alembic gestiona exclusivamente el esquema app. El fichero alembic/env.py filtra los esquemas mediante include\_name, ejecuta CREATE SCHEMA IF NOT EXISTS app antes de aplicar migraciones y almacena la tabla de versiones en app.alembic\_version. La migración inicial crea la tabla app.users con los campos: id, email (único, indexado), hashed\_password, role, created\_at y updated\_at.
+
+\subsection{Autenticación y autorización}
+
+\subsubsection{Flujo JWT}
+
+La autenticación sigue el esquema \textit{Bearer Token}. La Figura~\ref{fig:jwt_flow} muestra la secuencia completa desde el login hasta la inyección automática del token en peticiones protegidas:
+
+\begin{enumerate}
+    \item El cliente envía POST /api/v1/auth/login con email y password.
+    \item El backend busca al usuario en app.users, verifica la contraseña con bcrypt (vía passlib) y genera un JWT firmado con HS256.
+    \item Las peticiones subsiguientes incluyen la cabecera Authorization: Bearer <token>.
+    \item La dependencia get\_current\_user decodifica el token, valida firma y expiración, y recupera el usuario de la base de datos.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/fig_jwt_flow.png}
+    \caption{Diagrama de secuencia del flujo de autenticación JWT: fase de login (generación y almacenamiento del token) y fase de petición protegida (inyección del token por el interceptor Axios y validación por get\_current\_user).}
+    \label{fig:jwt_flow}
+\end{figure}
+
+\subsubsection{Roles y permisos}
+
+Existen dos roles: admin y viewer (valor por defecto al crear usuarios). La dependencia get\_current\_admin\_user restringe las operaciones de gestión de usuarios al rol admin. Además, el módulo crud\_user.py implementa reglas de protección del superadministrador (usuario con id=1):
+
+\begin{itemize}
+    \item Solo el superadmin puede crear, modificar o eliminar otros usuarios con rol admin.
+    \item El superadmin no puede ser eliminado ni degradado a viewer.
+    \item Otros administradores no pueden modificar la cuenta del superadmin.
+\end{itemize}
+
+El script app/seed.py crea el usuario inicial con email y contraseña configurable y rol admin, forzando id=1.
+
+\subsection{Arquitectura en capas del backend}
+
+El código del backend sigue una separación estricta de responsabilidades en cuatro capas, cuya organización se refleja en la Figura~\ref{fig:diagrama_clases_backend}:
+
+\begin{itemize}
+    \item \textbf{Routers} (app/routers/v1/): Definen los endpoints HTTP, validan parámetros de entrada con Query de FastAPI y delegan en la capa CRUD. Existen tres routers: auth.py, dashboard.py y users.py.
+    \item \textbf{Schemas} (app/schemas/): Modelos Pydantic que definen la forma de las peticiones y respuestas JSON. Actúan como contrato tipado entre la API y el frontend.
+    \item \textbf{CRUD} (app/crud/): Contiene la lógica SQL pesada. crud\_dashboard.py concentra todas las agregaciones analíticas; crud\_user.py gestiona el ciclo de vida de usuarios.
+    \item \textbf{Models} (app/models/): Mapeo ORM de las tablas de ambos esquemas.
+\end{itemize}
+
+\subsection{Diagrama de clases del backend}
+
+La Figura~\ref{fig:diagrama_clases_backend} resume la arquitectura orientada a capas del servidor FastAPI, distinguiendo tres niveles que se corresponden con los paquetes reales del repositorio:
+
+\begin{itemize}
+    \item \textbf{Interfaces REST} (app/routers/v1/): Los tres APIRouter exponen los \textit{endpoints} HTTP. Cada función de ruta valida los parámetros de entrada, inyecta las dependencias de autenticación (get\_current\_user) y delega en la capa inferior. Los modelos Pydantic de app/schemas/ actúan como contrato de serialización JSON (peticiones y respuestas), generando automáticamente la documentación OpenAPI.
+    \item \textbf{Objetos de negocio} (app/crud/ y app/core/security.py): Concentran la lógica analítica y las reglas de acceso. crud\_dashboard.py implementa las agregaciones SQL, los umbrales de riesgo, la comparativa T0/T-1 y el índice de riesgo por centro; crud\_user.py gestiona el ciclo de vida de usuarios y las restricciones del superadministrador. El módulo security.py encapsula el hashing bcrypt y la emisión/validación de JWT.
+    \item \textbf{Acceso a datos} (app/models/ y app/core/database.py): SQLAlchemy mapea las tablas de los esquemas app (User) y dwh (dimensiones y hechos del Datamart). Un único engine y la factoría SessionLocal proveen sesiones transaccionales por petición mediante get\_db().
+\end{itemize}
+
+El flujo de una petición autenticada al dashboard sigue la cadena: \textit{Router} $\rightarrow$ \textit{CRUD} $\rightarrow$ \textit{Session}/\textit{Model} $\rightarrow$ PostgreSQL. La respuesta se valida contra el \textit{Schema} Pydantic correspondiente antes de devolverse al cliente React.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/diagrama_backend.pdf}
+    \caption{Diagrama de clases simplificado del backend FastAPI: interfaces REST, lógica de negocio y acceso a datos.}
+    \label{fig:diagrama_clases_backend}
+\end{figure}
+
+\subsection{Motor de consultas analíticas (crud\_dashboard.py)}
+
+Todas las consultas del dashboard parten de la función interna \_base\_query(), que realiza un JOIN de fact\_rendimiento\_anual con las seis dimensiones necesarias: dim\_estudiante, dim\_centro, dim\_curso, dim\_tiempo, dim\_adaptacion y dim\_demografia\_familiar. La Figura~\ref{fig:star_join} ilustra este modelo en estrella, detallando las claves primarias y foráneas que articulan cada JOIN. Los identificadores de las claves foráneas en la tabla de hechos se castean a Integer en los JOIN para compatibilizar tipos BigInteger con las claves subrogadas de las dimensiones.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/fig_star_join.png}
+    \caption{Modelo en estrella: JOINs entre fact\_rendimiento\_anual y las seis dimensiones del datamart utilizados como base de todas las consultas analíticas del backend.}
+    \label{fig:star_join}
+\end{figure}
+
+\subsubsection{Filtros dinámicos}
+
+La función \_apply\_filters() acepta cuatro parámetros opcionales como listas, permitiendo selección múltiple en el frontend mediante query params repetidos (ej.\ ?cod\_centro=A\&cod\_centro=B):
+
+\begin{itemize}
+    \item cod\_centro: filtra por dim\_centro.cod\_centro.
+    \item curso\_academico: filtra por dim\_tiempo.curso\_academico.
+    \item cod\_ciclo: filtra por dim\_curso.cod\_ciclo.
+    \item tipo\_centro: filtra por dim\_centro.tipo.
+\end{itemize}
+
+\subsubsection{Umbrales de riesgo dinámicos}
+
+La función get\_dynamic\_risk\_thresholds() calcula los umbrales de clasificación bajo, medio y alto a partir del máximo histórico de riesgo\_abandono en el Datamart: el umbral medio corresponde al 25\% del máximo y el alto al 50\%. Esto evita umbrales fijos que quedarían obsoletos si el ETL recalcula las ponderaciones.
+
+Para el riesgo socioeconómico se emplean constantes fijas definidas en el módulo: RIESGO\_SOCIO\_ALTO\_UMBRAL = 16 y RIESGO\_SOCIO\_MEDIO\_UMBRAL = 5, alineadas con las reglas de negocio del Capítulo~\ref{chap:diseno_datamart}.
+
+\subsubsection{Comparativa interanual (T0 vs T-1)}
+
+Las funciones de KPIs (get\_micro\_kpis) y ranking de centros (get\_centros\_ranking) implementan una lógica de comparación temporal. Si el cliente no especifica curso académico, se toma el más reciente del Datamart. A partir de ese año (T0), la función auxiliar get\_a1() calcula el curso anterior (T-1), soportando formatos 2023-2024, 23/24 o años simples. Los contadores se agrupan por año y se devuelven aplanados con sufijo \_a1 para el periodo anterior.
+
+\subsubsection{Índice de riesgo por centro}
+
+La función get\_centros\_ranking() agrega diez métricas de alerta por centro educativo (riesgo alto, repetidores, suspensos en primaria, brecha digital, etc.), calcula el porcentaje de alumnos afectados en cada una y determina la mediana de cada métrica entre todos los centros. El \textbf{índice de riesgo del centro} (indice\_riesgo\_centro) es el número de métricas cuyo porcentaje supera la mediana autonómica (escala 0--10). Los centros se ordenan de forma descendente por este índice.
+
+Adicionalmente, el backend geocodifica cada centro mediante la librería geopy (geocodificador Nominatim de OpenStreetMap), usando la pareja código postal + ciudad. Las coordenadas se cachean en memoria a nivel de módulo (\_GEO\_CACHE) para evitar llamadas repetidas a la API externa.
+
+\subsection{Catálogo de endpoints}
+
+La Figura~\ref{tab:endpoints_dashboard} recoge el inventario completo de endpoints expuestos por el router dashboard.py. Todos requieren autenticación JWT salvo POST /auth/login.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/tabla_endpoints.png}
+    \caption{Catálogo de endpoints de la API del dashboard (/api/v1).}
+    \label{tab:endpoints_dashboard}
+\end{figure}
+
+El endpoint GET /dashboard/micro/students admite, además de los cuatro filtros globales, parámetros de alerta booleanos (alerta\_brecha\_digital, alerta\_renta\_baja, alerta\_riesgo\_alto, etc.), ordenación configurable (sort\_by, sort\_desc) y paginación (page, page\_size, máximo 100 registros por página).
+
+La convención de rutas alinea el prefijo de cada endpoint con la vista del frontend que lo consume: /macro/* para el \textit{MacroDashboard} y /micro/* para el \textit{MicroDashboard}, más /filters como recurso compartido.
+
+% =========================================================================
+\section{Frontend (React y Vite)}
+% =========================================================================
+
+La interfaz del dashboard reside en el directorio /frontend y se ha desarrollado como una \textbf{Single Page Application (SPA)} con React~18~\cite{React_Docs} y el bundler \textbf{Vite}~6. La elección de Vite frente a herramientas como Webpack se fundamenta en su arranque casi instantáneo en desarrollo (basado en ESM nativo) y en la generación de bundles de producción optimizados mediante Rollup.
+
+\subsection{Pipeline de construcción y despliegue}
+
+El Dockerfile del frontend implementa un \textbf{build multi-etapa}, cuyas fases se ilustran en la Figura~\ref{fig:build_pipeline}:
+
+\begin{enumerate}
+    \item \textbf{Etapa build:} Imagen node:20-alpine. Instala dependencias con npm install y ejecuta npm run build, generando los artefactos estáticos en /app/dist.
+    \item \textbf{Etapa de producción:} Imagen node:20-alpine limpia. Instala globalmente el paquete serve y ejecuta serve -s dist -l 80, sirviendo la SPA con \textit{fallback} a index.html para las rutas del cliente.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/fig_build_pipeline.png}
+    \caption{Pipeline de build y despliegue del frontend: desde el código fuente JSX hasta el servicio de ficheros estáticos a través del proxy Nginx.}
+    \label{fig:build_pipeline}
+\end{figure}
+
+Es importante señalar que el fichero frontend/nginx.conf existe en el repositorio como configuración alternativa de referencia, pero \textbf{no se utiliza} en el contenedor de producción actual, que delega el servicio de ficheros estáticos a serve.
+
+\subsection{Dependencias del proyecto}
+
+Las dependencias de producción declaradas en package.json son:
+
+\begin{itemize}
+    \item \textbf{axios} (v1.7.9): Cliente HTTP con soporte de interceptores para la inyección automática del JWT.
+    \item \textbf{react-router-dom} (v6.28.0): Enrutamiento del lado del cliente.
+    \item \textbf{recharts} (v2.13.3): Librería declarativa de gráficos basada en D3.
+    \item \textbf{leaflet} + \textbf{react-leaflet}: Mapa interactivo para la geolocalización de centros.
+    \item \textbf{lucide-react}: Iconografía vectorial utilizada en tarjetas KPI y navegación.
+\end{itemize}
+
+\subsection{Arquitectura del código fuente}
+
+El directorio src/ se organiza en los siguientes módulos técnicos, cuya estructura se resume en la Figura~\ref{fig:frontend_tree}:
+
+\begin{itemize}
+    \item \textbf{services/api.js:} Instancia central de Axios con baseURL configurable vía VITE\_API\_URL (por defecto /api/v1). Implementa un interceptor de peticiones que inyecta el JWT desde localStorage y un interceptor de respuestas que redirige a /login ante errores 401.
+    \item \textbf{api/dashboard.js:} Capa única de acceso a la API del dashboard. Centraliza la serialización de filtros y expone una función por endpoint (getMacroCentros, getMicroKpis, etc.), evitando rutas duplicadas en los componentes.
+    \item \textbf{context/:} Dos contextos React para estado global:
+    \begin{itemize}
+        \item AuthContext: Gestiona token, usuario autenticado, login/logout y validación inicial del token contra GET /auth/me.
+        \item DashboardContext: Almacena el tema visual (light/dark), los filtros globales y el estado de alertas activas para \textit{cross-filtering}.
+    \end{itemize}
+    \item \textbf{pages/:} Tres vistas autenticadas: MacroDashboard, MicroDashboard y UserManagement, más LoginPage.
+    \item \textbf{components/:} Componentes reutilizables organizados por dominio: charts/ (gráficos Recharts), dashboard/ (mapa y tarjetas de centro), layout/ (sidebar y cabecera), ui/ (tarjetas KPI, badges, tabla de alumnos) y users/ (modal de gestión).
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.78\textwidth]{imaxes/fig_frontend_tree.png}
+    \caption{Estructura de directorios del frontend (src/): separación en pages/ (vistas), components/ (UI reutilizable), context/ (estado global) y services/ (capa de datos).}
+    \label{fig:frontend_tree}
+\end{figure}
+
+\subsection{Enrutamiento y protección de rutas}
+
+El fichero App.jsx define la estructura de rutas con react-router-dom, cuya jerarquía de protección se corresponde con la separación de módulos mostrada en la Figura~\ref{fig:frontend_tree}:
+
+\begin{itemize}
+    \item /login: Página de autenticación. Redirige a /macro si ya existe sesión.
+    \item / (protegida): Layout principal (AppLayout) con sidebar y área de contenido (<Outlet />). Requiere autenticación; si no hay token, redirige a /login.
+    \begin{itemize}
+        \item /macro: Vista de análisis autonómico (ranking de centros, mapa, gráficos macro).
+        \item /micro: Vista de análisis granular (KPIs, gráficos detallados, tabla de alumnos).
+        \item /users: Gestión de usuarios (accesible según rol).
+    \end{itemize}
+\end{itemize}
+
+El árbol de componentes se envuelve en ErrorBoundary para capturar errores de renderizado sin derribar la aplicación completa.
+
+\subsection{Sistema de diseño (CSS nativo)}
+
+El frontend no utiliza frameworks de componentes externos (Bootstrap, Material UI, etc.). El sistema de diseño está implementado íntegramente en CSS puro mediante variables personalizadas en index.css, siguiendo una estética inspirada en el \textit{Glassmorphism} de los sistemas operativos modernos. Estas variables se aplican de forma transversal a todos los componentes del directorio components/ visible en la Figura~\ref{fig:frontend_tree}:
+
+\begin{itemize}
+    \item Variables de color semánticas: --color-primary, --color-danger, --color-success, --color-warning.
+    \item Efectos de cristal: --glass-blur (blur(24px)), --glass-border y --glass-shadow.
+    \item Soporte de tema oscuro mediante el atributo [data-theme="dark"] en el elemento <html>, alternado por DashboardContext y persistido en localStorage.
+    \item Tipografía: familia \textit{Inter} cargada desde Google Fonts.
+\end{itemize}
+
+\subsection{Integración con la API}
+
+Cada componente de gráfico consume la API exclusivamente a través de api/dashboard.js, pasando los filtros globales desde DashboardContext. Este flujo de datos, desde el interceptor Axios hasta el endpoint del backend, queda representado en la Figura~\ref{fig:jwt_flow} para el caso de peticiones autenticadas. En desarrollo local, vite.config.js configura un proxy de /api hacia http://api:8000, evitando problemas de CORS durante el desarrollo con npm run dev (puerto 5173).
+
+% =========================================================================
+\section{Proxy inverso y despliegue (Nginx)}
+% =========================================================================
+
+El contenedor nginx constituye el \textbf{único punto de entrada} de la aplicación web hacia el exterior. Su configuración reside en nginx/nginx.conf y se despliega mediante una imagen nginx:alpine personalizada.
+
+\subsection{Terminación TLS y redirección HTTP}
+
+Nginx escucha en dos puertos, mapeados al host mediante las variables NGINX\_HTTP\_PORT y NGINX\_HTTPS\_PORT del fichero .env:
+
+\begin{itemize}
+    \item \textbf{Puerto 80 (HTTP):} Redirige permanentemente (código 301) todas las peticiones a HTTPS, preservando el host y la ruta original.
+    \item \textbf{Puerto 443 (HTTPS):} Servidor principal con certificados TLS montados desde el volumen ./nginx/ssl (nginx.crt y nginx.key). Se habilitan los protocolos TLSv1.2 y TLSv1.3 con cifrados seguros.
+\end{itemize}
+
+\subsection{Reglas de enrutamiento}
+
+El fichero de configuración define dos \textit{upstreams} internos de Docker:
+
+\begin{itemize}
+    \item frontend $\rightarrow$ frontend:80 (contenedor React/serve).
+    \item api $\rightarrow$ api:8000 (contenedor FastAPI/Uvicorn).
+\end{itemize}
+
+Las reglas de location implementan el siguiente comportamiento, cuyo flujo de decisión se detalla en la Figura~\ref{fig:nginx_routing}:
+
+\begin{enumerate}
+    \item /health: Endpoint de \textit{health check} propio de Nginx. Devuelve 200 healthy sin acceder a los backends. Utilizado por el healthcheck de Docker Compose.
+    \item /api/: \textit{Proxy pass} transparente al upstream api. Se reenvían las cabeceras X-Real-IP, X-Forwarded-For y X-Forwarded-Proto. Los \textit{timeouts} de conexión, envío y lectura se fijan en 60 segundos para tolerar consultas analíticas pesadas.
+    \item /ws/: Soporte de \textit{WebSocket} con cabeceras Upgrade y Connection: upgrade (preparado para futuras extensiones en tiempo real).
+    \item Ficheros estáticos (.js, .css, imágenes, fuentes): Se proxifican al contenedor frontend con cabeceras de caché de un año (Cache-Control: public, immutable).
+    \item / (resto de rutas): Se proxifican al contenedor frontend, que resuelve el \textit{fallback} SPA hacia index.html.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.72\textwidth]{imaxes/fig_nginx_routing.png}
+    \    caption{Diagrama de flujo de decisión del proxy inverso Nginx: enrutamiento según el path de la petición hacia /health, /api/, assets estáticos o la SPA React.}
+    \label{fig:nginx_routing}
+\end{figure}
+
+\subsection{Optimizaciones de rendimiento}
+
+Nginx aplica compresión gzip a tipos MIME relevantes (JSON, JavaScript, CSS, SVG) con nivel de compresión~6 y umbral mínimo de 256 bytes. El tamaño máximo del cuerpo de petición se limita a 20\,MB (client\_max\_body\_size). Estas optimizaciones complementan el flujo de enrutamiento descrito en la Figura~\ref{fig:nginx_routing}.
+
+\subsection{Topología de red resultante}
+
+Desde la perspectiva de un cliente externo, la topología de acceso es la siguiente (véase también la Figura~\ref{fig:diagrama_nginx_deploy} al inicio del capítulo):
+
+\begin{itemize}
+    \item El navegador se conecta exclusivamente a Nginx (HTTPS).
+    \item Las peticiones a /api/v1/* son reenviadas internamente a FastAPI, que consulta PostgreSQL (postgres-dwh) y devuelve JSON.
+    \item Las peticiones a cualquier otra ruta reciben el bundle estático de React desde el contenedor frontend.
+    \item Ni la API, ni el frontend, ni las bases de datos exponen puertos directamente al host en la configuración de producción con proxy.
+\end{itemize}

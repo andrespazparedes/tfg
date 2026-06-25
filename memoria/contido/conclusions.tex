@@ -1,9 +1,48 @@
-﻿\chapter{Conclusións}
-\label{chap:conclusions}
+\chapter{Conclusiones}
+\label{chap:conclusiones}
 
-\lettrine{D}{erradeiro} capítulo da memoria, onde se presentará a
-situación final do traballo, as leccións aprendidas, a relación coas
-competencias da titulación en xeral e a mención en particular,
-posibles liñas futuras,\dots
+\lettrine{A}{l} término del proyecto, el sistema planteado en la introducción ha sido implementado en su totalidad. Este capítulo recoge el balance del trabajo realizado, las lecciones aprendidas durante su desarrollo y las posibles líneas de evolución futura.
 
-\Blindtext
+% =========================================================================
+\section{Cumplimiento de objetivos}
+% =========================================================================
+
+El objetivo principal del proyecto, consistente en crear un almacén de datos que integrara información procedente de múltiples fuentes institucionales y exponerla mediante un cuadro de mando accionable para los gestores públicos, ha sido alcanzado en su totalidad. A continuación se evalúa el grado de consecución de cada uno de los objetivos específicos enunciados en la introducción.
+
+El primer objetivo, la \textbf{simulación de fuentes de datos}, se materializó en tres bases de datos PostgreSQL que replican fielmente los dominios de un sistema educativo autonómico real: expedientes académicos, adaptaciones curriculares y encuestas socioeconómicas familiares. La generación de datos sintéticos con distribuciones estadísticas realistas permitió validar el sistema en condiciones representativas sin depender de datos sensibles reales.
+
+El segundo objetivo, el \textbf{diseño del almacén de datos}, se resolvió mediante un modelo en estrella con dos tablas de hechos (\textit{fact\_rendimiento\_anual} y \textit{fact\_calificaciones}) y siete dimensiones, siguiendo la metodología de Ralph Kimball. Este diseño permite ejecutar consultas analíticas multidimensionales de forma eficiente y constituye la base sobre la que se calculan todos los KPIs del sistema.
+
+El tercer objetivo, el \textbf{diseño de los procesos ETL}, se implementó mediante diez pipelines y tres workflows de orquestación en Apache Hop. El proceso más relevante desde el punto de vista de la lógica de negocio es el cálculo del índice de riesgo de abandono, que integra factores académicos, socioeconómicos y de necesidades educativas especiales en una puntuación normalizada entre 0 y 10, con ventanas de tiempo que permiten comparativas interanuales.
+
+El cuarto objetivo, el \textbf{desarrollo del backend}, se concretó en una API RESTful con FastAPI que expone veinte endpoints organizados en cuatro dominios funcionales (autenticación, filtros, vista Macro y vista Micro), protegidos mediante autenticación JWT y desplegados en un contenedor Docker junto al resto del ecosistema.
+
+El quinto y último objetivo, la \textbf{creación del cuadro de mando}, se cumplió con la implementación de una aplicación React que ofrece dos vistas complementarias. La vista Macro permite a los técnicos de la administración identificar qué centros concentran mayor riesgo a escala autonómica. La vista Micro actúa como herramienta de diagnóstico causal, desagregando los factores que explican el índice de riesgo de los centros seleccionados. El mecanismo de \textit{drilldown} entre ambas vistas, articulado mediante un contexto de filtros globales, constituye el flujo de trabajo central de la herramienta y responde directamente a la necesidad de fundamentar con evidencia objetiva las decisiones de asignación de recursos.
+
+% =========================================================================
+\section{Lecciones aprendidas}
+% =========================================================================
+
+El desarrollo de este proyecto ha proporcionado una experiencia práctica integral en el ciclo de vida completo de un sistema de Inteligencia de Negocios, desde la ingesta de datos hasta la visualización analítica, que difícilmente puede adquirirse de forma teórica.
+
+Desde el punto de vista técnico, la principal lección aprendida es la importancia del \textbf{diseño dimensional como contrato arquitectónico}. Las decisiones tomadas en la fase de modelado del Datamart condicionan directamente la complejidad de los procesos ETL, la expresividad de las consultas SQL y, en última instancia, la velocidad de respuesta de la API. Un modelo en estrella bien diseñado simplifica radicalmente todas las capas superiores del sistema.
+
+En cuanto a los procesos ETL, la adopción de \textbf{Apache Hop} ha demostrado ser una elección acertada para un proyecto de esta naturaleza. Su modelo visual de pipelines facilita la comprensión y el mantenimiento de transformaciones complejas, y su soporte nativo para contenedores Docker lo hace especialmente adecuado para arquitecturas modernas. No obstante, la curva de aprendizaje inicial es pronunciada, y la depuración de errores en pipelines encadenados requiere una estrategia sistemática de validación por etapas.
+
+La arquitectura \textbf{desacoplada cliente-servidor} ha demostrado su valor a lo largo del desarrollo iterativo: la posibilidad de modificar los umbrales de alerta en el backend o añadir nuevos endpoints sin afectar al frontend, y viceversa, ha agilizado significativamente el ciclo de refinamiento de la lógica de negocio.
+
+Finalmente, la decisión de utilizar exclusivamente \textbf{tecnologías Open Source} ha validado que es posible construir un sistema de BI de nivel profesional sin incurrir en costes de licenciamiento, lo que refuerza la viabilidad de este tipo de soluciones en el contexto de la administración pública, donde la transparencia, la auditabilidad y la sostenibilidad económica son requisitos fundamentales.
+
+% =========================================================================
+\section{Líneas de trabajo futuro}
+% =========================================================================
+
+El sistema desarrollado constituye una base sólida y extensible sobre la que pueden plantearse diversas líneas de evolución que ampliarían su alcance y su impacto.
+
+La mejora más inmediata y de mayor impacto sería la \textbf{integración con fuentes de datos reales}. El sistema ha sido diseñado y validado con datos sintéticos, pero su arquitectura ETL está preparada para conectarse a los sistemas de información reales de una administración educativa autonómica con modificaciones mínimas en la capa de extracción.
+
+Una segunda línea de evolución relevante sería la incorporación de \textbf{modelos predictivos de aprendizaje automático}. El índice de riesgo actual se calcula mediante reglas heurísticas ponderadas. La sustitución o complementación de este cálculo por un modelo supervisado (por ejemplo, una regresión logística o un árbol de decisión entrenado sobre datos históricos reales) permitiría mejorar la precisión de las alertas tempranas y reducir los falsos positivos.
+
+Desde el punto de vista de la usabilidad, sería valioso incorporar un \textbf{módulo de exportación de informes} que permitiera a los técnicos generar documentos PDF o Excel a partir de las vistas activas, facilitando la elaboración de informes institucionales sin necesidad de herramientas externas.
+
+Por último, la \textbf{automatización del proceso ETL} mediante un orquestador de tareas (como Apache Airflow) permitiría que el Datamart se actualizara de forma periódica y desatendida al inicio de cada curso académico, eliminando la necesidad de ejecución manual y convirtiendo el sistema en una solución verdaderamente operacional.
