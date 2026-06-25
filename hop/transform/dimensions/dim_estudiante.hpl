@@ -180,7 +180,7 @@
     <start_date_alternative>pipeline_start</start_date_alternative>
     <start_date_field_name/>
     <table>dim_estudiante</table>
-    <unknown_row_check_disabled>N</unknown_row_check_disabled>
+    <unknown_row_check_disabled>Y</unknown_row_check_disabled>
     <update>Y</update>
     <useBatch>N</useBatch>
     <use_start_date_alternative>N</use_start_date_alternative>
