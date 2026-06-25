@@ -27,6 +27,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     description="Backend analítico del Dashboard Educativo (TFG).",
+    redirect_slashes=False,
 )
 
 # ── CORS ──────────────────────────────────────────────────────────────

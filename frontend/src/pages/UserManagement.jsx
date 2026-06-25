@@ -27,6 +27,7 @@ export const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
+      setError('');
       setLoading(true);
       const data = await getUsers();
       setUsers(data);

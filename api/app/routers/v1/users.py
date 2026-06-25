@@ -11,7 +11,7 @@ from app.crud import crud_user
 router = APIRouter()
 
 @router.get(
-    "/",
+    "",
     response_model=List[UserResponse],
     summary="Listar usuarios",
     description="Obtiene la lista de todos los usuarios. Solo accesible para administradores."
@@ -26,7 +26,7 @@ def read_users(
     return users
 
 @router.post(
-    "/",
+    "",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Crear usuario",
