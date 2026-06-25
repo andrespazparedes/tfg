@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Users, AlertOctagon, TrendingDown, BookX, RefreshCcw, Home, History, FileWarning, Puzzle, MonitorX, AlertCircle } from 'lucide-react';
 import { useDashboardContext } from '../context/DashboardContext';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../services/api';
+import { getMicroKpis } from '../api/dashboard';
 import { PageHeader } from '../components/layout/PageHeader';
 import { KPICard } from '../components/ui/KPICard';
 import { Card } from '../components/ui/Card';
@@ -38,13 +38,8 @@ export const MicroDashboard = () => {
       setLoading(true);
       try {
         // Convertimos el estado de filtros en Query Params (ej: ?cod_centro=123)
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/overview/kpis', { params });
-        setKpis(response.data);
+        const data = await getMicroKpis(filters);
+        setKpis(data);
       } catch (error) {
         console.error("Error cargando KPIs:", error);
       } finally {

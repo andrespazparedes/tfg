@@ -11,7 +11,7 @@ import {
   Area
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMacroTrend } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -44,13 +44,8 @@ export const TendenciaGlobalChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/macro/charts/trend', { params });
-        const sortedData = response.data.data.sort((a, b) => a.curso_academico.localeCompare(b.curso_academico));
+        const response = await getMacroTrend(filters);
+        const sortedData = response.data.sort((a, b) => a.curso_academico.localeCompare(b.curso_academico));
         setData(sortedData);
       } catch (error) {
         console.error("Error cargando TendenciaGlobalChart:", error);

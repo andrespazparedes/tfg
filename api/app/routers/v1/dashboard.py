@@ -1,6 +1,11 @@
 """
 Endpoints analíticos del Dashboard Educativo.
 
+Convención de rutas:
+- ``/dashboard/filters`` — catálogo de filtros (compartido).
+- ``/dashboard/macro/*``  — visión autonómica (centros, KPIs por centro).
+- ``/dashboard/micro/*``  — visión granular (alumnos, gráficos detallados).
+
 Todos los endpoints:
 - Están protegidos por JWT (``Depends(get_current_user)``).
 - Delegan la lógica SQL pesada a la capa CRUD.
@@ -32,244 +37,62 @@ from app.schemas.dashboard import (
     TrendMacroResponse,
     RiskByTypeResponse,
     MacroKPIsResponse,
+    FiltersResponse,
+    CentroListResponse,
 )
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard Analítico"])
 
 
 # =====================================================================
-# 1. KPIs GLOBALES
+# FILTROS (compartidos)
 # =====================================================================
 
 @router.get(
-    "/overview/kpis",
-    response_model=KPIsResponse,
-    summary="KPIs globales absolutos (T0 y T-1 aplanados)",
+    "/filters",
+    response_model=FiltersResponse,
+    summary="Filtros dinámicos para el dashboard",
 )
-def get_kpis(
-    cod_centro: Optional[List[str]] = Query(None),
+def get_filters(
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> FiltersResponse:
+    data = crud_dashboard.get_dynamic_filters(db)
+    return FiltersResponse(**data)
+
+
+# =====================================================================
+# MACRO — visión autonómica
+# =====================================================================
+
+@router.get(
+    "/macro/kpis",
+    response_model=MacroKPIsResponse,
+    summary="KPIs agregados por centro (visión macro)",
+)
+def get_macro_kpis(
     curso_academico: Optional[List[str]] = Query(None),
     cod_ciclo: Optional[List[str]] = Query(None),
     tipo_centro: Optional[List[str]] = Query(None),
     db: Session = Depends(get_db),
     _current_user: User = Depends(get_current_user),
-) -> KPIsResponse:
-    data = crud_dashboard.get_overview_kpis(
-        db, 
-        cod_centro=cod_centro, 
-        curso_academico=curso_academico, 
-        cod_ciclo=cod_ciclo,
-        tipo_centro=tipo_centro
+):
+    return crud_dashboard.get_macro_kpis(
+        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro
     )
-    return KPIsResponse(**data)
-
-
-# =====================================================================
-# 2. GRÁFICOS
-# =====================================================================
-
-@router.get(
-    "/overview/charts/risk-distribution",
-    response_model=RiskDistributionResponse,
-    summary="Distribución de riesgo de abandono",
-)
-def get_risk_distribution(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> RiskDistributionResponse:
-    data = crud_dashboard.get_risk_distribution(
-        db, 
-        cod_centro=cod_centro, 
-        curso_academico=curso_academico, 
-        cod_ciclo=cod_ciclo,
-        tipo_centro=tipo_centro
-    )
-    return RiskDistributionResponse(data=data)
 
 
 @router.get(
-    "/overview/charts/risk-by-cycle",
-    response_model=RiskByCycleResponse,
-    summary="Media de riesgo por ciclo educativo",
-)
-def get_risk_by_cycle(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> RiskByCycleResponse:
-    data = crud_dashboard.get_risk_by_cycle(
-        db, 
-        cod_centro=cod_centro, 
-        curso_academico=curso_academico, 
-        cod_ciclo=cod_ciclo,
-        tipo_centro=tipo_centro
-    )
-    return RiskByCycleResponse(data=data)
-
-
-@router.get(
-    "/overview/charts/trend",
-    response_model=TrendResponse,
-    summary="Evolución histórica de los últimos 5 años",
-)
-def get_trend(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> TrendResponse:
-    data = crud_dashboard.get_trend(
-        db, 
-        cod_centro=cod_centro, 
-        curso_academico=curso_academico,
-        cod_ciclo=cod_ciclo,
-        tipo_centro=tipo_centro
-    )
-    return TrendResponse(data=data)
-
-@router.get(
-    "/overview/charts/failed-subjects",
-    response_model=FailedSubjectsDistributionResponse,
-    summary="Distribución de suspensos por alumno",
-)
-def get_failed_subjects_distribution(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> FailedSubjectsDistributionResponse:
-    data = crud_dashboard.get_failed_subjects_distribution(
-        db, 
-        cod_centro=cod_centro, 
-        curso_academico=curso_academico,
-        cod_ciclo=cod_ciclo,
-        tipo_centro=tipo_centro
-    )
-    return FailedSubjectsDistributionResponse(data=data)
-
-@router.get(
-    "/overview/charts/income-distribution",
-    response_model=IncomeDistributionMicroResponse,
-    summary="Distribución del Nivel de Renta",
-)
-def get_income_distribution_micro(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> IncomeDistributionMicroResponse:
-    data = crud_dashboard.get_income_distribution_micro(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
-    return IncomeDistributionMicroResponse(data=data)
-
-
-
-@router.get(
-    "/overview/charts/correlation-income-failures",
-    response_model=CorrelationIncomeFailuresResponse,
-    summary="Correlación entre Renta y Suspensos",
-)
-def get_correlation_income_failures(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> CorrelationIncomeFailuresResponse:
-    data = crud_dashboard.get_correlation_income_failures(db, cod_centro=cod_centro, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro)
-    return CorrelationIncomeFailuresResponse(data=data)
-
-# =====================================================================
-# 3. SECCIÓN 2: CONTEXTO SOCIOECONÓMICO
-# =====================================================================
-
-from app.schemas.dashboard import (
-    DigitalGapResponse,
-    ParentEducationResponse,
-    IncomeRiskResponse,
-)
-
-
-@router.get(
-    "/socioeconomic/charts/digital-gap",
-    response_model=DigitalGapResponse,
-    summary="Brecha digital y tasa de aprobados",
-)
-def get_digital_gap(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> DigitalGapResponse:
-    data = crud_dashboard.get_digital_gap(db, cod_centro, curso_academico, cod_ciclo, tipo_centro)
-    return DigitalGapResponse(data=data)
-
-
-@router.get(
-    "/socioeconomic/charts/parent-education",
-    response_model=ParentEducationResponse,
-    summary="Pirámide de nivel de estudios de los padres",
-)
-def get_parent_education(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> ParentEducationResponse:
-    data = crud_dashboard.get_parent_education(db, cod_centro, curso_academico, cod_ciclo, tipo_centro)
-    return ParentEducationResponse(data=data)
-
-
-@router.get(
-    "/socioeconomic/charts/income-risk",
-    response_model=IncomeRiskResponse,
-    summary="Nivel de renta y riesgo crítico de abandono",
-)
-def get_income_risk(
-    cod_centro: Optional[List[str]] = Query(None),
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    _current_user: User = Depends(get_current_user),
-) -> IncomeRiskResponse:
-    data = crud_dashboard.get_income_risk(db, cod_centro, curso_academico, cod_ciclo, tipo_centro)
-    return IncomeRiskResponse(data=data)
-
-# =====================================================================
-# 4. LISTADO DE ALUMNOS Y FILTROS
-# =====================================================================
-
-from app.schemas.dashboard import StudentListResponse, FiltersResponse, CentroListResponse
-
-@router.get(
-    "/centros",
+    "/macro/centros",
     response_model=CentroListResponse,
-    summary="Ranking de centros por índice de riesgo (Visión Macro)",
+    summary="Ranking de centros por índice de riesgo",
 )
-def get_centros(
+def get_macro_centros(
     curso_academico: Optional[List[str]] = Query(None),
     cod_ciclo: Optional[List[str]] = Query(None),
     tipo_centro: Optional[List[str]] = Query(None),
     page: int = Query(1, ge=1, description="Número de página (1-indexed)"),
-    page_size: int = Query(25, ge=1, le=100, description="Registros por página"),
+    page_size: int = Query(25, ge=1, le=1000, description="Registros por página"),
     db: Session = Depends(get_db),
     _current_user: User = Depends(get_current_user),
 ) -> CentroListResponse:
@@ -280,11 +103,72 @@ def get_centros(
 
 
 @router.get(
-    "/students",
+    "/macro/charts/trend",
+    response_model=TrendMacroResponse,
+    summary="Evolución histórica de riesgo a nivel autonómico",
+)
+def get_macro_trend(
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+):
+    data = crud_dashboard.get_macro_trend(
+        db, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro
+    )
+    return {"data": data}
+
+
+@router.get(
+    "/macro/charts/risk-by-type",
+    response_model=RiskByTypeResponse,
+    summary="Media de riesgo por tipo de centro",
+)
+def get_macro_risk_by_type(
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+):
+    data = crud_dashboard.get_macro_risk_by_type(
+        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo
+    )
+    return {"data": data}
+
+
+# =====================================================================
+# MICRO — visión granular (centro / alumnado)
+# =====================================================================
+
+@router.get(
+    "/micro/kpis",
+    response_model=KPIsResponse,
+    summary="KPIs de alumnado con comparativa T0 y T-1",
+)
+def get_micro_kpis(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> KPIsResponse:
+    data = crud_dashboard.get_micro_kpis(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return KPIsResponse(**data)
+
+
+@router.get(
+    "/micro/students",
     response_model=StudentListResponse,
     summary="Listado paginado de alumnos",
 )
-def get_students(
+def get_micro_students(
     cod_centro: Optional[List[str]] = Query(None),
     curso_academico: Optional[List[str]] = Query(None),
     cod_ciclo: Optional[List[str]] = Query(None),
@@ -316,73 +200,201 @@ def get_students(
         alerta_adaptacion=alerta_adaptacion,
         alerta_repetidores_pri=alerta_repetidores_pri,
         alerta_suspensos_pri=alerta_suspensos_pri,
-        sort_by=sort_by, sort_desc=sort_desc, page=page, page_size=page_size
+        sort_by=sort_by, sort_desc=sort_desc, page=page, page_size=page_size,
     )
     return StudentListResponse(**data)
 
-# =====================================================================
-# 6. MACRO DASHBOARD
-# =====================================================================
 
 @router.get(
-    "/macro/kpis",
-    response_model=MacroKPIsResponse,
-    summary="KPIs agregados para el MacroDashboard",
+    "/micro/charts/risk-distribution",
+    response_model=RiskDistributionResponse,
+    summary="Distribución de riesgo de abandono",
 )
-def get_macro_kpis(
+def get_micro_risk_distribution(
+    cod_centro: Optional[List[str]] = Query(None),
     curso_academico: Optional[List[str]] = Query(None),
     cod_ciclo: Optional[List[str]] = Query(None),
     tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
-):
-    data = crud_dashboard.get_macro_kpis(
-        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro
-    )
-    return data
-
-
-@router.get(
-    "/macro/charts/trend",
-    response_model=TrendMacroResponse,
-    summary="Evolución histórica de riesgo a nivel autonómico",
-)
-def get_macro_trend(
-    cod_ciclo: Optional[List[str]] = Query(None),
-    tipo_centro: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
-):
-    data = crud_dashboard.get_macro_trend(
-        db, cod_ciclo=cod_ciclo, tipo_centro=tipo_centro
-    )
-    return {"data": data}
-
-
-@router.get(
-    "/macro/charts/risk-by-type",
-    response_model=RiskByTypeResponse,
-    summary="Media de riesgo por tipo de centro",
-)
-def get_macro_risk_by_type(
-    curso_academico: Optional[List[str]] = Query(None),
-    cod_ciclo: Optional[List[str]] = Query(None),
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
-):
-    data = crud_dashboard.get_macro_risk_by_type(
-        db, curso_academico=curso_academico, cod_ciclo=cod_ciclo
-    )
-    return {"data": data}
-
-@router.get(
-    "/filters",
-    response_model=FiltersResponse,
-    summary="Filtros dinámicos para el dashboard",
-)
-def get_filters(
     db: Session = Depends(get_db),
     _current_user: User = Depends(get_current_user),
-) -> FiltersResponse:
-    data = crud_dashboard.get_dynamic_filters(db)
-    return FiltersResponse(**data)
+) -> RiskDistributionResponse:
+    data = crud_dashboard.get_risk_distribution(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return RiskDistributionResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/risk-by-cycle",
+    response_model=RiskByCycleResponse,
+    summary="Riesgo crítico por ciclo educativo",
+)
+def get_micro_risk_by_cycle(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> RiskByCycleResponse:
+    data = crud_dashboard.get_risk_by_cycle(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return RiskByCycleResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/trend",
+    response_model=TrendResponse,
+    summary="Evolución histórica de los últimos 5 años",
+)
+def get_micro_trend(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> TrendResponse:
+    data = crud_dashboard.get_trend(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return TrendResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/failed-subjects",
+    response_model=FailedSubjectsDistributionResponse,
+    summary="Distribución de suspensos por alumno",
+)
+def get_micro_failed_subjects(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> FailedSubjectsDistributionResponse:
+    data = crud_dashboard.get_failed_subjects_distribution(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return FailedSubjectsDistributionResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/income-distribution",
+    response_model=IncomeDistributionMicroResponse,
+    summary="Distribución del nivel de renta",
+)
+def get_micro_income_distribution(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> IncomeDistributionMicroResponse:
+    data = crud_dashboard.get_income_distribution_micro(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return IncomeDistributionMicroResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/correlation-income-failures",
+    response_model=CorrelationIncomeFailuresResponse,
+    summary="Correlación entre renta y suspensos",
+)
+def get_micro_correlation_income_failures(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> CorrelationIncomeFailuresResponse:
+    data = crud_dashboard.get_correlation_income_failures(
+        db,
+        cod_centro=cod_centro,
+        curso_academico=curso_academico,
+        cod_ciclo=cod_ciclo,
+        tipo_centro=tipo_centro,
+    )
+    return CorrelationIncomeFailuresResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/digital-gap",
+    response_model=DigitalGapResponse,
+    summary="Brecha digital y tasa de aprobados",
+)
+def get_micro_digital_gap(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> DigitalGapResponse:
+    data = crud_dashboard.get_digital_gap(
+        db, cod_centro, curso_academico, cod_ciclo, tipo_centro
+    )
+    return DigitalGapResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/parent-education",
+    response_model=ParentEducationResponse,
+    summary="Nivel de estudios de los progenitores",
+)
+def get_micro_parent_education(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> ParentEducationResponse:
+    data = crud_dashboard.get_parent_education(
+        db, cod_centro, curso_academico, cod_ciclo, tipo_centro
+    )
+    return ParentEducationResponse(data=data)
+
+
+@router.get(
+    "/micro/charts/income-risk",
+    response_model=IncomeRiskResponse,
+    summary="Nivel de renta y riesgo crítico de abandono",
+)
+def get_micro_income_risk(
+    cod_centro: Optional[List[str]] = Query(None),
+    curso_academico: Optional[List[str]] = Query(None),
+    cod_ciclo: Optional[List[str]] = Query(None),
+    tipo_centro: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> IncomeRiskResponse:
+    data = crud_dashboard.get_income_risk(
+        db, cod_centro, curso_academico, cod_ciclo, tipo_centro
+    )
+    return IncomeRiskResponse(data=data)

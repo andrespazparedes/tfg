@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroRiskDistribution } from '../../api/dashboard';
 
 const COLORS = {
   'Alto': 'var(--color-danger)',
@@ -41,13 +41,8 @@ export const RiskDistributionChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/overview/charts/risk-distribution', { params });
-        setData(response.data.data);
+        const response = await getMicroRiskDistribution(filters);
+        setData(response.data);
       } catch (error) {
         console.error("Error cargando RiskDistributionChart:", error);
       } finally {

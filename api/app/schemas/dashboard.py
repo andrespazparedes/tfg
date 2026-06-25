@@ -14,12 +14,12 @@ from pydantic import BaseModel, Field
 
 
 # =====================================================================
-# 1. KPIs GLOBALES — GET /api/v1/dashboard/overview/kpis
+# 1. KPIs MICRO — GET /api/v1/dashboard/micro/kpis
 # =====================================================================
 
 
 class KPIsResponse(BaseModel):
-    """Indicadores clave absolutos para la pantalla Overview."""
+    """Indicadores clave absolutos para la visión micro (alumnado)."""
 
     num_estudiantes: int = Field(..., description="Número total de alumnos únicos")
     num_estudiantes_a1: Optional[int] = None
@@ -56,7 +56,7 @@ class KPIsResponse(BaseModel):
 
 
 # =====================================================================
-# 2. GRÁFICOS OVERVIEW — GET /api/v1/dashboard/overview/charts/*
+# 2. GRÁFICOS MICRO — GET /api/v1/dashboard/micro/charts/*
 # =====================================================================
 
 
@@ -159,7 +159,7 @@ class IncomeRiskResponse(BaseModel):
     data: List[IncomeRiskItem]
 
 # =====================================================================
-# 4. LISTADO DE ALUMNOS — GET /api/v1/dashboard/students
+# 4. LISTADO DE ALUMNOS — GET /api/v1/dashboard/micro/students
 # =====================================================================
 
 
@@ -205,7 +205,7 @@ class StudentListResponse(BaseModel):
 
 
 # =====================================================================
-# 4. LISTADO DE CENTROS — GET /api/v1/dashboard/centros
+# 5. LISTADO DE CENTROS — GET /api/v1/dashboard/macro/centros
 # =====================================================================
 
 class CentroListItem(BaseModel):

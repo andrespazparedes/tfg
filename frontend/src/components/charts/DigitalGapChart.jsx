@@ -10,7 +10,7 @@ import {
   Legend
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroDigitalGap } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -46,15 +46,9 @@ export const DigitalGapChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
+        const response = await getMicroDigitalGap(filters);
 
-        const response = await api.get('/dashboard/socioeconomic/charts/digital-gap', { params });
-        
-        // Transformar datos booleanos en etiquetas legibles
-        const formattedData = response.data.data.map(item => {
+        const formattedData = response.data.map((item) => {
           let category = 'Conectados';
           if (!item.conexion_internet && item.ordenadores_suficientes === false) {
             category = 'Sin Acceso Ni Equipo';

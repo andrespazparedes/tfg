@@ -9,7 +9,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroFailedSubjects } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -47,13 +47,8 @@ export const FailedSubjectsChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/overview/charts/failed-subjects', { params });
-        setData(response.data.data);
+        const response = await getMicroFailedSubjects(filters);
+        setData(response.data);
       } catch (error) {
         console.error("Error cargando FailedSubjectsChart:", error);
       } finally {

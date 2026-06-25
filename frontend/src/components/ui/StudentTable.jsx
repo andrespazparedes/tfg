@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroStudents } from '../../api/dashboard';
 import { Badge } from './Badge';
 import { ChevronLeft, ChevronRight, AlertTriangle, ArrowRight, X } from 'lucide-react';
 import { MultiSelect } from './MultiSelect';
@@ -27,29 +27,22 @@ export const StudentTable = () => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        
-        // Inyectar filtros globales
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        // Inyectar estado de Cross-Filtering
+        const alertParams = {};
         if (activeAlerts && activeAlerts.length > 0) {
-          activeAlerts.forEach(alertKey => {
-            params.append(alertKey, 'true');
+          activeAlerts.forEach((alertKey) => {
+            alertParams[alertKey] = 'true';
           });
         }
 
-        // Paginación y ordenación
-        params.append('page', page);
-        params.append('page_size', pageSize);
-        params.append('sort_by', sortBy);
-        params.append('sort_desc', sortDesc);
-
-        const response = await api.get('/dashboard/students', { params });
-        setData(response.data.data);
-        setTotal(response.data.total);
+        const response = await getMicroStudents(filters, {
+          ...alertParams,
+          page,
+          page_size: pageSize,
+          sort_by: sortBy,
+          sort_desc: sortDesc,
+        });
+        setData(response.data);
+        setTotal(response.total);
       } catch (error) {
         console.error("Error cargando StudentTable:", error);
       } finally {

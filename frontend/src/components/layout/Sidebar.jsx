@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useDashboardContext } from '../../context/DashboardContext';
 import { useAuth } from '../../context/AuthContext';
-import { api } from '../../services/api';
+import { getFilters } from '../../api/dashboard';
 import { MultiSelect } from '../ui/MultiSelect';
 import './Sidebar.css';
 
@@ -27,14 +27,14 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
     // Cargar las opciones de los desplegables desde la API
     const loadFilters = async () => {
       try {
-        const res = await api.get('/dashboard/filters');
-        const cursos = res.data.cursos_academicos || [];
+        const res = await getFilters();
+        const cursos = res.cursos_academicos || [];
         
         setFilterOptions({
-          centros: res.data.centros || [],
-          ciclos: res.data.ciclos || [],
+          centros: res.centros || [],
+          ciclos: res.ciclos || [],
           cursos_academicos: cursos,
-          tipos_centro: res.data.tipos_centro || []
+          tipos_centro: res.tipos_centro || []
         });
 
         // Seleccionar por defecto el último curso académico si no hay ninguno seleccionado

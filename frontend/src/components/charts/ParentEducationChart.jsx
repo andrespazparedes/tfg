@@ -10,7 +10,7 @@ import {
   Cell
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroParentEducation } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -46,16 +46,10 @@ export const ParentEducationChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
+        const response = await getMicroParentEducation(filters);
 
-        const response = await api.get('/dashboard/socioeconomic/charts/parent-education', { params });
-        
-        // Ordenar por nivel educativo de forma lógica
         const order = ["Sin Estudios", "Estudios Primarios", "Estudios Secundarios", "Estudios Universitarios", "Desconocido"];
-        const sortedData = response.data.data.sort((a, b) => {
+        const sortedData = response.data.sort((a, b) => {
           return order.indexOf(a.max_nivel_estudios_padres) - order.indexOf(b.max_nivel_estudios_padres);
         });
         

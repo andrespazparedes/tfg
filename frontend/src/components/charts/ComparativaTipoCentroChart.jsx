@@ -10,7 +10,7 @@ import {
   Cell
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMacroRiskByType } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -45,14 +45,8 @@ export const ComparativaTipoCentroChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/macro/charts/risk-by-type', { params });
-        // Sort by risk descending
-        const sortedData = response.data.data.sort((a, b) => b.indice_riesgo_medio - a.indice_riesgo_medio);
+        const response = await getMacroRiskByType(filters);
+        const sortedData = response.data.sort((a, b) => b.indice_riesgo_medio - a.indice_riesgo_medio);
         setData(sortedData);
       } catch (error) {
         console.error("Error cargando ComparativaTipoCentroChart:", error);

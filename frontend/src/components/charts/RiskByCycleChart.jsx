@@ -10,7 +10,7 @@ import {
   Cell
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroRiskByCycle } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -46,16 +46,8 @@ export const RiskByCycleChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/overview/charts/risk-by-cycle', { params });
-        // Ordenamos de mayor a menor riesgo para que sea más fácil de leer
-        const sortedData = response.data.data.sort((a, b) => b.riesgo_abandono_critico - a.riesgo_abandono_critico);
-        
-        // Mostrar top 5 si hay muchos
+        const response = await getMicroRiskByCycle(filters);
+        const sortedData = response.data.sort((a, b) => b.riesgo_abandono_critico - a.riesgo_abandono_critico);
         setData(sortedData.slice(0, 5));
       } catch (error) {
         console.error("Error cargando RiskByCycleChart:", error);

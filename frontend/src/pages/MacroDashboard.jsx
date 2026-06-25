@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDashboardContext } from '../context/DashboardContext';
-import { api } from '../services/api';
+import { getMacroCentros } from '../api/dashboard';
 import { PageHeader } from '../components/layout/PageHeader';
 import { KPICard } from '../components/ui/KPICard';
 import { Card } from '../components/ui/Card';
@@ -34,15 +34,8 @@ export const MacroDashboard = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const queryParams = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          if (Array.isArray(values)) {
-            values.forEach((v) => queryParams.append(key, v));
-          }
-        });
-
-        const res = await api.get(`/dashboard/centros?${queryParams.toString()}`);
-        setData(res.data.data || []);
+        const res = await getMacroCentros(filters);
+        setData(res.data || []);
       } catch (err) {
         console.error('Error fetching macro data:', err);
       } finally {

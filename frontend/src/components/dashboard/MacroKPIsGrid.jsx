@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AlertOctagon, BookX, RefreshCcw, Home, History, FileWarning, Puzzle, MonitorX, AlertCircle } from 'lucide-react';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroKpis } from '../../api/dashboard';
 import { KPICard } from '../ui/KPICard';
 
 export const MacroKPIsGrid = ({ onKpiClick, activeFilter }) => {
@@ -13,13 +13,8 @@ export const MacroKPIsGrid = ({ onKpiClick, activeFilter }) => {
     const fetchMacroKPIs = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/overview/kpis', { params });
-        setKpis(response.data);
+        const data = await getMicroKpis(filters);
+        setKpis(data);
       } catch (error) {
         console.error("Error cargando Macro KPIs:", error);
       } finally {

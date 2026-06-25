@@ -83,7 +83,7 @@ def get_a1(year_str: str) -> str:
         pass
     return year_str
 
-def get_overview_kpis(
+def get_micro_kpis(
     db: Session,
     cod_centro: Optional[List[str]] = None,
     curso_academico: Optional[List[str]] = None,

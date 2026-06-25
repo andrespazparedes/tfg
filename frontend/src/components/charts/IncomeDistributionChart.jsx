@@ -8,7 +8,7 @@ import {
   Legend
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroIncomeDistribution } from '../../api/dashboard';
 
 const COLORS = {
   'Muy Baja': 'var(--color-danger)',
@@ -47,14 +47,9 @@ export const IncomeDistributionChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
+        const response = await getMicroIncomeDistribution(filters);
 
-        const response = await api.get('/dashboard/overview/charts/income-distribution', { params });
-        
-        const formattedData = response.data.data.map(d => {
+        const formattedData = response.data.map((d) => {
           const rawName = (d.name || 'Desconocida').toLowerCase();
           let displayName = 'Desconocida';
           if (rawName.includes('muy baja')) displayName = 'Muy Baja';

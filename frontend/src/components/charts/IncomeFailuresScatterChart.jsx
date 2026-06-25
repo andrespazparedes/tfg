@@ -11,7 +11,7 @@ import {
   ZAxis
 } from 'recharts';
 import { useDashboardContext } from '../../context/DashboardContext';
-import { api } from '../../services/api';
+import { getMicroCorrelationIncomeFailures } from '../../api/dashboard';
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -46,13 +46,8 @@ export const IncomeFailuresScatterChart = () => {
     const fetchChartData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, values]) => {
-          values.forEach(val => params.append(key, val));
-        });
-
-        const response = await api.get('/dashboard/overview/charts/correlation-income-failures', { params });
-        let fetchedData = response.data.data || [];
+        const response = await getMicroCorrelationIncomeFailures(filters);
+        let fetchedData = response.data || [];
         // Ordenamos por renta para que la línea de tendencia se dibuje de izquierda a derecha
         fetchedData.sort((a, b) => a.renta - b.renta);
 
