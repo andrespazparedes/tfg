@@ -41,7 +41,7 @@ El modelo implementa dos niveles de análisis a través de dos tablas de hechos:
 
 \section{Reglas de negocio y cálculo de riesgos}
 
-Para que el Dashboard ofrezca métricas accionables a nivel autonómico, se han parametrizado dos indicadores de riesgo fundamentales mediante sistemas de puntuación acumulativa, integrados en la lógica del Datamart.
+Para que el \textit{dashboard} ofrezca métricas accionables a nivel autonómico, se han parametrizado dos indicadores de riesgo fundamentales mediante sistemas de puntuación acumulativa, integrados en la lógica del Datamart.
 
 \subsection{Riesgo socioeconómico}
 Este riesgo evalúa el contexto familiar de exclusión y brecha digital. Los puntos se calculan sumando los siguientes factores:
@@ -69,4 +69,4 @@ Combina factores académicos, de apoyo y de arrastre socioeconómico para emitir
     \item \textbf{Necesidades de apoyo y adaptación:} Adaptación por motivos de discapacidad (10 pts). Adaptación por otros motivos o compensatoria (5 pts).
 \end{itemize}
 
-Estos valores numéricos quedan consolidados en \textit{fact\_rendimiento\_anual}, lo que permite al Backend (FastAPI) entregar al Dashboard de forma instantánea el listado de centros con mayor concentración de alumnado en riesgo inminente de abandono.
+Estos valores numéricos quedan consolidados en \textit{fact\_rendimiento\_anual}, lo que permite al \textit{backend} (FastAPI) entregar al \textit{dashboard} de forma instantánea el listado de centros con mayor concentración de alumnado en riesgo inminente de abandono.

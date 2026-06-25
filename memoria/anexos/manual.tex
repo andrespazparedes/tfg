@@ -1,6 +1,6 @@
 \chapter{Manual de uso}
 
-Este manual describe el despliegue y el funcionamiento del cuadro de mando analítico para la prevención del abandono escolar. Está dirigido a dos perfiles: el administrador del sistema, que debe levantar la infraestructura y poblar los datos, y el técnico de la administración educativa, que utilizará el dashboard para la toma de decisiones.
+Este manual describe el despliegue y el funcionamiento del cuadro de mando analítico para la prevención del abandono escolar. Está dirigido a dos perfiles: el administrador del sistema, que debe levantar la infraestructura y poblar los datos, y el técnico de la administración educativa, que utilizará el \textit{dashboard} para la toma de decisiones.
 
 \section{Despliegue del sistema}
 
@@ -31,7 +31,7 @@ Este comando levanta los seis contenedores que componen el sistema:
     \item Proxy Nginx, que unifica el acceso a la aplicación.
 \end{enumerate}
 
-Una vez levantados, el frontend estará accesible en http://localhost y Apache Hop en http://localhost:8080.
+Una vez levantados, el \textit{frontend} estará accesible en http://localhost y Apache Hop en http://localhost:8080.
 
 \subsection{Poblar el Datamart}
 
@@ -43,7 +43,7 @@ En modo incremental, el sistema solo procesa los datos del curso indicado y recu
 
 \subsection{Personalización}
 
-Todo el código fuente está disponible en el repositorio. Los administradores pueden modificar las reglas de negocio (ponderaciones del riesgo, umbrales de alerta, etc.) editando los pipelines de Hop o el código del backend, y reconstruir los contenedores con los cambios.
+Todo el código fuente está disponible en el repositorio. Los administradores pueden modificar las reglas de negocio (ponderaciones del riesgo, umbrales de alerta, etc.) editando los \textit{pipeline}s de Hop o el código del \textit{backend}, y reconstruir los contenedores con los cambios.
 
 \section{Uso del cuadro de mando}
 
@@ -110,11 +110,11 @@ Cada centro aparece en el mapa con un marcador de color (verde, amarillo o rojo)
 
 \subsubsection{Ranking de centros}
 
-Lista completa de centros ordenados de mayor a menor índice de riesgo. Cada tarjeta muestra el nombre, tipo, número de alumnos, índice de riesgo y variación respecto al curso anterior. Al pulsar sobre una tarjeta se realiza un drill-down a la vista Micro con ese centro preseleccionado.
+Lista completa de centros ordenados de mayor a menor índice de riesgo. Cada tarjeta muestra el nombre, tipo, número de alumnos, índice de riesgo y variación respecto al curso anterior. Al pulsar sobre una tarjeta se realiza un \textit{drill-down} a la vista Micro con ese centro preseleccionado.
 
 \subsection{Vista Micro: diagnóstico causal de un centro}
 
-Esta vista responde a la pregunta: ¿por qué este centro tiene el riesgo que tiene? Se accede desde el menú o mediante drill-down desde la Macro.
+Esta vista responde a la pregunta: ¿por qué este centro tiene el riesgo que tiene? Se accede desde el menú o mediante \textit{drill-down} desde la Macro.
 
 \subsubsection{Indicadores de alumnado}
 
@@ -151,7 +151,7 @@ Accesible únicamente para cuentas con rol de administrador, permite crear, edit
 
 \begin{enumerate}
     \item El técnico consulta la vista Macro, observa el panel de alertas y el ranking, e identifica los centros que más destacan por riesgo alto o por métricas concretas (por ejemplo, brecha digital o repetidores en primaria).
-    \item Mediante drill-down, accede a la vista Micro de esos centros.
+    \item Mediante \textit{drill-down}, accede a la vista Micro de esos centros.
     \item En la vista Micro, examina los gráficos socioeconómicos y la distribución de suspensos para determinar si el problema requiere refuerzo curricular, becas, dotación tecnológica o programas de acompañamiento familiar.
     \item Con esta evidencia, fundamenta la propuesta de asignación de recursos ante los órganos competentes.
 \end{enumerate}

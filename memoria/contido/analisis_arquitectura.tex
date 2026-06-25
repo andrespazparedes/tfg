@@ -1,7 +1,7 @@
 \chapter{Análisis y arquitectura}
 \label{chap:analisis_arquitectura}
 
-\lettrine{E}{n} este capítulo se detallan los requisitos del sistema y la arquitectura tecnológica seleccionada para la implementación del Datamart y el cuadro de mando. Es importante destacar que todo el proyecto se ha diseñado y desarrollado utilizando exclusivamente tecnologías \textbf{Open Source} (código abierto). Esta decisión estratégica garantiza que cualquier centro educativo, sea público o privado, pueda adoptar y desplegar esta solución sin incurrir en costes de licenciamiento de software comercial.
+\lettrine{E}{n} este capítulo se detallan los requisitos del sistema y la arquitectura tecnológica seleccionada para la implementación del Datamart y el cuadro de mando. Es importante destacar que todo el proyecto se ha diseñado y desarrollado utilizando exclusivamente tecnologías \textbf{Open Source} (código abierto). Esta decisión estratégica garantiza que cualquier centro educativo pueda adoptar y desplegar esta solución sin incurrir en costes de licenciamiento de software comercial.
 
 \section{Requisitos del sistema}
 
@@ -10,7 +10,7 @@ Para lograr el objetivo de detectar de forma temprana el riesgo de abandono esco
 \begin{itemize}
     \item \textbf{RF1 - Extracción y Transformación:} El sistema debe ser capaz de extraer datos en bruto del sistema transaccional (PostgreSQL), limpiarlos y aplicar reglas de negocio para calcular índices de riesgo socioeconómico y académico.
     \item \textbf{RF2 - Modelo Dimensional:} Los datos deben estructurarse en un Data Warehouse bajo un modelo de estrella para facilitar consultas analíticas ultrarrápidas y cruces demográficos.
-    \item \textbf{RF3 - Visualización y Alertas:} Se debe proveer una interfaz web (Dashboard) que muestre de forma intuitiva qué centros educativos o cohortes geográficas presentan un riesgo alto de vulnerabilidad sistémica y fracaso escolar.
+    \item \textbf{RF3 - Visualización y Alertas:} Se debe proveer una interfaz web (\textit{dashboard}) que muestre de forma intuitiva qué centros educativos o cohortes geográficas presentan un riesgo alto de vulnerabilidad sistémica y fracaso escolar.
     \item \textbf{RNF1 - Modularidad y Escalabilidad:} La arquitectura debe estar dividida en microservicios independientes, facilitando su despliegue y mantenimiento.
     \item \textbf{RNF2 - Tecnologías Libres:} Obligatoriedad de utilizar herramientas Open Source en todas las capas del proyecto.
 \end{itemize}
@@ -55,15 +55,15 @@ Para cumplir con el requisito de modularidad, la arquitectura del proyecto se ha
 El ecosistema está compuesto por seis contenedores principales orquestados mediante \textit{docker-compose}:
 
 \begin{enumerate}
-    \item \textbf{Origen de Datos Transaccional (PostgreSQL)} \cite{PostgreSQL_Docs}: Simula la base de datos operativa (\textit{source}) de los centros educativos. Contiene tablas normalizadas con los expedientes, matrículas, notas y encuestas familiares en tiempo real.
-    \item \textbf{Data Warehouse Analítico (PostgreSQL)}: Actúa como el repositorio central de BI (\textit{dwh}). Almacena los datos estructurados en un modelo dimensional (esquema en estrella) optimizado para lectura y agregación, conteniendo el historial acumulado.
-    \item \textbf{Orquestador ETL (Apache Hop Web)}: Contenedor que ejecuta los flujos de transformación (\textit{pipelines}). Se encarga de conectarse al Origen de Datos, extraer la información, calcular las métricas de riesgo (socioeconómico y de abandono) y cargar el resultado en el Data Warehouse.
-    \item \textbf{Servidor Backend RESTful (FastAPI)} \cite{FastAPI_Docs}: Construido en Python, este contenedor expone una API segura que se conecta al Data Warehouse, realiza las consultas analíticas pesadas mediante \textit{SQLAlchemy} y sirve los resultados en formato JSON al cliente.
-    \item \textbf{Aplicación Cliente Dashboard (React/Vite)} \cite{React_Docs}: Interfaz gráfica web moderna donde los gestores de la administración visualizan los datos. Utiliza \textit{Recharts} para los gráficos y sigue una estética visual basada en \textit{Glassmorphism}.
-    \item \textbf{Servidor Web y Proxy Inverso (Nginx)}: Se encarga de servir la aplicación React compilada y de enrutar las peticiones de red hacia la API del Backend, asegurando un único punto de entrada seguro para la aplicación.
+    \item \textbf{Origen de datos transaccional (PostgreSQL)} \cite{PostgreSQL_Docs}: Simula la base de datos operativa (\textit{source}) de los centros educativos. Contiene tablas normalizadas con los expedientes, matrículas, notas y encuestas familiares en tiempo real.
+    \item \textbf{Data Warehouse analítico (PostgreSQL)}: Actúa como el repositorio central de BI (\textit{dwh}). Almacena los datos estructurados en un modelo dimensional (esquema en estrella) optimizado para lectura y agregación, conteniendo el historial acumulado.
+    \item \textbf{Orquestador ETL (Apache Hop Web)}: Contenedor que ejecuta los flujos de transformación (\textit{\textit{pipeline}s}). Se encarga de conectarse al Origen de Datos, extraer la información, calcular las métricas de riesgo (socioeconómico y de abandono) y cargar el resultado en el Data Warehouse.
+    \item \textbf{Servidor backend RESTful (FastAPI)} \cite{FastAPI_Docs}: Construido en Python, este contenedor expone una API segura que se conecta al Data Warehouse, realiza las consultas analíticas pesadas mediante \textit{SQLAlchemy} y sirve los resultados en formato JSON al cliente.
+    \item \textbf{Aplicación cliente \textit{dashboard} (React/Vite)} \cite{React_Docs}: Interfaz gráfica web moderna donde los gestores de la administración visualizan los datos. Utiliza \textit{Recharts} para los gráficos y sigue una estética visual basada en \textit{glassmorphism}.
+    \item \textbf{Servidor web y proxy inverso (Nginx)}: Se encarga de servir la aplicación React compilada y de enrutar las peticiones de red hacia la API del \textit{backend}, asegurando un único punto de entrada seguro para la aplicación.
 \end{enumerate}
 
-Esta separación clara entre la base de datos transaccional (OLTP) y el almacén analítico (OLAP) garantiza que las complejas consultas del Dashboard no penalicen el rendimiento de las operaciones diarias de la base de datos operacional.
+Esta separación clara entre la base de datos transaccional (OLTP) y el almacén analítico (OLAP) garantiza que las complejas consultas del \textit{dashboard} no penalicen el rendimiento de las operaciones diarias de la base de datos operacional.
 
 \subsection{Justificación del paradigma de contenedores}
 
@@ -107,7 +107,7 @@ A continuación, en la tabla \ref{tab:casos_uso}, se enumeran los casos de uso q
 \endlastfoot
 
 % ---- Autenticación ----
-CU-01 & Iniciar sesión & Validación de credenciales, generación de token JWT y redirección al dashboard. \\
+CU-01 & Iniciar sesión & Validación de credenciales, generación de token JWT y redirección al \textit{dashboard}. \\
 CU-02 & Cerrar sesión & Invalida el token JWT y redirige a la pantalla de login. \\
 CU-03 & Recuperar sesión automática & Restaura la sesión si el token JWT almacenado es válido, sin necesidad de nuevas credenciales. \\
 \hline
@@ -142,7 +142,7 @@ CU-28 & Filtrar alumnos por tipo de alerta & Filtro rápido multicriterio por ti
 \hline
 % ---- Gestión de usuarios (solo administradores) ----
 CU-29 & Gestionar usuarios \textit{(solo administradores)} & Crear, editar o eliminar cuentas de usuario. La cuenta del superadministrador (id=1) está protegida. \\
-CU-30 & Visualizar perfil de usuario & Consultar los propios datos (nombre, email, rol) a través del endpoint \texttt{/auth/me}. \\
+CU-30 & Visualizar perfil de usuario & Consultar los propios datos (nombre, email, rol) a través del \textit{endpoint} \texttt{/auth/me}. \\
 
 \end{longtable}
 
