@@ -141,8 +141,8 @@
       <comparevalue/>
       <minvalue/>
       <maxvalue/>
-      <successcondition>equal</successcondition>
-      <successwhenvarset>Y</successwhenvarset>
+      <successcondition>different</successcondition>
+      <successwhenvarset>N</successwhenvarset>
       <successbooleancondition>true</successbooleancondition>
       <successnumbercondition>equal</successnumbercondition>
       <name>Simple evaluation</name>
