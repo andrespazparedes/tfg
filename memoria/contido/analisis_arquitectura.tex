@@ -63,7 +63,7 @@ El ecosistema está compuesto por seis contenedores principales orquestados medi
     \item \textbf{Servidor Web y Proxy Inverso (Nginx)}: Se encarga de servir la aplicación React compilada y de enrutar las peticiones de red hacia la API del Backend, asegurando un único punto de entrada seguro para la aplicación.
 \end{enumerate}
 
-Esta separación clara entre la base de datos transaccional (OLTP) y el almacén analítico (OLAP) garantiza que las complejas consultas del Dashboard no penalicen el rendimiento de las operaciones diarias del colegio.
+Esta separación clara entre la base de datos transaccional (OLTP) y el almacén analítico (OLAP) garantiza que las complejas consultas del Dashboard no penalicen el rendimiento de las operaciones diarias de la base de datos operacional.
 
 \subsection{Justificación del paradigma de contenedores}
 
@@ -71,6 +71,6 @@ Aunque el diseño de una arquitectura distribuida conlleva una mayor carga de ra
 
 \begin{itemize}
     \item \textbf{Aislamiento y Reproducibilidad:} Cada contenedor empaqueta sus propias dependencias (por ejemplo, librerías concretas de Python para FastAPI o módulos de Node para React). Esto elimina el clásico problema de \textit{"funciona en mi máquina"} y garantiza que el comportamiento del software sea idéntico en desarrollo, pruebas y producción.
-    \item \textbf{Despliegue Universal (\textit{One-Click Deployment}):} Al estar orientado a centros educativos (instituciones que frecuentemente carecen de departamentos de IT especializados o presupuestos para infraestructuras complejas), la orquestación con \textit{docker-compose} permite levantar toda la plataforma (bases de datos, ETL, API y web) con un único comando. Esto facilita enormemente su transferencia tecnológica y adopción real.
+    \item \textbf{Despliegue Universal (\textit{One-Click Deployment}):} La orquestación con \textit{docker-compose} permite levantar toda la plataforma (bases de datos, ETL, API y web) con un único comando. Esto facilita enormemente su transferencia tecnológica y adopción real.
     \item \textbf{Topología de Red y Seguridad:} Docker permite crear redes virtuales cerradas (\textit{Docker Networks}). De esta forma, bases de datos críticas como el Data Warehouse y los flujos de transformación de Apache Hop quedan totalmente invisibles desde el exterior. Solamente el proxy inverso (Nginx) expone los puertos estrictamente necesarios, añadiendo una capa de seguridad pasiva esencial cuando se tratan datos académicos y demográficos de menores.
 \end{itemize}
