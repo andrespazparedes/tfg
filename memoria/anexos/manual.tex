@@ -1,0 +1,159 @@
+\chapter{Manual de uso}
+
+Este manual describe el despliegue y el funcionamiento del cuadro de mando analítico para la prevención del abandono escolar. Está dirigido a dos perfiles: el administrador del sistema, que debe levantar la infraestructura y poblar los datos, y el técnico de la administración educativa, que utilizará el dashboard para la toma de decisiones.
+
+\section{Despliegue del sistema}
+
+\subsection{Requisitos previos}
+
+\begin{itemize}
+    \item Tener instalado Docker y Docker Compose.
+    \item Clonar el repositorio disponible en \href{https://github.com/andrespazparedes/tfg}{github.com/andrespazparedes/tfg}\footnote{\url{https://github.com/andrespazparedes/tfg}}.
+    \item Crear un archivo .env en la raíz del proyecto a partir de la plantilla .env.example. Este archivo contiene las credenciales de las bases de datosy los puertos.
+\end{itemize}
+
+\subsection{Levantar los contenedores}
+
+Ejecutar en la terminal, dentro de la carpeta del proyecto:
+
+\begin{verbatim}
+docker-compose up -d --build
+\end{verbatim}
+
+Este comando levanta los seis contenedores que componen el sistema:
+
+\begin{enumerate}
+    \item Base de datos origen (PostgreSQL) con los datos transaccionales simulados.
+    \item Data Warehouse (PostgreSQL) con el modelo en estrella.
+    \item Apache Hop Web, para ejecutar los procesos ETL.
+    \item Backend FastAPI, que expone la API REST.
+    \item Frontend React, con la interfaz de usuario.
+    \item Proxy Nginx, que unifica el acceso a la aplicación.
+\end{enumerate}
+
+Una vez levantados, el frontend estará accesible en http://localhost y Apache Hop en http://localhost:8080.
+
+\subsection{Poblar el Datamart}
+
+Los datos no se cargan automáticamente. Es necesario ejecutar los flujos de Apache Hop para extraer, transformar y cargar la información desde la base de datos origen al Data Warehouse.
+
+Para ello, acceder a la interfaz web de Hop (http://localhost:8080), abrir el proyecto y ejecutar el workflow principal, llamado main.hwf. Este workflow orquesta la carga de todas las dimensiones y las tablas de hechos.
+
+En modo incremental, el sistema solo procesa los datos del curso indicado y recupera el histórico acumulado de años anteriores.
+
+\subsection{Personalización}
+
+Todo el código fuente está disponible en el repositorio. Los administradores pueden modificar las reglas de negocio (ponderaciones del riesgo, umbrales de alerta, etc.) editando los pipelines de Hop o el código del backend, y reconstruir los contenedores con los cambios.
+
+\section{Uso del cuadro de mando}
+
+\subsection{Acceso y autenticación}
+
+Abrir el navegador en la URL donde se sirve la aplicación (por defecto, http://localhost). La pantalla de inicio solicita correo electrónico y contraseña. Tras autenticarse, la sesión se mantiene mediante un token JWT almacenado en el navegador, por lo que al cerrar y volver a abrir el navegador no es necesario volver a introducir las credenciales si el token sigue siendo válido.
+
+\subsection{Barra lateral y filtros globales}
+
+La barra lateral izquierda permite navegar entre las dos vistas principales (Macro y Micro) y, para los administradores, acceder a la gestión de usuarios. Además, contiene los filtros globales que condicionan todos los datos mostrados:
+
+\begin{itemize}
+    \item Curso académico: selecciona el año de análisis.
+    \item Tipo de centro: público, concertado o privado.
+    \item Ciclo educativo: Primaria, ESO, etc.
+    \item Centros concretos: permite elegir uno o varios centros para análisis focalizado.
+\end{itemize}
+
+Al modificar cualquier filtro, todas las visualizaciones se actualizan automáticamente.
+
+\subsection{Vista Macro: identificación de centros prioritarios}
+
+Esta vista ofrece una panorámica autonómica y está pensada para responder a la pregunta: ¿qué centros requieren atención prioritaria?
+
+\subsubsection{Indicadores de cabecera}
+
+Tres tarjetas resumen el estado general:
+\begin{itemize}
+    \item Total de centros que cumplen los filtros.
+    \item Número de centros críticos (índice de riesgo igual o superior a 7 sobre 10).
+    \item Riesgo medio autonómico.
+\end{itemize}
+
+\subsubsection{Panel de alertas institucionales}
+
+Diez tarjetas muestran, para cada métrica de riesgo, cuántos centros superan la mediana autonómica en el número de alumnos afectados. Las métricas son:
+
+\begin{itemize}
+    \item Alto riesgo de abandono.
+    \item Alumnado con suspensos.
+    \item Desfase académico por edad.
+    \item Repetidores.
+    \item Riesgo socioeconómico alto.
+    \item Brecha digital.
+    \item Bajo nivel de estudios familiar.
+    \item Adaptaciones curriculares.
+    \item Repetidores en 1.º y 2.º de primaria.
+    \item Suspensos en 1.º y 2.º de primaria.
+\end{itemize}
+
+Al pulsar sobre cualquiera de estas tarjetas, el ranking de centros se filtra para mostrar solo aquellos que superan la mediana en esa métrica, facilitando la focalización en problemas concretos.
+
+\subsubsection{Mapa geográfico}
+
+Cada centro aparece en el mapa con un marcador de color (verde, amarillo o rojo) según su nivel de riesgo. Al hacer clic en un marcador se puede acceder a un resumen y navegar directamente a la vista Micro de ese centro.
+
+\subsubsection{Gráficos de análisis macro}
+
+\begin{itemize}
+    \item Evolución del índice de riesgo: tendencia del riesgo medio en los últimos cinco años.
+    \item Distribución por tipo de centro: barras que comparan centros públicos, concertados y privados.
+    \item Matriz de asignación de recursos: gráfico de dispersión que cruza el índice de riesgo (eje X) con el número de alumnos (eje Y). Los centros que combinan alto riesgo y gran volumen de alumnos son los de mayor prioridad.
+\end{itemize}
+
+\subsubsection{Ranking de centros}
+
+Lista completa de centros ordenados de mayor a menor índice de riesgo. Cada tarjeta muestra el nombre, tipo, número de alumnos, índice de riesgo y variación respecto al curso anterior. Al pulsar sobre una tarjeta se realiza un drill-down a la vista Micro con ese centro preseleccionado.
+
+\subsection{Vista Micro: diagnóstico causal de un centro}
+
+Esta vista responde a la pregunta: ¿por qué este centro tiene el riesgo que tiene? Se accede desde el menú o mediante drill-down desde la Macro.
+
+\subsubsection{Indicadores de alumnado}
+
+Diez tarjetas KPI muestran, a escala de alumno, el número de estudiantes afectados por cada factor de riesgo en el curso actual (T0), junto con la variación porcentual respecto al curso anterior (T-1). Esto permite evaluar la evolución temporal de cada problema.
+
+Al pulsar sobre una tarjeta, la tabla de alumnos se filtra para mostrar únicamente los estudiantes que presentan esa alerta, y la vista se desplaza automáticamente hasta la tabla.
+
+\subsubsection{Gráficos de análisis de alumnado}
+
+Ocho gráficos desglosan la composición del riesgo:
+
+\begin{itemize}
+    \item Evolución histórica del riesgo medio en los últimos cinco cursos.
+    \item Distribución de suspensos: histograma con el número de alumnos que acumulan 0, 1, 2, 3 o más suspensos.
+    \item Distribución del nivel de riesgo: gráfico circular con los porcentajes de alumnos en riesgo bajo, medio y alto.
+    \item Riesgo por ciclo educativo: comparativa del porcentaje de alumnos en riesgo crítico por ciclo (Primaria, ESO, etc.).
+    \item Distribución del nivel de renta: tramos de renta familiar (Muy baja, Baja, Media/Alta).
+    \item Correlación renta vs. suspensos: diagrama de dispersión que evidencia la relación entre vulnerabilidad económica y rendimiento.
+    \item Brecha digital vs. aprobados: relación entre acceso a dispositivos e internet y tasa de aprobado.
+    \item Nivel educativo familiar: distribución del máximo nivel de estudios de los progenitores.
+\end{itemize}
+
+Los cuatro últimos gráficos son clave para diferenciar si el problema es principalmente académico (suspensos, repetición) o socioeconómico (renta baja, brecha digital, bajo nivel educativo), lo que orienta la decisión sobre qué tipo de recursos asignar.
+
+\subsubsection{Directorio de alumnos}
+
+Tabla paginada que lista los alumnos que cumplen los filtros activos. Muestra expediente, centro, ciclo, tasa de aprobado, puntuación de riesgo (con código de colores) y badges de alertas activas. Permite ordenar por cualquier columna y filtrar por tipo de alerta mediante un selector rápido. Un contador indica el total de alumnos coincidentes.
+
+\subsection{Gestión de usuarios (solo administradores)}
+
+Accesible únicamente para cuentas con rol de administrador, permite crear, editar y eliminar cuentas de usuario. La cuenta con identificador 1 (superadministrador) está protegida: no puede ser eliminada ni degradada a rol de visualizador, garantizando que siempre haya al menos una cuenta con permisos totales.
+
+\subsection{Flujo de trabajo recomendado}
+
+\begin{enumerate}
+    \item El técnico consulta la vista Macro, observa el panel de alertas y el ranking, e identifica los centros que más destacan por riesgo alto o por métricas concretas (por ejemplo, brecha digital o repetidores en primaria).
+    \item Mediante drill-down, accede a la vista Micro de esos centros.
+    \item En la vista Micro, examina los gráficos socioeconómicos y la distribución de suspensos para determinar si el problema requiere refuerzo curricular, becas, dotación tecnológica o programas de acompañamiento familiar.
+    \item Con esta evidencia, fundamenta la propuesta de asignación de recursos ante los órganos competentes.
+\end{enumerate}
+
+Este flujo asegura que las decisiones se tomen sobre datos objetivos y no sobre impresiones subjetivas.

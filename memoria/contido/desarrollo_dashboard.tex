@@ -1,7 +1,7 @@
 \chapter{Desarrollo del dashboard analítico}
 \label{chap:desarrollo_dashboard}
 
-\lettrine{L}{a} capa de presentación es una aplicación web que consume el Datamart de forma segura. La solución se ha desplegado en tres contenedores Docker interconectados: un backend FastAPI (API REST), un frontend React y un proxy inverso Nginx que actúa como único punto de entrada (Figura~\ref{fig:diagrama_nginx_deploy}).
+\lettrine{L}{a} capa de presentación es una aplicación web que consume el Datamart de forma segura. La solución se ha desplegado en tres contenedores Docker interconectados: un backend FastAPI (API REST), un frontend React y un proxy inverso Nginx que actúa como único punto de entrada (ver figura \ref{fig:diagrama_nginx_deploy}).
 
 \begin{figure}[htbp]
     \centering
@@ -16,11 +16,11 @@
 
 El backend se ha implementado con \textbf{FastAPI}~\cite{FastAPI_Docs} y SQLAlchemy~2.0. El contenedor arranca ejecutando migraciones Alembic, el \textit{seeding} del administrador y el servidor Uvicorn. 
 
-La persistencia emplea un patrón dual sobre PostgreSQL: el esquema \textit{app} (lectura/escritura, gestionado por Alembic) alberga los usuarios, mientras que el esquema \textit{dwh} (solo lectura) mapea el Datamart (Figura~\ref{fig:diagrama_clases_backend}). La configuración sensible se inyecta mediante variables de entorno usando \textit{pydantic-settings}.
+La persistencia emplea un patrón dual sobre PostgreSQL: el esquema \textit{app} (lectura/escritura, gestionado por Alembic) alberga los usuarios, mientras que el esquema \textit{dwh} (solo lectura) mapea el Datamart (ver figura \ref{fig:diagrama_clases_backend}). La configuración sensible se inyecta mediante variables de entorno usando \textit{pydantic-settings}.
 
 \subsection{Autenticación y roles}
 
-La autenticación sigue el flujo JWT estándar (Figura~\ref{fig:jwt_flow}). Existen dos roles (\textit{admin} y \textit{viewer}), con reglas estrictas de protección sobre la cuenta del superadministrador (id=1), que no puede ser eliminada ni degradada.
+La autenticación sigue el flujo JWT estándar (ver figura \ref{fig:jwt_flow}). Existen dos roles (\textit{admin} y \textit{viewer}), con reglas estrictas de protección sobre la cuenta del superadministrador (id=1), que no puede ser eliminada ni degradada.
 
 \begin{figure}[htbp]
     \centering
@@ -31,7 +31,7 @@ La autenticación sigue el flujo JWT estándar (Figura~\ref{fig:jwt_flow}). Exis
 
 \subsection{Arquitectura en capas}
 
-El código del backend sigue una separación estricta de responsabilidades en cuatro capas, cuya organización se refleja en la Figura~\ref{fig:diagrama_clases_backend}:
+El código del backend sigue una separación estricta de responsabilidades en cuatro capas, cuya organización se refleja en la figura \ref{fig:diagrama_clases_backend}:
 
 \begin{itemize}
     \item \textbf{Routers} (\textit{app/routers/v1/}): Definen los endpoints HTTP, validan parámetros de entrada con \textit{Query} de FastAPI, inyectan las dependencias de autenticación y delegan en la capa CRUD.
@@ -45,13 +45,13 @@ El flujo de una petición autenticada al dashboard sigue la cadena: \textit{Rout
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{imaxes/diagrama_backend.pdf}
-    \caption{Diagrama de clases simplificado del backend FastAPI: interfaces REST, lógica de negocio y acceso a datos.}
+    \caption{Diagrama arquitectónico simplificado del backend: interfaces, lógica y acceso a datos.}
     \label{fig:diagrama_clases_backend}
 \end{figure}
 
 \subsection{Motor de consultas analíticas}
 
-Todas las consultas del dashboard parten de la función interna \textit{\_base\_query()}, que realiza un JOIN de \textit{fact\_rendimiento\_anual} con las seis dimensiones necesarias (Figura~\ref{fig:star_join}). Los identificadores de las claves foráneas en la tabla de hechos se castean a \textit{Integer} en los JOIN para compatibilizar tipos \textit{BigInteger} con las claves subrogadas de las dimensiones.
+Todas las consultas del dashboard parten de la función interna \textit{\_base\_query()}, que realiza un JOIN de \textit{fact\_rendimiento\_anual} con las seis dimensiones necesarias (ver figura~\ref{fig:star_join}). Los identificadores de las claves foráneas en la tabla de hechos se cambian a \textit{Integer} en los JOIN para compatibilizar tipos \textit{BigInteger} con las claves subrogadas de las dimensiones.
 
 \begin{figure}[htbp]
     \centering
@@ -70,7 +70,7 @@ Sobre esta consulta base, la capa CRUD implementa las siguientes lógicas analí
     \item \textbf{Geocodificación:} Geocodifica cada centro mediante la librería \textit{geopy} (Nominatim de OpenStreetMap) usando el código postal y ciudad, cacheando las coordenadas en memoria para evitar llamadas repetidas a la API externa.
 \end{itemize}
 
-La Figura~\ref{tab:endpoints_dashboard} resume el catálogo de endpoints expuestos.
+La figura \ref{tab:endpoints_dashboard} resume el catálogo de endpoints expuestos.
 
 \begin{figure}[htbp]
     \centering
@@ -84,12 +84,12 @@ La Figura~\ref{tab:endpoints_dashboard} resume el catálogo de endpoints expuest
 
 La interfaz es una \textbf{Single Page Application (SPA)} desarrollada con React~18~\cite{React_Docs} y empaquetada con \textbf{Vite}~6. 
 
-El Dockerfile implementa un build multi-etapa (Figura~\ref{fig:build_pipeline}): una etapa de compilación que genera los artefactos estáticos (\textit{npm run build}), y una etapa de producción basada en Node Alpine que sirve la aplicación mediante el paquete \textit{serve} en el puerto 80, delegando el \textit{fallback} de rutas a \textit{index.html}.
+El Dockerfile implementa un construcción multi-etapa (ver figura \ref{fig:build_pipeline}): una etapa de compilación que genera los artefactos estáticos (\textit{npm run build}), y una etapa de producción basada en Node Alpine que sirve la aplicación mediante el paquete \textit{serve} en el puerto 80, delegando el \textit{fallback} de rutas a \textit{index.html}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{imaxes/fig_build_pipeline.png}
-    \caption{Pipeline de build y despliegue del frontend.}
+    \caption{Construcción y despliegue del frontend.}
     \label{fig:build_pipeline}
 \end{figure}
 
@@ -97,7 +97,7 @@ Las dependencias clave incluyen \textbf{Axios} (cliente HTTP con interceptores J
 
 \subsection{Arquitectura del código fuente}
 
-El directorio \textit{src/} se organiza en módulos técnicos (Figura~\ref{fig:frontend_tree}): \textbf{services} y \textbf{api} (instancia Axios y funciones de acceso al backend), \textbf{context} (estado global de autenticación y filtros), \textbf{pages} (vistas de la SPA) y \textbf{components} (UI reutilizable).
+El directorio \textit{src/} se organiza en módulos técnicos (ver figura \ref{fig:frontend_tree}): \textbf{services} y \textbf{api} (instancia Axios y funciones de acceso al backend), \textbf{context} (estado global de autenticación y filtros), \textbf{pages} (vistas de la SPA) y \textbf{components} (UI reutilizable).
 
 \begin{figure}[htbp]
     \centering
@@ -113,7 +113,7 @@ El enrutamiento (\textit{App.jsx}) protege las rutas \textit{/macro}, \textit{/m
 
 El contenedor \textit{nginx} es el único punto de entrada de la aplicación. Escucha en el puerto 80 para redirigir tráfico a HTTPS (puerto 443), donde termina el cifrado TLS con certificados montados en volumen.
 
-Nginx define dos \textit{upstreams} internos de Docker (\textit{frontend} y \textit{api}) y enruta el tráfico basándose en la ruta solicitada (Figura~\ref{fig:nginx_routing}). Las peticiones al prefijo \textit{/api/} se reenvían al backend FastAPI (con \textit{timeouts} extendidos a 60 segundos para consultas analíticas pesadas), mientras que el resto de rutas y assets estáticos se proxifican al contenedor React. 
+Nginx define dos \textit{upstreams} internos de Docker (\textit{frontend} y \textit{api}) y enruta el tráfico basándose en la ruta solicitada (ver figura \ref{fig:nginx_routing}). Las peticiones al prefijo \textit{/api/} se reenvían al backend FastAPI (con \textit{timeouts} extendidos a 60 segundos para consultas analíticas pesadas), mientras que el resto de rutas y assets estáticos se proxifican al contenedor React.
 
 \begin{figure}[htbp]
     \centering
@@ -123,3 +123,138 @@ Nginx define dos \textit{upstreams} internos de Docker (\textit{frontend} y \tex
 \end{figure}
 
 Para optimizar el rendimiento, Nginx aplica compresión \textit{gzip} nivel 6 a respuestas JSON y assets estáticos, y añade cabeceras de caché de larga duración (1 año) para imágenes y fuentes tipográficas. Como resultado, ni la API, ni el frontend, ni las bases de datos exponen puertos directamente al \textit{host}, garantizando el aislamiento de la red interna.
+
+\section{Interfaz gráfica y experiencia de usuario}
+
+El resultado del proyecto es un cuadro de mando analítico accesible desde el navegador, cuyo usuario objetivo es el \textbf{técnico o inspector de la administración educativa autonómica} responsable de la distribución de recursos entre centros. La herramienta le permite responder a dos preguntas fundamentales de forma secuencial: en primer lugar, \textit{qué centros requieren mayor atención o dotación de recursos} en el conjunto de la comunidad autónoma; y en segundo lugar, \textit{por qué} un centro concreto presenta el índice de riesgo que presenta, desagregando las causas académicas, socioeconómicas y curriculares que lo explican.
+
+Para dar respuesta a estas dos preguntas, la interfaz se estructura en dos vistas complementarias que comparten los mismos indicadores de alerta pero los miden a distinta escala. La \textbf{vista Macro} opera a escala autonómica: sus KPI cuentan el número de \textit{centros} que superan la mediana autonómica en cada métrica de riesgo. La \textbf{vista Micro} opera a escala de centro: sus KPI cuentan el número de \textit{alumnos} de los centros seleccionados que presentan cada factor de riesgo. El flujo natural de uso consiste en identificar centros prioritarios en la vista Macro y, a continuación, realizar un \textit{drilldown} hacia la vista Micro para diagnosticar las causas concretas del riesgo en esos centros, fundamentando así la decisión de asignación de recursos con evidencia objetiva.
+
+\subsection{Estructura general de la interfaz}
+
+La \textbf{pantalla de login} (ver figura \ref{fig:dashboard_login}) solicita únicamente las credenciales de acceso (correo electrónico y contraseña). Tras una autenticación correcta, la aplicación almacena el token de sesión de forma segura y redirige automáticamente al usuario a la vista principal del cuadro de mando. La sesión persiste entre visitas: si el usuario cierra el navegador y lo vuelve a abrir, la aplicación la recupera automáticamente sin necesidad de volver a introducir las credenciales, siempre que el token no haya expirado.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/dashboard_login.png}
+    \caption{Pantalla de inicio de sesión de la aplicación.}
+    \label{fig:dashboard_login}
+\end{figure}
+
+Tras el login, el usuario accede a un \textit{layout} de aplicación compuesto por dos áreas diferenciadas: una barra lateral de navegación a la izquierda y el área de contenido principal a la derecha.
+
+\subsubsection{Barra lateral (Sidebar)}
+
+La barra lateral cumple una doble función: sirve como menú de navegación entre las vistas de la aplicación y alberga los \textbf{filtros globales} que condicionan todos los datos mostrados en pantalla de forma simultánea. Puede contraerse para maximizar el espacio de visualización, mostrando únicamente los iconos de navegación.
+
+Los filtros globales disponibles son cuatro. El \textbf{curso académico} permite seleccionar el año lectivo que se desea analizar; por defecto, la aplicación selecciona automáticamente el curso más reciente disponible en el sistema. El \textbf{tipo de centro} filtra por tipología institucional (IES, CEIP, etc.). El \textbf{centro educativo} permite seleccionar uno o varios centros concretos mediante un selector con búsqueda por nombre, lo que habilita el drilldown desde la vista Macro hacia la Micro. El \textbf{ciclo formativo} restringe el análisis a un ciclo educativo específico. Cualquier cambio en estos filtros se propaga de forma inmediata a todas las visualizaciones activas, sin necesidad de confirmar ni recargar la página. Un botón de \textit{Resetear} restaura los filtros a su estado por defecto.
+
+La barra lateral también incluye un selector de \textbf{tema visual} (modo claro / modo oscuro), que se persiste entre sesiones mediante \textit{localStorage}, y el botón de cierre de sesión. En cuanto a la navegación, el menú ofrece acceso a tres secciones: \textbf{Centro de Mando} (\textit{/macro}), \textbf{Análisis de Centro} (\textit{/micro}), y \textbf{Gestión de Usuarios} (\textit{/users}), esta última visible únicamente para cuentas con rol de administrador.
+
+\subsection{Vista Macro: centro de mando autonómico}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/dashboard_cm_1.png}
+    \caption{Vista Macro: indicadores autonómicos, alertas y mapa geográfico.}
+    \label{fig:dashboard_cm_1}
+\end{figure}
+
+La vista \textit{Centro de Mando Autonómico} (ver figura \ref{fig:dashboard_cm_1}) es el punto de partida habitual del flujo de trabajo. Ofrece una perspectiva agregada del conjunto de centros educativos de la comunidad autónoma, permitiendo al técnico de la administración identificar qué centros concentran mayor riesgo y, por tanto, deben ser priorizados en la asignación de recursos de apoyo, refuerzo o inspección.
+
+\subsubsection{Indicadores de cabecera}
+
+En la parte superior de la vista se presentan tres \textbf{tarjetas KPI} de resumen que ofrecen una lectura inmediata del estado del sistema: el número total de centros incluidos en la selección activa, el número de centros con índice de riesgo institucional igual o superior a~7 sobre~10 (centros críticos), y la media autonómica del índice de riesgo de todos los centros analizados.
+
+\subsubsection{Panel de alertas institucionales}
+
+Debajo de los KPI de cabecera, un panel de \textbf{alertas institucionales} desglosa diez métricas de riesgo a escala de centro. Para cada métrica, el indicador muestra el número de centros que superan la mediana autonómica del número de alumnos afectados, calculada a partir de los datos individuales de la vista Micro. Las métricas cubren: alto riesgo de abandono, alumnado con suspensos, desfase académico por edad, repetidores, riesgo socioeconómico alto, brecha digital, bajo nivel de estudios familiar, adaptaciones curriculares, repetidores en 1.º y 2.º de primaria, y suspensos en 1.º y 2.º de primaria.
+
+Estas tarjetas son interactivas: al pulsar sobre cualquiera de ellas, la vista filtra automáticamente el ranking de centros para mostrar únicamente aquellos que superan la mediana en esa métrica concreta, desplazándose de forma suave hasta la sección del ranking. Este mecanismo permite al técnico focalizar la atención en el subconjunto de centros más afectados por un factor de riesgo específico antes de decidir qué tipo de recurso asignar.
+
+\subsubsection{Mapa geográfico de centros}
+
+Un \textbf{mapa interactivo} muestra la distribución geográfica de todos los centros. Cada centro se representa mediante un marcador circular cuyo color refleja su nivel de riesgo (verde, amarillo o rojo). Al hacer clic sobre un marcador, la aplicación realiza un drilldown automático: fija ese centro en los filtros globales y navega a la vista Micro para mostrar el diagnóstico causal de su índice de riesgo.
+
+\subsubsection{Gráficos de análisis macro}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/dashboard_cm_2.png}
+    \caption{Vista Macro: gráficos de evolución y ranking de centros.}
+    \label{fig:dashboard_cm_2}
+\end{figure}
+
+La vista incluye cuatro gráficos complementarios (ver figura \ref{fig:dashboard_cm_2}). La \textbf{evolución del riesgo autonómico} es una línea temporal con la media histórica del índice de riesgo de los centros, que permite identificar si la tendencia general mejora o empeora a lo largo de los cursos académicos. La \textbf{comparativa por tipo de centro} es un gráfico de barras que contrasta la media del índice de riesgo según la tipología institucional, revelando si determinados tipos de centro concentran sistemáticamente mayor vulnerabilidad. La \textbf{distribución de riesgo institucional} agrupa los centros en tres niveles (bajo 0--3, medio 4--6, alto 7--10) mediante barras horizontales; al hacer clic sobre una barra, el ranking inferior se filtra para mostrar únicamente los centros de ese nivel. Por último, la \textbf{matriz de asignación de recursos} es un diagrama de dispersión que enfrenta la gravedad del riesgo (eje horizontal) con el volumen de alumnado (eje vertical) para cada centro, permitiendo identificar visualmente qué centros combinan alto riesgo con gran número de alumnos y, por tanto, representan la mayor prioridad de intervención.
+
+\subsubsection{Ranking de centros}
+
+En la parte inferior de la vista se muestra el \textbf{ranking completo de centros}, ordenado de mayor a menor índice de riesgo. Cada tarjeta de centro presenta el nombre, el tipo, el número de alumnos, el índice de riesgo con indicador visual de color, y la variación respecto al curso anterior expresada en puntos. Al pulsar sobre una tarjeta, se activa el drilldown hacia la vista Micro con ese centro preseleccionado en los filtros globales.
+
+\subsection{Vista Micro: análisis de centro}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/dashboard_ac_1.png}
+    \caption{Vista Micro: indicadores de alumnado y distribución del riesgo.}
+    \label{fig:dashboard_ac_1}
+\end{figure}
+
+La vista \textit{Análisis de Centro} (ver figura \ref{fig:dashboard_ac_1}) es la herramienta de diagnóstico causal del sistema. Se accede a ella bien directamente desde el menú, bien mediante el drilldown desde la vista Macro al seleccionar uno o varios centros concretos. Su propósito es responder a la pregunta de \textit{por qué} un centro presenta el índice de riesgo que tiene, desagregando los factores que lo componen y permitiendo al técnico fundamentar con evidencia la naturaleza de los recursos que deben asignarse.
+
+\subsubsection{Indicadores de alumnado con comparativa interanual}
+
+La sección superior presenta \textbf{diez tarjetas KPI}, una por cada tipo de alerta, que miden el número de alumnos de los centros seleccionados que presentan ese factor de riesgo en el curso actual (T0), junto con el porcentaje de incremento o decremento respecto al curso anterior (T-1). Esta comparativa interanual permite evaluar si la situación ha mejorado o empeorado respecto al año precedente, aportando una dimensión temporal al diagnóstico. Las métricas son las mismas diez que en la vista Macro, pero medidas ahora a escala de alumno individual en lugar de a escala de centro.
+
+Cada tarjeta es interactiva: al pulsarla, la tabla de alumnos de la parte inferior se filtra automáticamente para mostrar únicamente los estudiantes que presentan esa alerta, y la vista se desplaza suavemente hasta la tabla. Este mecanismo de \textit{cross-filtering} permite pasar en un solo clic de la lectura del KPI a la lista nominal de alumnos afectados.
+
+\subsubsection{Gráficos de análisis de alumnado}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imaxes/dashboard_ac_2.png}
+    \caption{Vista Micro: gráficos de factores socioeconómicos y correlaciones.}
+    \label{fig:dashboard_ac_2}
+\end{figure}
+
+Ocho gráficos ofrecen distintas perspectivas sobre la composición del riesgo en los centros seleccionados. La \textbf{evolución histórica} muestra la tendencia del riesgo medio de abandono en los últimos cinco cursos académicos. La \textbf{distribución de suspensos} es un histograma que muestra cuántos alumnos acumulan 0, 1, 2, 3 o más asignaturas suspensas. La \textbf{distribución de riesgo} es un gráfico circular que clasifica al alumnado en los tres niveles de riesgo (bajo, medio, alto). El \textbf{riesgo por ciclo} compara el porcentaje de alumnado en riesgo crítico desglosado por ciclo educativo, revelando en qué etapas se concentra el problema.
+
+Los cuatro gráficos restantes (ver figura \ref{fig:dashboard_ac_2}) analizan los factores socioeconómicos y familiares: la \textbf{distribución del nivel de renta} muestra la proporción de familias en cada tramo (Muy baja, baja, media/alta); el gráfico de \textbf{renta frente a suspensos} es un diagrama de dispersión que evidencia la correlación entre vulnerabilidad económica y rendimiento académico; el gráfico de \textbf{brecha digital frente a aprobados} relaciona el acceso a dispositivos e internet con la tasa de aprobado; y el gráfico de \textbf{nivel educativo familiar} muestra la distribución del máximo nivel de estudios alcanzado por los progenitores. Estos cuatro indicadores son especialmente relevantes para determinar si los recursos que necesita un centro son de naturaleza académica (refuerzo curricular) o socioeconómica (becas, dotación tecnológica, programas de acompañamiento familiar).
+
+\subsubsection{Directorio de alumnos}
+
+En la parte inferior de la vista se encuentra el \textbf{Directorio de Alumnos}, una tabla paginada (25 registros por página) que lista a todos los estudiantes que cumplen los filtros activos. Para cada alumno se muestra el número de expediente, el centro educativo y ciclo al que pertenece, la tasa de aprobado, la puntuación de riesgo de abandono con indicador visual de nivel (bajo, medio o alto), y los \textit{badges} de alertas activas (brecha digital, renta baja, repetidor, discapacidad o compensatoria).
+
+La tabla permite ordenación interactiva por cualquiera de sus columnas, tanto ascendente como descendente, e incorpora un filtro rápido multicriterio por tipo de alerta que puede combinarse con los filtros globales del sidebar. Un contador en tiempo real informa del total de alumnos que coinciden con la selección activa.
+
+\subsection{Gestión de usuarios}
+
+La sección de \textbf{Gestión de Usuarios} es accesible únicamente para cuentas con rol de administrador. Permite mantener el directorio de cuentas de acceso a la aplicación mediante las operaciones habituales de creación, edición y eliminación de usuarios. El sistema aplica reglas de protección sobre la cuenta del superadministrador (identificador~1): no puede ser eliminada, degradada a rol de visualizador ni modificada por otros administradores, garantizando que siempre exista al menos una cuenta con acceso completo al sistema.
+
+\section{Validación y pruebas}
+
+Para garantizar la corrección y robustez del sistema, se llevó a cabo un proceso continuo de pruebas a lo largo de todo el ciclo de desarrollo. Este proceso combinó pruebas unitarias sobre componentes aislados, pruebas de integración entre módulos y pruebas de aceptación supervisadas por el tutor del proyecto. Cada iteración de desarrollo incluía una fase de validación que permitía detectar desviaciones respecto a los requisitos y corregirlas de manera ágil. Como resultado de este enfoque, todas las funcionalidades han sido validadas y se encuentran operativas en la actualidad.
+
+A continuación, se presentan ejemplos concretos de cómo las pruebas influyeron en la evolución del sistema, llevando a ajustes y mejoras significativas.
+
+\begin{itemize}
+
+\item \textbf{Estrategia de carga incremental frente a carga completa:} Inicialmente, la tabla de hechos \emph{fact\_rendimiento\_anual} se poblaba mediante un proceso de carga completa que recalculaba todo el histórico de alumnos en cada ejecución. Durante las pruebas de rendimiento se observó que, al crecer el volumen de datos simulados, el tiempo de procesamiento se volvía inviable para una actualización periódica. Tras discutirlo con el tutor, se rediseñó la lógica para implementar un proceso incremental que solo procesa los datos del curso académico actual, recuperando el riesgo histórico acumulado mediante una consulta a la propia tabla destino. Este cambio obligó a modificar los pipelines de extracción, a crear una nueva variante incremental del pipeline de hechos y a adaptar los workflows para que aceptaran el parámetro dinámico \emph{CURSO\_ACTUAL}, permitiendo que todo el ecosistema se ejecute con un único valor de configuración.
+
+\item \textbf{Cálculo del riesgo académico con perspectiva histórica:} En las primeras pruebas, el índice de riesgo de abandono se calculaba únicamente a partir de los datos del curso actual, lo que no reflejaba la trayectoria real del alumno. Por ejemplo, un estudiante que había repetido dos cursos en primaria pero que en el curso actual aprobaba todas las asignaturas aparecía con un riesgo bajo, cuando en realidad su historial indicaba una vulnerabilidad significativa. Las pruebas de aceptación pusieron de manifiesto esta limitación, y se modificó la lógica del pipeline para que el cálculo del \emph{riesgo\_academico} tuviera en cuenta todo el historial de calificaciones, repeticiones y suspensos acumulados. Este cambio fue especialmente complejo de adaptar al flujo incremental, ya que requería recuperar el bagaje histórico del año anterior y sumarle los puntos del curso actual, pero finalmente se resolvió mediante un \emph{Database Join} que consulta la propia tabla destino antes de insertar los nuevos registros.
+
+\item \textbf{Geocodificación de centros educativos:} Para representar los centros en el mapa, inicialmente se utilizó una librería pública que relacionaba códigos postales con coordenadas geográficas. Sin embargo, durante las pruebas se comprobó que muchos centros no aparecían en el mapa o sus coordenadas eran imprecisas, lo que hacía inutilizable la visualización geográfica. Se sustituyó esta aproximación por una consulta directa a la API de \emph{Nominatim} (OpenStreetMap) utilizando la dirección completa del centro. Para evitar superar los límites de peticiones de la API gratuita, se implementó una caché en memoria que almacena las coordenadas de cada centro tras la primera consulta, reduciendo drásticamente el número de llamadas externas. Esta solución fue validada con éxito y el mapa geográfico funciona actualmente con total precisión.
+
+\item \textbf{Protección de la cuenta de superadministrador:} Durante las pruebas de gestión de usuarios, se detectó que un administrador con permisos totales podía degradar su propia cuenta a rol de visualizador (\emph{viewer}) a través de la interfaz de edición. Esto suponía un riesgo grave, ya que podía dejar al sistema sin ningún usuario con capacidad de administración. Tras identificar el problema, se añadió una regla de negocio en el backend que impide modificar el rol de la cuenta con identificador \emph{id=1}, así como eliminarla. Esta restricción se aplica tanto en la lógica de actualización como en la de eliminación, y se validó mediante pruebas de aceptación que intentaban todas las operaciones prohibidas sin éxito.
+
+\item \textbf{Despliegue unificado con Docker y variables de entorno:} Uno de los requisitos no funcionales más importantes era que el sistema pudiera levantarse con un único comando (\emph{docker-compose up}) en cualquier máquina, sin necesidad de configuraciones manuales. Durante las primeras pruebas de despliegue, se encontraron múltiples problemas: variables de entorno duplicadas en distintos contenedores, rutas relativas incorrectas en los volúmenes, y dependencias entre servicios que se iniciaban en orden incorrecto. Se reorganizó la estructura del proyecto para centralizar todas las variables de entorno en un único archivo \emph{.env} en la raíz, y se ajustaron los archivos \emph{docker-compose.yml} y los \emph{Dockerfile} para que cada contenedor leyera exclusivamente las variables que le corresponden. Además, se añadieron dependencias explícitas entre servicios para garantizar el orden de arranque. Con estas correcciones, el despliegue funciona de forma fiable y reproducible en cualquier entorno.
+
+\item \textbf{Proxy inverso Nginx y enrutamiento en producción:} Durante el desarrollo, el frontend utilizaba el servidor de desarrollo de Vite, que actuaba como proxy para las peticiones a la API. Al pasar a producción con un contenedor Nginx independiente, las referencias a los endpoints quedaron rotas porque el frontend compilado apuntaba a rutas relativas que no se resolvían correctamente. Las pruebas de integración revelaron que el problema residía en la configuración del proxy y en el manejo de las rutas de la SPA. Se rediseñó la topología de despliegue para que Nginx actuara como único punto de entrada, enrutando las peticiones a \emph{/api/} al backend FastAPI y el resto al frontend React. Se ajustaron las reglas de \emph{try\_files} para manejar correctamente el \emph{failback} a \emph{index.html} en rutas de cliente, y se configuraron timeouts más largos para las consultas analíticas pesadas. Tras estas modificaciones, el sistema funciona correctamente en producción con los tres contenedores (frontend, backend y Nginx) coordinados.
+
+\item \textbf{Diseño del Datamart y adaptación a las capacidades de Apache Hop:} El modelo dimensional inicial se diseñó en papel siguiendo estrictamente la metodología de Kimball, pero al implementar los pipelines de transformación en Apache Hop surgieron dificultades técnicas. Por ejemplo, el manejo de dimensiones de tipo 2 (SCD) con fechas de vigencia requería un enfoque particular que no estaba inicialmente previsto, y la generación de claves subrogadas con el nodo \emph{Combination Lookup} obligó a reestructurar algunas tablas para que los tipos de datos fueran compatibles. Durante las pruebas de carga, se comprobó que algunas consultas de los pipelines eran ineficientes y se optimizaron utilizando la funcionalidad de \emph{preview SQL} de Hop, que permite inspeccionar las sentencias generadas antes de ejecutarlas. Este proceso iterativo de prueba y ajuste condujo a un Datamart estable y bien adaptado a la herramienta, sin sacrificar la corrección de los cálculos.
+
+\item \textbf{Correlación entre renta y rendimiento académico:} Inicialmente, el indicador de riesgo socioeconómico se calculaba aplicando directamente la renta declarada sin ajustar por el tamaño del hogar. Durante la validación de los datos, se observó que familias con ingresos medios pero con muchos hijos obtenían una puntuación de riesgo baja, cuando en realidad su situación podía ser de vulnerabilidad. Siguiendo las recomendaciones de la OCDE y Eurostat, se incorporó la escala de unidades de consumo, pero los datos de origen no incluían la edad de los convivientes, lo que obligó a una adaptación metodológica. Las pruebas con distintos escenarios permitieron ajustar los umbrales de renta (muy baja, baja, media/alta) y las ponderaciones asociadas, logrando que el índice de riesgo socioeconómico reflejara fielmente la situación de cada familia.
+
+\end{itemize}
+
+Estos ejemplos ilustran cómo el proceso de validación y pruebas no se limitó a verificar el funcionamiento nominal, sino que permitió detectar limitaciones, corregir errores y mejorar el diseño general del sistema. Cada funcionalidad fue sometida a un proceso exhaustivo de evaluación, lo que resultó en una adaptación constante de la arquitectura y la lógica de negocio para asegurar su adecuación a los requisitos y su eficacia en un entorno real. En la actualidad, todas las funcionalidades han sido validadas y el sistema se encuentra operativo y listo para su despliegue en producción.

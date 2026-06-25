@@ -19,7 +19,7 @@ Para lograr el objetivo de detectar de forma temprana el riesgo de abandono esco
 
 Para comprender la necesidad de construir un Data Warehouse y diseñar los flujos ETL, es fundamental analizar previamente la estructura de la base de datos origen. En este proyecto se ha simulado una base de datos transaccional (OLTP) en PostgreSQL que replica el sistema de gestión académica y administrativa estándar de los centros educativos.
 
-Este sistema está altamente normalizado para garantizar la integridad referencial y evitar la redundancia de datos en las operaciones diarias (altas de matrículas, registro de calificaciones, encuestas familiares). El modelo relacional consta de 14 tablas principales interconectadas (ver Figura \ref{fig:diagrama_er_origen} y Figura \ref{fig:modelo_relacional_origen}), agrupadas en los siguientes dominios lógicos:
+Este sistema está altamente normalizado para garantizar la integridad referencial y evitar la redundancia de datos en las operaciones diarias (altas de matrículas, registro de calificaciones, encuestas familiares). El modelo relacional consta de 14 tablas principales interconectadas (ver figura \ref{fig:diagrama_er_origen} y figura \ref{fig:modelo_relacional_origen}), agrupadas en los siguientes dominios lógicos:
 
 \begin{itemize}
     \item \textbf{Dominio Académico:} Tablas \textit{CICLO\-\_EDUCATIVO}, \textit{ESPECIALIDAD}, \textit{CURSO} y \textit{ASIGNATURA}. Definen el catálogo formativo del sistema.
@@ -36,14 +36,14 @@ Dada la alta fragmentación de la información (por ejemplo, para relacionar las
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1\textwidth]{imaxes/modelo_er_source.pdf}
+    \includegraphics[width=1.1\textwidth]{imaxes/modelo_er_source.pdf}
     \caption{Modelo Entidad-Relación (ER) de la base de datos transaccional origen.}
     \label{fig:diagrama_er_origen}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1\textwidth]{imaxes/relacional_source.pdf}
+    \includegraphics[width=1.1\textwidth]{imaxes/relacional_source.pdf}
     \caption{Esquema Relacional de origen.}
     \label{fig:modelo_relacional_origen}
 \end{figure}
@@ -74,3 +74,76 @@ Aunque el diseño de una arquitectura distribuida conlleva una mayor carga de ra
     \item \textbf{Despliegue Universal (\textit{One-Click Deployment}):} La orquestación con \textit{docker-compose} permite levantar toda la plataforma (bases de datos, ETL, API y web) con un único comando. Esto facilita enormemente su transferencia tecnológica y adopción real.
     \item \textbf{Topología de Red y Seguridad:} Docker permite crear redes virtuales cerradas (\textit{Docker Networks}). De esta forma, bases de datos críticas como el Data Warehouse y los flujos de transformación de Apache Hop quedan totalmente invisibles desde el exterior. Solamente el proxy inverso (Nginx) expone los puertos estrictamente necesarios, añadiendo una capa de seguridad pasiva esencial cuando se tratan datos académicos y demográficos de menores.
 \end{itemize}
+
+\section{Análisis de requisitos}
+
+A continuación, en la tabla \ref{tab:casos_uso}, se enumeran los casos de uso que describen las funcionalidades del sistema. Salvo que se indique expresamente \textit{(solo administradores)}, todos los casos de uso pueden ser ejecutados por un técnico con rol de visualizador (viewer).
+
+\small
+\renewcommand{\arraystretch}{1.1}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} 
+                   >{\raggedright\arraybackslash}p{3.5cm} 
+                   >{\raggedright\arraybackslash}p{7.0cm}}
+\caption{Casos de uso del sistema}
+\label{tab:casos_uso} \\
+\hline
+\textbf{Código} & \textbf{Nombre} & \textbf{Descripción} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries Tabla \thetable{} – Continuación}} \\
+\hline
+\textbf{Código} & \textbf{Nombre} & \textbf{Descripción} \\
+\hline
+\endhead
+
+\hline
+\multicolumn{3}{r}{\footnotesize Continúa en la página siguiente} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% ---- Autenticación ----
+CU-01 & Iniciar sesión & Validación de credenciales, generación de token JWT y redirección al dashboard. \\
+CU-02 & Cerrar sesión & Invalida el token JWT y redirige a la pantalla de login. \\
+CU-03 & Recuperar sesión automática & Restaura la sesión si el token JWT almacenado es válido, sin necesidad de nuevas credenciales. \\
+\hline
+% ---- Vista Macro ----
+CU-04 & Visualizar vista Macro & Muestra el panel de control autonómico con indicadores resumen, alertas, mapa, gráficos y ranking. \\
+CU-05 & Filtrar datos globalmente & Desde la barra lateral, permite seleccionar curso, tipo de centro, ciclo y/o centros concretos, actualizando todas las visualizaciones. \\
+CU-06 & Consultar indicadores de cabecera & Muestra tres KPI: total de centros, centros críticos (índice $\ge$ 7) y media autonómica del índice de riesgo. \\
+CU-07 & Visualizar panel de alertas institucionales & Muestra diez métricas de riesgo a escala de centro, indicando cuántos centros superan la mediana autonómica. \\
+CU-08 & Filtrar ranking por alerta & Al pulsar sobre una tarjeta de alerta, filtra el ranking mostrando solo centros que superan la mediana en esa métrica. \\
+CU-09 & Visualizar mapa geográfico de centros & Representa cada centro en un mapa con marcador de color según su nivel de riesgo (verde/amarillo/rojo). \\
+CU-10 & Consultar evolución del índice de riesgo & Gráfico de líneas con la evolución del índice de riesgo medio de los centros seleccionados en los últimos cinco años. \\
+CU-11 & Visualizar distribución de centros por tipo & Diagrama de barras con el número de centros (públicos/concertados/privados) y su nivel de riesgo promedio. \\
+CU-12 & Consultar matriz de asignación de recursos & Diagrama de dispersión que enfrenta el índice de riesgo (eje X) con el número de alumnos (eje Y) para cada centro. \\
+CU-13 & Ver ranking de centros & Lista de todos los centros ordenados de mayor a menor índice de riesgo, con nombre, tipo, alumnos, índice y variación interanual. \\
+CU-14 & Realizar drilldown a vista Micro & Al pulsar sobre un centro en el ranking o mapa, navega a la vista Micro con ese centro preseleccionado. \\
+\hline
+% ---- Vista Micro ----
+CU-15 & Visualizar vista Micro & Muestra el análisis detallado de los centros seleccionados: KPI de alumnado, gráficos de distribución y tabla de alumnos. \\
+CU-16 & Consultar indicadores de alumnado & Muestra diez KPI a escala de alumno (número de alumnos afectados por cada factor de riesgo) con comparativa interanual. \\
+CU-17 & Filtrar tabla de alumnos por alerta & Al pulsar sobre una tarjeta KPI en vista Micro, filtra la tabla de alumnos mostrando solo los que presentan esa alerta. \\
+CU-18 & Visualizar evolución histórica del riesgo & Gráfico de líneas con la tendencia del riesgo medio de abandono en los centros seleccionados en los últimos cinco cursos. \\
+CU-19 & Consultar distribución de suspensos & Histograma con el número de alumnos que acumulan 0, 1, 2, 3 o más asignaturas suspensas. \\
+CU-20 & Visualizar distribución del nivel de riesgo & Gráfico circular que clasifica al alumnado en riesgo bajo, medio y alto. \\
+CU-21 & Consultar riesgo por ciclo educativo & Gráfico comparativo del porcentaje de alumnado en riesgo crítico desglosado por ciclo (Primaria, ESO, etc.). \\
+CU-22 & Visualizar distribución del nivel de renta & Proporción de familias en cada tramo de renta (Muy baja, Baja, Media/Alta). \\
+CU-23 & Consultar correlación renta vs. suspensos & Diagrama de dispersión que relaciona el nivel de renta familiar con el número de suspensos. \\
+CU-24 & Visualizar brecha digital vs. aprobados & Gráfico que relaciona el acceso a dispositivos e internet con la tasa de aprobado. \\
+CU-25 & Consultar nivel educativo familiar & Distribución del máximo nivel de estudios alcanzado por los progenitores. \\
+CU-26 & Ver directorio de alumnos & Tabla paginada (25 registros) con expediente, centro, ciclo, tasa de aprobado, riesgo y badges de alertas. \\
+CU-27 & Ordenar tabla de alumnos & Ordenación ascendente o descendente por cualquiera de las columnas de la tabla. \\
+CU-28 & Filtrar alumnos por tipo de alerta & Filtro rápido multicriterio por tipo de alerta (brecha digital, renta baja, repetidor, etc.) sobre la tabla de alumnos. \\
+\hline
+% ---- Gestión de usuarios (solo administradores) ----
+CU-29 & Gestionar usuarios \textit{(solo administradores)} & Crear, editar o eliminar cuentas de usuario. La cuenta del superadministrador (id=1) está protegida. \\
+CU-30 & Visualizar perfil de usuario & Consultar los propios datos (nombre, email, rol) a través del endpoint \texttt{/auth/me}. \\
+
+\end{longtable}
+
+\normalsize

@@ -1,92 +1,402 @@
-# 🎓 Datamart Educativo & Motor de Riesgo de Abandono Escolar
+# 🎓 Sistema de Inteligencia Educativa para la Prevención del Abandono Escolar
 
-![Estado](https://img.shields.io/badge/Estado-En_Desarrollo-orange)
+![Estado](https://img.shields.io/badge/Estado-Finalizado-success)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?logo=postgresql)
 ![Apache Hop](https://img.shields.io/badge/ETL-Apache_Hop-red?logo=apache)
 ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
+![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)
 
-Sistema de inteligencia de negocio (Business Intelligence) integral diseñado para el ámbito educativo. Su núcleo es un **Data Warehouse analítico** alimentado por un **ETL avanzado** que evalúa el rendimiento académico, factores demográficos y adaptaciones curriculares para predecir de forma temprana el **Riesgo de Abandono Escolar** de los estudiantes.
+Sistema integral de **Business Intelligence Educativo** orientado a la detección temprana del riesgo de abandono escolar y al apoyo en la toma de decisiones por parte de las administraciones educativas.
 
----
-
-## 🏗 Arquitectura del Sistema
-
-El proyecto sigue una arquitectura moderna dividida en 4 grandes capas (End-to-End):
-
-### 1. Data Warehouse (PostgreSQL)
-Implementa un diseño dimensional estelar basado en la metodología Kimball, optimizado estrictamente para consultas analíticas masivas de solo lectura (OLAP).
-- **Esquema `dwh`**: Aislamiento analítico.
-- **Tablas de Hechos (Facts)**:
-  - `fact_calificaciones`: Rendimiento atómico a nivel Estudiante $\times$ Asignatura $\times$ Evaluación.
-  - `fact_rendimiento_anual`: Motor predictivo y consolidador anual por Estudiante $\times$ Curso. Alberga los indicadores maestros (`riesgo_academico`, `riesgo_socioeconomico`, `riesgo_adaptacion` y `riesgo_abandono`).
-- **Tablas de Dimensiones (Dims)**: `dim_estudiante` (SCD2), `dim_tiempo`, `dim_curso`, `dim_centro`, `dim_asignatura`, `dim_demografia_familiar` y `dim_adaptacion`.
-
-### 2. Capa ETL (Apache Hop)
-El cerebro matemático del sistema. Las tuberías (Pipelines) ingieren datos transaccionales crudos y los transforman:
-- **Sumas Acumuladas (Window Functions)**: Rastrea el histórico de suspensos de un alumno desde su inicio en primaria.
-- **Detección de Repetidores**: Uso de `Analytic Query` (LAG) para cruzar matrículas pasadas y determinar repeticiones por tramo educativo.
-- **Scoring de Riesgo**: Algoritmos de cálculo de riesgo basados en ponderaciones matemáticas de factores socioeconómicos e historial de fracaso escolar.
-
-### 3. Backend (FastAPI + SQLAlchemy 2.0)
-Servidor de ultra-alto rendimiento en Python 3.12:
-- **ORM Dual**: Emplea SQLAlchemy para rutear a dos esquemas. El esquema de analítica (`dwh`) está fuertemente bloqueado para **solo lectura**, garantizando la inmutabilidad de los datos calculados por el ETL.
-- **Seguridad**: Gestión de configuración robusta vía Pydantic Settings.
-
-### 4. Frontend (Dashboard Analítico)
-Interfaz gráfica diseñada con las últimas tendencias de UI/UX para que el equipo directivo/orientadores del centro consuman las métricas. Proporciona vistas en detalle (Drill-down) desde la visión macro del centro hasta el riesgo individual de un estudiante.
+La solución combina un **Data Warehouse analítico**, procesos **ETL desarrollados en Apache Hop**, una **API REST con FastAPI** y un **dashboard interactivo** que permite analizar tanto indicadores agregados a nivel de centro como factores de riesgo individuales de los estudiantes.
 
 ---
 
-## 🚀 Estructura del Repositorio
+# 🚀 Características principales
+
+* Modelo dimensional en estrella orientado al análisis educativo.
+* Motor de cálculo de riesgo de abandono escolar.
+* Procesos ETL automatizados mediante Apache Hop.
+* API REST desarrollada con FastAPI y SQLAlchemy.
+* Dashboard interactivo desarrollado con React.
+* Sistema de autenticación basado en JWT.
+* Gestión de usuarios con control de roles.
+* Navegación Macro → Micro mediante drill-down.
+* Arquitectura completamente dockerizada.
+
+---
+
+# 🏗 Arquitectura del sistema
+
+La solución sigue una arquitectura de cuatro capas:
+
+## 1. Data Warehouse (PostgreSQL)
+
+Implementa un modelo dimensional basado en la metodología Kimball.
+
+### Tablas de hechos
+
+* `fact_calificaciones`
+
+  * Rendimiento académico a nivel Estudiante × Asignatura × Evaluación.
+
+* `fact_rendimiento_anual`
+
+  * Consolidación anual por Estudiante × Curso.
+  * Incluye los indicadores:
+
+    * `riesgo_academico`
+    * `riesgo_socioeconomico`
+    * `riesgo_adaptacion`
+    * `riesgo_abandono`
+
+### Tablas de dimensiones
+
+* `dim_estudiante` (SCD Tipo 2)
+* `dim_tiempo`
+* `dim_curso`
+* `dim_centro`
+* `dim_asignatura`
+* `dim_demografia_familiar`
+* `dim_adaptacion`
+
+---
+
+## 2. Procesos ETL (Apache Hop)
+
+Los pipelines transforman los datos operacionales en información analítica mediante:
+
+* Cálculo histórico de suspensos acumulados.
+* Detección automática de repetidores.
+* Consolidación de indicadores por curso académico.
+* Cálculo de puntuaciones de riesgo.
+* Cargas incrementales por año académico.
+
+El workflow principal (`main.hwf`) orquesta la carga completa de dimensiones y tablas de hechos.
+
+---
+
+## 3. Backend (FastAPI)
+
+API REST desarrollada con:
+
+* Python 3.12
+* FastAPI
+* SQLAlchemy 2.0
+* Pydantic Settings
+
+Características:
+
+* Autenticación JWT.
+* Gestión de usuarios y roles.
+* Acceso seguro al Data Warehouse.
+* Endpoints para indicadores Macro y Micro.
+* Configuración mediante variables de entorno.
+
+---
+
+## 4. Frontend (React)
+
+Dashboard analítico diseñado para responsables educativos.
+
+Incluye:
+
+* Visualizaciones interactivas.
+* Filtros globales.
+* KPIs en tiempo real.
+* Mapas geográficos.
+* Drill-down desde centro educativo hasta alumno.
+* Gestión de usuarios para administradores.
+
+---
+
+# 📦 Infraestructura Docker
+
+El sistema se despliega mediante Docker Compose y está compuesto por seis contenedores:
+
+1. PostgreSQL (Base de datos origen)
+2. PostgreSQL (Data Warehouse)
+3. Apache Hop Web
+4. FastAPI
+5. React Frontend
+6. Nginx (Proxy inverso)
+
+---
+
+# 📁 Estructura del repositorio
 
 ```text
 /tfg
-├── /api/                # Backend FastAPI (Controladores, Modelos, Cruds, Schemas)
-├── /dwh/                # Scripts DDL de base de datos (Ej: 00_create_dwh_tables.sql)
-├── /frontend/           # Dashboard Web (React/Vite)
-├── /hop/                # Pipelines y Workflows de Apache Hop (.hpl, .hwf)
-├── /source/             # Datos crudos de origen (CSVs, Excels)
-├── docker-compose.yml   # Orquestación de infraestructura local (BDs)
-└── README.md            # Este archivo
+├── api/                 # Backend FastAPI
+├── dwh/                 # Scripts DDL y modelo dimensional
+├── frontend/            # Aplicación React
+├── hop/                 # Pipelines y workflows Apache Hop
+├── source/              # Datos de origen
+├── nginx/               # Configuración del proxy inverso
+├── docker-compose.yml
+├── .env.example
+└── README.md
 ```
 
 ---
 
-## 🛠 Instalación y Puesta en Marcha
+# 🛠 Instalación y despliegue
 
-### Prerrequisitos
-- Docker y Docker Compose (Docker Desktop en Windows/Mac)
-- Apache Hop (Cliente local opcional si deseas modificar los pipelines visualmente, aunque el contenedor de la interfaz web ya viene incluido).
+## Requisitos previos
 
-### Despliegue Automatizado (One-Click)
-La gran ventaja de este repositorio es que toda la infraestructura está completamente "dockerizada" e interconectada a través de una red virtual (`tfg-network`). 
+* Docker
+* Docker Compose
 
-Para levantar **el proyecto entero por completo** (Bases de Datos, ETL Web, Servidor Backend y Cliente Frontend), solo necesitas ejecutar en la raíz del proyecto:
+## Clonar el repositorio
+
+```bash
+git clone https://github.com/andrespazparedes/tfg.git
+cd tfg
+```
+
+## Configuración
+
+Crear un archivo `.env` a partir de:
+
+```bash
+cp .env.example .env
+```
+
+Configurar las credenciales y puertos necesarios.
+
+---
+
+## Levantar la infraestructura
 
 ```bash
 docker-compose up -d --build
 ```
 
-### ¿Qué ocurre al lanzar este comando?
-1. **Bases de Datos (`postgres-source` y `postgres-dwh`)**: Se inicializan los motores de Postgres 16 y se ejecutan automáticamente los scripts DDL de creación de tablas (`/dwh/init/` y `/source/init/`).
-2. **Apache Hop (`apachehop-web`)**: Se levanta un servidor de Apache Hop Web en el puerto `8080`, conectado directamente a la carpeta `/hop/` y a las bases de datos.
-3. **Backend (`api`)**: Se construye la imagen de FastAPI, se instalan sus dependencias (vía `requirements.txt`) y arranca el servidor en el puerto `8000`. (Documentación interactiva disponible en `http://localhost:8000/docs`).
-4. **Frontend (`frontend`)**: Se instala el entorno de Node.js, se bajan las dependencias de React/Vite y se expone la web app en el puerto `5173`.
-
-### Siguiente paso: Ejecución del ETL
-Una vez levantada toda la infraestructura, la base de datos `dwh` está creada pero vacía. Para poblarla:
-1. Abre tu navegador y entra en `http://localhost:8080` (Interfaz de Apache Hop Web).
-2. Abre el pipeline maestro (`/orchestration/main.hwf`).
-3. Dale al botón de **Ejecutar (Run)** para extraer los datos crudos, realizar los cálculos predictivos e inyectarlos en el Data Warehouse.
+Este comando construye y levanta todos los servicios del sistema.
 
 ---
 
-## 📊 Metodología Analítica de Abandono
+## Acceso a las aplicaciones
 
-El **riesgo de abandono** (`riesgo_abandono`) no es un simple cálculo aleatorio. Es la sumatoria de tres sub-vectores de riesgo:
-1. **Riesgo Académico**: Ponderación agresiva por suspensos históricos (con penalizaciones superiores si los suspensos ocurren en 1º y 2º de Primaria) y detección histórica de repeticiones de curso.
-2. **Riesgo Socioeconómico**: Matriz de baja cardinalidad que cruza el Nivel de Renta de la unidad de consumo, la conectividad a Internet, la disponibilidad de ordenadores y el nivel de estudios máximo de los tutores legales.
-3. **Riesgo por Adaptación**: Evaluación de la necesidad de apoyo curricular significativo o compensatoria.
+Una vez iniciado el despliegue:
+
+| Servicio       | URL                       |
+| -------------- | ------------------------- |
+| Dashboard      | http://localhost          |
+| Apache Hop Web | http://localhost:8080     |
+| API REST       | http://localhost/api      |
+| Swagger        | http://localhost/api/docs |
 
 ---
-*Proyecto finalizado desarrollado como Trabajo de Fin de Grado (TFG).*
+
+# 🔄 Carga de datos
+
+El Data Warehouse se crea automáticamente pero inicialmente está vacío.
+
+Para cargar la información:
+
+1. Acceder a Apache Hop Web.
+2. Abrir el proyecto ETL.
+3. Ejecutar el workflow principal:
+
+```text
+main.hwf
+```
+
+Este workflow:
+
+* Extrae los datos de la base operacional.
+* Calcula los indicadores históricos.
+* Evalúa los factores de riesgo.
+* Carga las dimensiones.
+* Actualiza las tablas de hechos.
+
+En modo incremental, únicamente procesa el curso académico seleccionado, manteniendo el histórico acumulado.
+
+---
+
+# 📊 Metodología de cálculo del riesgo
+
+La puntuación de abandono escolar se construye a partir de tres componentes:
+
+## Riesgo académico
+
+Considera:
+
+* Suspensos acumulados.
+* Repetición de curso.
+* Penalización adicional en 1.º y 2.º de Primaria.
+
+## Riesgo socioeconómico
+
+Basado en:
+
+* Nivel de renta familiar.
+* Acceso a Internet.
+* Disponibilidad de dispositivos.
+* Nivel educativo familiar.
+
+## Riesgo por adaptación
+
+Evalúa:
+
+* Adaptaciones curriculares.
+* Necesidades específicas de apoyo educativo.
+
+La combinación de estos factores genera el indicador final:
+
+```text
+riesgo_abandono
+```
+
+---
+
+# 🖥 Uso del dashboard
+
+## Autenticación
+
+El acceso requiere:
+
+* Correo electrónico
+* Contraseña
+
+La sesión se mantiene mediante tokens JWT.
+
+---
+
+## Filtros globales
+
+Todas las visualizaciones comparten:
+
+* Curso académico
+* Tipo de centro
+* Ciclo educativo
+* Centros seleccionados
+
+Los cambios se aplican automáticamente a toda la aplicación.
+
+---
+
+# 🌍 Vista Macro
+
+Permite identificar centros prioritarios.
+
+Incluye:
+
+### KPIs principales
+
+* Total de centros
+* Centros críticos
+* Riesgo medio
+
+### Alertas institucionales
+
+* Riesgo alto de abandono
+* Suspensos
+* Repetidores
+* Brecha digital
+* Riesgo socioeconómico
+* Adaptaciones curriculares
+* Otros indicadores críticos
+
+### Mapa geográfico
+
+Representación visual de centros según nivel de riesgo.
+
+### Análisis agregado
+
+* Evolución temporal del riesgo
+* Comparativa por tipo de centro
+* Matriz de asignación de recursos
+
+### Ranking de centros
+
+Ordenados según índice de riesgo.
+
+---
+
+# 🔍 Vista Micro
+
+Permite analizar las causas del riesgo en un centro concreto.
+
+Incluye:
+
+### KPIs de alumnado
+
+* Riesgo alto
+* Suspensos
+* Repetidores
+* Brecha digital
+* Adaptaciones curriculares
+* Variaciones respecto al curso anterior
+
+### Gráficos analíticos
+
+* Evolución histórica
+* Distribución de suspensos
+* Distribución del riesgo
+* Riesgo por ciclo educativo
+* Distribución de renta
+* Renta vs suspensos
+* Brecha digital vs rendimiento
+* Nivel educativo familiar
+
+### Directorio de alumnos
+
+Tabla con:
+
+* Expediente
+* Centro
+* Ciclo
+* Tasa de aprobado
+* Puntuación de riesgo
+* Alertas activas
+
+---
+
+# 👥 Gestión de usuarios
+
+Disponible únicamente para administradores.
+
+Permite:
+
+* Crear usuarios
+* Editar usuarios
+* Eliminar usuarios
+* Gestionar roles
+
+La cuenta superadministradora está protegida para garantizar la existencia permanente de un usuario con privilegios totales.
+
+---
+
+# 🎯 Flujo de trabajo recomendado
+
+1. Analizar la situación general desde la Vista Macro.
+2. Identificar centros prioritarios mediante alertas y rankings.
+3. Acceder a la Vista Micro mediante drill-down.
+4. Diagnosticar las causas del riesgo.
+5. Proponer medidas de intervención basadas en evidencias objetivas.
+
+---
+
+# 🔧 Personalización
+
+Las reglas de negocio pueden modificarse mediante:
+
+* Pipelines de Apache Hop.
+* Código del backend.
+* Configuración de umbrales e indicadores.
+
+Tras cualquier modificación es suficiente con reconstruir los contenedores:
+
+```bash
+docker-compose up -d --build
+```
+
+---
+
+# 📚 Trabajo Fin de Grado
+
+Proyecto desarrollado como Trabajo de Fin de Grado (TFG) en Ingeniería Informática.
+
+Su objetivo es proporcionar una herramienta de apoyo a la toma de decisiones para la prevención temprana del abandono escolar mediante técnicas de Business Intelligence, modelado dimensional y analítica educativa.

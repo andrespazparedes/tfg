@@ -10,7 +10,7 @@ Este capítulo detalla la arquitectura de los flujos de datos (\textit{Pipelines
 \subsection{Volcado a staging (\textit{extract\_all\_to\_staging.hpl})}
 Para no sobrecargar la base de datos transaccional durante los cruces analíticos, el primer paso es clonar las tablas de producción al esquema intermedio \textit{raw} (Staging Area). El pipeline establece 14 hilos independientes que extraen datos de forma incremental usando el parámetro \textit{\$\{CURSO\_ACTUAL\}}, permitiendo recargas históricas completas si el parámetro se omite. 
 
-Una decisión clave es la \textbf{ausencia de claves foráneas} en el esquema destino \textit{raw}, lo que permite a Hop paralelizar la inserción masiva de todas las entidades simultáneamente sin generar bloqueos lógicos por dependencias (Figura \ref{fig:extract_all_to_staging}).
+Una decisión clave es la \textbf{ausencia de claves foráneas} en el esquema destino \textit{raw}, lo que permite a Hop paralelizar la inserción masiva de todas las entidades simultáneamente sin generar bloqueos lógicos por dependencias (ver figura \ref{fig:extract_all_to_staging}).
 
 \begin{figure}[htbp]
     \centering
@@ -21,9 +21,9 @@ Una decisión clave es la \textbf{ausencia de claves foráneas} en el esquema de
 
 \subsection{Dimensión de demografía familiar}
 
-El núcleo de las reglas de negocio reside en este pipeline, cuya misión es ingerir datos brutos de encuestas y construir una dimensión de baja cardinalidad consolidando perfiles de riesgo socioeconómico (Figura \ref{fig:dim_demografia_familiar}).
+El núcleo de las reglas de negocio reside en este pipeline, cuya misión es ingerir datos brutos de encuestas y construir una dimensión de baja cardinalidad consolidando perfiles de riesgo socioeconómico (ver figura \ref{fig:dim_demografia_familiar}).
 
-El flujo encadena operaciones matemáticas para derivar ratios (como la renta por unidad de consumo o la ratio de ordenadores por hijo) y nodos \textit{NumberRange} para discretizar estas variables continuas en bandas analíticas fijas (ej. renta "Baja", "Media/Alta"). Mediante transformaciones \textit{ValueMapper}, se asignan pesos numéricos de riesgo a cada factor (ej. renta muy baja suma 15 puntos, falta de internet suma 3 puntos). Una \textit{Formula} final consolida la puntuación total de riesgo.
+El flujo encadena operaciones matemáticas para derivar ratios (como la renta por unidad de consumo o la ratio de ordenadores por hijo) y nodos \textit{NumberRange} para discretizar estas variables continuas en bandas analíticas fijas (ej. renta "Baja", "Media/Alta"). Mediante transformaciones \textit{ValueMapper}, se asignan pesos numéricos de riesgo a cada factor (ej. renta muy baja suma 15 puntos, falta de internet suma 3 puntos). Una fórmula final consolida la puntuación total de riesgo.
 
 Para optimizar la cardinalidad, un paso de ordenación con filtrado de filas únicas (\textit{unique\_rows=Y}) descarta duplicados en memoria, garantizando que el Datamart solo almacene las combinaciones únicas de factores socioeconómicos antes de asignar la clave subrogada \textit{id\_demografia\_familiar}.
 
@@ -36,7 +36,7 @@ Para optimizar la cardinalidad, un paso de ordenación con filtrado de filas ún
 
 \subsection{Dimensión de estudiante}
 
-La casuística de un estudiante no es estática: puede cambiar de domicilio o tutor legal a lo largo de los años. Para no perder el contexto socioeconómico histórico asociado a calificaciones pasadas, este pipeline implementa un algoritmo SCD (Slowly Changing Dimension) Tipo 2 (Figura \ref{fig:dim_estudiante}).
+La casuística de un estudiante no es estática: puede cambiar de domicilio o tutor legal a lo largo de los años. Para no perder el contexto socioeconómico histórico asociado a calificaciones pasadas, este pipeline implementa un algoritmo SCD (Slowly Changing Dimension) Tipo 2 (ver figura \ref{fig:dim_estudiante}).
 
 Tras cruzar los datos del estudiante y sus tutores legales, y aplicar transformaciones de limpieza de cadenas (separación de direcciones, casteo numérico de códigos postales), el flujo utiliza el nodo \textit{Dimension lookup/update} configurado para rastrear el ciclo de vida del \textit{num\_expediente} (clave natural). La configuración micro-gestiona las actualizaciones campo a campo:
 \begin{itemize}
@@ -67,7 +67,7 @@ Tras cruzar los datos y extraer el dominio temporal real filtrando los pares ún
 
 \subsection{Dimensión de asignatura}
 
-El modelo origen de asignaturas presenta una arquitectura relacional normalizada en "Copo de Nieve". Para modelarlo en el Data Warehouse bajo un esquema en Estrella óptimo para lectura, este pipeline colapsa jerarquías relacionales en una única fila dimensional mediante nodos \textit{DBLookup} encadenados que recorren las claves foráneas hacia arriba, recuperando información del curso, la especialidad y el ciclo educativo antes de generar la clave \textit{id\_asignatura} (Figura \ref{fig:dim_asignatura}).
+El modelo origen de asignaturas presenta una arquitectura relacional normalizada en "Copo de Nieve". Para modelarlo en el Data Warehouse bajo un esquema en Estrella óptimo para lectura, este pipeline colapsa jerarquías relacionales en una única fila dimensional mediante nodos \textit{DBLookup} encadenados que recorren las claves foráneas hacia arriba, recuperando información del curso, la especialidad y el ciclo educativo antes de generar la clave \textit{id\_asignatura} (ver figura \ref{fig:dim_asignatura}).
 
 \begin{figure}[htbp]
     \centering
@@ -78,7 +78,7 @@ El modelo origen de asignaturas presenta una arquitectura relacional normalizada
 
 \subsection{Dimensión de curso}
 
-Esta dimensión almacena los metadatos del curso y calcula la edad teórica esperada del alumno, clave para medir el desfase de edad en la tabla de hechos. Un nodo \textit{ValueMapper} inyecta la edad base de acceso al ciclo ("PRI" $\rightarrow$ 5, "ESO" $\rightarrow$ 11), y un \textit{Calculator} le suma el ordinal del curso para consolidar la \textit{edad\_ideal} (Figura \ref{fig:dim_curso}).
+Esta dimensión almacena los metadatos del curso y calcula la edad teórica esperada del alumno, clave para medir el desfase de edad en la tabla de hechos. Un nodo \textit{ValueMapper} inyecta la edad base de acceso al ciclo ("PRI" $\rightarrow$ 5, "ESO" $\rightarrow$ 11), y un \textit{Calculator} le suma el ordinal del curso para consolidar la \textit{edad\_ideal} (ver figura \ref{fig:dim_curso}).
 
 \begin{figure}[htbp]
     \centering
@@ -89,7 +89,7 @@ Esta dimensión almacena los metadatos del curso y calcula la edad teórica espe
 
 \subsection{Dimensión de adaptación}
 
-El registro transaccional de adaptaciones suele ser texto libre. Este pipeline actúa como motor de extracción de reglas clínicas mediante expresiones regulares (\textit{RegexEval}), clasificando el texto en discapacidades fisiológicas/neuropsicológicas (TDAH, Dislexia, etc.) o necesidades compensatorias sociológicas (Absentismo, Acogimiento, etc.). Cada tipología suma puntos de severidad (10 o 5) para crear la métrica unificada \textit{riesgo\_adaptacion} (Figura \ref{fig:dim_adaptacion}).
+El registro transaccional de adaptaciones suele ser texto libre. Este pipeline actúa como motor de extracción de reglas clínicas mediante expresiones regulares (\textit{RegexEval}), clasificando el texto en discapacidades fisiológicas/neuropsicológicas (TDAH, Dislexia, etc.) o necesidades compensatorias sociológicas (Absentismo, Acogimiento, etc.). Cada tipología suma puntos de severidad (10 o 5) para crear la métrica unificada \textit{riesgo\_adaptacion} (ver figura \ref{fig:dim_adaptacion}).
 
 \begin{figure}[htbp]
     \centering
@@ -100,7 +100,7 @@ El registro transaccional de adaptaciones suele ser texto libre. Este pipeline a
 
 \subsection{Dimensión de centro}
 
-El pipeline de centro encapsula lógicas de limpieza para la geolocalización analítica. El campo \textit{direccion} se particiona mediante \textit{FieldSplitter}, se limpia el prefijo literario de los códigos postales (\textit{ReplaceString}) y se formatea al tipo numérico (\textit{SelectValues}) antes de generar la clave \textit{id\_centro} (Figura \ref{fig:dim_centro}).
+El pipeline de centro encapsula lógicas de limpieza para la geolocalización analítica. El campo \textit{direccion} se particiona mediante \textit{FieldSplitter}, se limpia el prefijo literario de los códigos postales (\textit{ReplaceString}) y se formatea al tipo numérico (\textit{SelectValues}) antes de generar la clave \textit{id\_centro} (ver figura \ref{fig:dim_centro}).
 
 \begin{figure}[htbp]
     \centering
@@ -111,7 +111,7 @@ El pipeline de centro encapsula lógicas de limpieza para la geolocalización an
 
 \subsection{Tabla de hechos de calificaciones}
 
-Este es el pipeline central del sistema. Su objetivo es poblar la tabla de hechos atómica \textit{fact\_calificaciones}, cruzando los eventos transaccionales con todas las dimensiones construidas previamente y calculando métricas volátiles en el momento del evento (ver Figuras \ref{fig:fact_calificaciones_p1} y \ref{fig:fact_calificaciones_p2}).
+Este es el pipeline central del sistema. Su objetivo es poblar la tabla de hechos atómica \textit{fact\_calificaciones}, cruzando los eventos transaccionales con todas las dimensiones construidas previamente y calculando métricas volátiles en el momento del evento (ver figura \ref{fig:fact_calificaciones_p1} y figura \ref{fig:fact_calificaciones_p2}).
 
 \begin{enumerate}
     \item \textbf{Ingesta y cruce base (\textit{Table Input}, \textit{SortRows}, \textit{DBLookup}):} El flujo arranca extrayendo las calificaciones desde \textit{raw.linea\_expediente}, ordenándolas en memoria, y utilizando un nodo \textit{DBLookup} contra \textit{raw.matricula} para heredar metadatos vitales como la \textit{fecha} formal de matriculación, el \textit{curso\_academico} y el \textit{cod\_centro}.
@@ -142,7 +142,7 @@ El último proceso del ecosistema ETL actúa como el motor predictivo del proyec
 
 \subsubsection{Lógica de consolidación masiva (pipeline full)}
 
-Este pipeline (ver Figuras \ref{fig:fact_rendimiento_anual_full_p1} y \ref{fig:fact_rendimiento_anual_full_p2}) abandona la clásica consolidación estática anual y adopta una arquitectura de "Suma Acumulada" manteniendo el grano de la tabla a nivel de Evaluación (\textit{id\_estudiante} $\times$ \textit{id\_tiempo}).
+Este pipeline (ver figuras \ref{fig:fact_rendimiento_anual_full_p1} y figura \ref{fig:fact_rendimiento_anual_full_p2}) abandona la clásica consolidación estática anual y adopta una arquitectura de "Suma Acumulada" manteniendo el grano de la tabla a nivel de Evaluación (\textit{id\_estudiante} $\times$ \textit{id\_tiempo}).
 
 \begin{enumerate}
     \item \textbf{Ingesta y tipificación analítica (\textit{Formula}):} Tras ingerir los datos y cruzar con las dimensiones, un nodo \textit{Formula} bautizado como ``flags analíticos'' perfila las casuísticas de cada nota. Es aquí donde se detecta de forma temprana si el registro pertenece al ciclo crítico de 1.º y 2.º de primaria, y se despliegan vectores binarios para segmentar si un suspenso es parcial o final.
@@ -154,7 +154,7 @@ Este pipeline (ver Figuras \ref{fig:fact_rendimiento_anual_full_p1} y \ref{fig:f
 
 \subsubsection{Adaptaciones del pipeline incremental}
 
-El flujo \textit{Full} requiere volcar en RAM todo el historial autonómico, algo insostenible para recargas periódicas. La variante \textit{Incremental} (Figuras \ref{fig:fact_rendimiento_anual_incremental} y \ref{fig:fact_rendimiento_anual_incremental_join}) resuelve esto leyendo solo las notas del \textit{\$\{CURSO\_ACTUAL\}}.
+El flujo \textit{Full} requiere volcar en RAM todo el historial autonómico, algo insostenible para recargas periódicas. La variante \textit{Incremental} (ver figura \ref{fig:fact_rendimiento_anual_incremental} y figura \ref{fig:fact_rendimiento_anual_incremental_join}) resuelve esto leyendo solo las notas del \textit{\$\{CURSO\_ACTUAL\}}.
 
 Al no disponer del historial en memoria, utiliza un \textit{Database Join} contra la propia tabla destino para recuperar el \textit{riesgo\_academico} consolidado del año anterior. Como el modelo es aditivo, suma los puntos del año en curso al riesgo histórico extraído. Finalmente, emplea \textit{Insert / update} para inyectar los nuevos cálculos sin destruir el historial previo.
 
@@ -188,11 +188,11 @@ Al no disponer del historial en memoria, utiliza un \textit{Database Join} contr
 
 \section{Orquestación y workflows}
 
-Los pipelines son secuenciados por flujos de trabajo (\textit{Workflows}). La orquestación sigue una arquitectura jerárquica encabezada por \textit{main.hwf} (Figura \ref{fig:main_workflow}), que delega en dos sub-workflows:
+Los pipelines son secuenciados por flujos de trabajo (\textit{Workflows}). La orquestación sigue una arquitectura jerárquica encabezada por \textit{main.hwf} (ver figura \ref{fig:main_workflow}), que delega en dos sub-workflows:
 
 \begin{itemize}
-    \item \textbf{\textit{dimensions.hwf}:} Extrae datos a \textit{Staging} y luego lanza en paralelo la carga de todas las dimensiones para maximizar el rendimiento (Figura \ref{fig:dimensions_workflow}).
-    \item \textbf{\textit{facts.hwf}:} Ejecuta secuencialmente las tablas de hechos. Un nodo \textit{Simple Evaluation} inspecciona el parámetro dinámico \textit{\$\{CURSO\_ACTUAL\}}: si está vacío, enruta hacia el pipeline \textit{Full}; si contiene un curso, enruta hacia el \textit{Incremental} (Figura \ref{fig:facts_workflow}).
+    \item \textbf{\textit{dimensions.hwf}:} Extrae datos a \textit{Staging} y luego lanza en paralelo la carga de todas las dimensiones para maximizar el rendimiento (ver figura \ref{fig:dimensions_workflow}).
+    \item \textbf{\textit{facts.hwf}:} Ejecuta secuencialmente las tablas de hechos. Un nodo \textit{Simple Evaluation} inspecciona el parámetro dinámico \textit{\$\{CURSO\_ACTUAL\}}: si está vacío, enruta hacia el pipeline \textit{Full}; si contiene un curso, enruta hacia el \textit{Incremental} (ver figura \ref{fig:facts_workflow}).
 \end{itemize}
 
 El parámetro \textit{CURSO\_ACTUAL} fluye en cascada desde la ejecución externa (Docker) hasta el código SQL de los pipelines, permitiendo que todo el ecosistema adapte su comportamiento a un nuevo año académico alterando un único valor.

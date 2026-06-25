@@ -7,12 +7,12 @@
 
 A diferencia de las bases de datos transaccionales, que están altamente normalizadas, el esquema del Data Warehouse se ha desnormalizado en dos tipos de tablas: \textbf{tablas de hechos} (que almacenan métricas y claves foráneas) y \textbf{tablas de dimensiones} (que contienen descriptores textuales para filtrar y agrupar).
 
-En nuestro diseño final se han establecido dos tablas de hechos de diferente granularidad para responder a distintas necesidades analíticas, rodeadas por un total de siete dimensiones. La Figura~\ref{fig:datamart_erd} muestra el esquema completo del Datamart, con todas las tablas del esquema \textit{dwh}, sus columnas, claves primarias, claves foráneas y las relaciones entre ellas.
+En nuestro diseño final se han establecido dos tablas de hechos de diferente granularidad para responder a distintas necesidades analíticas, rodeadas por un total de siete dimensiones. La figura \ref{fig:datamart_erd} muestra el esquema completo del Datamart, con todas las tablas del esquema \textit{dwh}, sus columnas, claves primarias, claves foráneas y las relaciones entre ellas.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{imaxes/fig_datamart_erd}
-    \caption{Esquema del Datamart analítico (\textit{dwh}) en modelo estrella: dos tablas de hechos de distinta granularidad (\texttt{fact\_rendimiento\_anual} y \texttt{fact\_calificaciones}) rodeadas por siete dimensiones. Se indica con \texttt{[SCD2]} la dimensión \texttt{dim\_estudiante}, que implementa una Dimensión de Variación Lenta de Tipo~2.}
+    \includegraphics[width=1.2\textwidth]{imaxes/fig_datamart_erd}
+    \caption{Esquema del Datamart analítico (\textit{dwh}) en modelo estrella.}
     \label{fig:datamart_erd}
 \end{figure}
 
