@@ -194,6 +194,62 @@
           <name>fact_rendimiento_anual</name>
           <schemaname>dwh</schemaname>
         </field>
+        <field>
+          <name>adaptacion_asignatura</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>adaptacion_curricular</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>admision</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>asignatura</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>asignatura_matricula</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>centro</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>ciclo_educativo</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>curso</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>encuesta</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>especialidad</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>estudiante</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>linea_expediente</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>matricula</name>
+          <schemaname>raw</schemaname>
+        </field>
+        <field>
+          <name>responsable_legal</name>
+          <schemaname>raw</schemaname>
+        </field>
       </fields>
       <name>Truncate tables</name>
       <description/>
